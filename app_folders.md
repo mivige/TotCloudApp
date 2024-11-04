@@ -58,7 +58,7 @@ totcloud-application/
 │   ├── controllers/
 │   ├── models/
 │   └── services/
-└── README.md
+└── 
 ```
 
 Here's a breakdown of the folder structure:
@@ -72,7 +72,6 @@ Here's a breakdown of the folder structure:
    - **utils/**: Contains utility classes, such as a validation class and a backup class.
 3. **public/**: The web-accessible folder, containing the entry point (index.php) and static assets (CSS and JavaScript files).
 4. **tests/**: Contains the unit and integration tests for the application, organized by the same structure as the `app/` folder.
-5. **README.md**: A file that provides documentation for the project, including instructions for setup, deployment, and usage.
 
 This structure follows a common Model-View-Controller (MVC) pattern, with a clear separation of concerns between the different components of the application. The `app/` folder contains the core logic, while the `public/` folder houses the publicly accessible files.
 
