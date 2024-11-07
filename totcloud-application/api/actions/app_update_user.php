@@ -40,17 +40,20 @@ $resultado="ERROR";
 	$dbb->set_charset("utf8");
 	$stmt->bind_param('ssssssd',$firstname,$lastname,$lastname2,$email,$mobile_phone,$activo,$id);
    }else{
-    $stmt = $dbb->prepare('insert into incidencias (titulo,descripcion,estado,fecha_creacion) values (?,?,?,?) ');
-	$dbb->set_charset("utf8");
-	$stmt->bind_param('ssss',$titulo,$descripcion,$estado,$fecha_creacion);
+    header("Location: ../../index.php?opcion=users&error=1");
+    //$stmt = $dbb->prepare('insert into incidencias (titulo,descripcion,estado,fecha_creacion) values (?,?,?,?) ');
+	//$dbb->set_charset("utf8");
+	//$stmt->bind_param('ssss',$titulo,$descripcion,$estado,$fecha_creacion);
 
    }
 	if ($stmt->execute()){
-		header("Location: ../../index.php?opcion=users");
+		header("Location: ../../index.php?opcion=users&error=2");
         exit; 
 	} else 
 	{
+        header("Location: ../../index.php?opcion=users&error=1");
 	$resultado = 'KO'; 	
+    exit;
 	}
 	echo $resultado;
 ?>

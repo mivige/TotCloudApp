@@ -2,10 +2,13 @@
 <?php
 
 $id="";
-$nombre="";
-$descripcion="";
-$code="";
-
+$firstname="";
+$lastname="";
+$lastname2="";
+$email="";
+$mobile_phone="";
+$activo=0;
+$admin=0;
 $encontrado=false;
 
 
@@ -19,9 +22,16 @@ $id=StringInputCleaner($id);
 if(!empty($_GET["modificar"]) || isset($_GET["modificar"]))
 {$modificar=$_GET["modificar"];} 
 
-if(!empty($modificar) and !empty($id)){
 
-    $stmt = $dbb->prepare("SELECT * FROM roles WHERE id= ? ");
+if(empty($id)){
+
+    
+} else {
+
+
+if(!empty($id)){
+
+    $stmt = $dbb->prepare("SELECT * FROM users WHERE id= ? ");
     $stmt->bind_param('s', $id); // 's' indica que el parámetro es una cadena
     $stmt->execute();
     $result = $stmt->get_result(); // Obtener el resultado de la ejecución
@@ -29,19 +39,24 @@ if(!empty($modificar) and !empty($id)){
     if ($result->num_rows > 0) {
         // Obtener el único resultado
         $fila = $result->fetch_assoc();
-        $nombre=$fila['role_name'];
-        $descripcion=$fila['description'];
-        $code=$fila['code'];
+        $firstname=$fila['firstname'];
+        $lastname=$fila['lastname'];
+        $lastname2=$fila['lastname2'];
+        $email=$fila['email'];
+        $mobile_phone=$fila['mobile_phone'];
+        $activo=$fila['activo'];
+        $admin=$fila['admin'];
         $encontrado=true;
         //$fecha_creacion=$fila['fecha_creacion'];
        // $fecha_creacion = explode(" ",$fecha_creacion)[0]; 
+    } else {
+
+        
+
     }
 } 
 
-  $stmt = $dbb->prepare('select * from roles');
-  $dbb->set_charset("utf8");
-  $stmt->execute();
-  $result = $stmt->get_result();
+
   
 ?>
 
@@ -52,13 +67,14 @@ if(!empty($modificar) and !empty($id)){
                     <li class="breadcrumb-item active">Users</li>
             </ol>
 
-        <h1 class="h2">Users Rols Management</h1>
+        <h1 class="h2">Roles from a User Management</h1>
         <ol class="breadcrumb">
-                    <li class="breadcrumb-item active"><a href="index.php?opcion=users">Users Management</a></li>
-                    <li class="breadcrumb-item "><a href="index.php?opcion=roles">Users Rols Management</a></li>
+                    <li class="breadcrumb-item "><a href="index.php?opcion=users">Users Management</a></li>
+                    <li class="breadcrumb-item active "><a href="index.php?opcion=roles">Users Rols Management</a></li>
             </ol>
-            
-      <?php      if(!empty($_GET["error"])) {?>
+
+
+            <?php      if(!empty($_GET["error"])) {?>
         <?php      if($_GET["error"]==1) {?>
     <div class="alert alert-dismissible bg-danger text-white border-0 fade show" role="alert">
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -77,55 +93,93 @@ if(!empty($modificar) and !empty($id)){
   <strong>ATENTION - </strong> The action has  been completed successfully.
   <?php } ?>
 </div>
-<?php } ?> 
+<?php } ?>
+
 
         <div class="card border-left-3 border-left-danger card-2by1">
         <div class="card-body">
                                     
                                     
-        <form id="incidenciaForm" action="api/actions/app_update_user_rol.php" method="post" class="needs-validation" >
+        <form id="incidenciaForm" action="api/actions/app_update_user_roles_assign.php" method="post" class="needs-validation" >
 
 
          <div class="row mb-3">
          <input type="hidden" name="id" value="<?php echo $id ?>">
-            <?php if ($encontrado) {?>
-                <input type="hidden" name="modificar" value=1>
-            <?php } else {?>
+       
                 <input type="hidden" name="modificar" value=0>
-                <?php }?>
+              
 
-
-                <div class="col-3">
-                    <label for="vode" class="form-label">Code</label>
-                    <input type="text" class="form-control" value="<?php echo $code ?>" id="code" name="code" required>
-                    <div class="invalid-feedback">
-                        Please, insert the code.
-                    </div>
+                <div class="col-4">
+                    <label for="firstname" class="form-label">Name: <?php echo $firstname ?></label>
+                   
                 </div>
-                <div class="col-9">
-                    <label for="nombre" class="form-label">Name</label>
-                    <input type="text" class="form-control" value="<?php echo $nombre ?>" id="nombre" name="nombre" required>
-                    <div class="invalid-feedback">
-                        Please, insert the name.
-                    </div>
+                <div class="col-4">
+                    <label for="lastname" class="form-label">First Surname: <?php echo $lastname ?></label>
+                    
                 </div>
-    
+                <div class="col-4">
+                    <label for="lastname2" class="form-label">Second Surname: <?php echo $lastname2 ?></label>
+                   
+                </div>
         </div>
 
         <div class="row mb-3">
          
 
-                <div class="col-12">
-                    <label for="descripcion" class="form-label">Description</label>
-                    <input type="text" class="form-control" value="<?php echo $descripcion ?>" id="ddescripcion" name="descripcion" required>
-                    <div class="invalid-feedback">
-                        Please, insert the description.
-                    </div>
+                <div class="col-4">
+                    <label for="mobile_phone" class="form-label">Phone: <?php echo $mobile_phone ?></label>
+                  
                 </div>
-                
-       
+                <div class="col-4">
+                    <label for="email" class="form-label">Email: <?php echo $email ?></label>
+                   
+                </div>
+                <div class="col-4">
+
+            
+               
+                                    <label class="form-label" for="activo">ACTIVE: <?php if($activo==1){ echo "YES";}else{echo "NO";} ?></label><br>
+                                 
+            </div>
+
+
+        
                  
-        </div>        
+        </div>  
+        
+        
+        <div class="row mb-3">
+
+<?php $stmt = $dbb->prepare('SELECT code, role_name FROM roles');
+$stmt->execute();
+
+// Obtenemos los resultados
+$result = $stmt->get_result();
+?>
+
+ <div class="col-4">
+     <label for="role" class="form-label">Role</label>
+     <select id="custom-select" class="form-control custom-select" id="role" name="role" required>
+         <option value="" disabled selected>Select a role</option>
+         <?php while ($role = $result->fetch_assoc()): ?>
+             <option value="<?php echo htmlspecialchars($role['code']); ?>"><?php echo htmlspecialchars($role['role_name']); ?></option>
+         <?php endwhile; ?>
+     </select>
+     <div class="invalid-feedback">
+         Please, select a role.
+     </div>
+ </div>
+
+ </div>
+
+
+
+<?php
+// Cerramos la declaración
+$stmt->close();
+?>
+
+
 
 <!--
             <div class="mb-3">
@@ -153,9 +207,8 @@ if(!empty($modificar) and !empty($id)){
 
 
             <?php if ($encontrado) {?>
-                <button type="submit" class="btn btn-primary">Modify</button>
-                <?php } else {?>
-                    <button type="submit" class="btn btn-primary">New</button>
+                <button type="submit" class="btn btn-primary">Add</button>
+                
                 <?php }?>
             
         </form>
@@ -163,26 +216,28 @@ if(!empty($modificar) and !empty($id)){
                                  
                                 </div>
                             </div>
-
+                            <h2 class="h2">Roles assigned to the selected User</h2>
                             
-
-
+                            <?php                         $stmt = $dbb->prepare('select ur.id as id1,u.id,r.code,r.description,r.role_name from user_roles as ur inner join users u on ur.user_id=u.id inner join roles r on ur.role_id=r.code and u.id=?');
+  $stmt->bind_param('s', $id); // 's' indica que el parámetro es una cadena
+  $dbb->set_charset("utf8");
+  $stmt->execute();
+  $result = $stmt->get_result();
+  ?>
 
                             <div class="card table-responsive" data-toggle="lists" data-lists-values='[
     "js-lists-values-document", 
     "js-lists-values-amount",
     "js-lists-values-status"
  
-
   ]' data-lists-sort-by="js-lists-values-document" data-lists-sort-asc="true">
                                 <table class="table mb-0">
                                     <thead class="thead-light">
                                         <tr>
                                             <th colspan="4">
-                                                <a href="javascript:void(0)" class="sort" data-sort="js-lists-values-document">code</a>
-                                                <a href="javascript:void(0)" class="sort" data-sort="js-lists-values-amount">Name</a>
-                                                <a href="javascript:void(0)" class="sort" data-sort="js-lists-values-status">Description</a>
-                                              
+                                                <a href="javascript:void(0)" class="sort" data-sort="js-lists-values-document">CODE</a>
+                                                <a href="javascript:void(0)" class="sort" data-sort="js-lists-values-amount">NAME</a>
+                                                <a href="javascript:void(0)" class="sort" data-sort="js-lists-values-status">DESCRPTION</a>
 
                                                 
                                             </th>
@@ -204,28 +259,25 @@ if(!empty($modificar) and !empty($id)){
                                                 </div>
                                             </td>
 
-                                            <td class="text-center">
-                                                <div class="d-flex align-items-center">
+
+                                            <td class="text-right">
+                                                <div class="d-flex align-items-center text-right">
                                                     <small class="text-uppercase text-muted mr-2">DESCRIPTION</small>
-                                                    <small class="text-uppercase"><span class="js-lists-values-status"><?php echo $row["description"]; ?></span></small>
+                                                    <small class="text-uppercase js-lists-values-status"><?php echo $row["description"]; ?></small>
+                                              
                                                 </div>
                                             </td>
-                                                                                 
-
-                                  
                                             <td>
                                             <div class="btn-group dropleft ">
 									
                                   
-                                       
-                                    <button id="dropdown1" onclick="pulsar_delete('<?php echo $row['id']; ?>');" type="button btn-primary"  data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-flush " >
+                                     
+                                    <button id="dropdown1" onclick="pulsar_delete('<?php echo $row['id1']; ?>');" type="button btn-primary"  data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-flush " >
                                      <i class="material-icons  text-primary">delete</i>
                                    </button>
-                                 
+                               
                                                                                                          
-                                   <button id="dropdown1" onclick="pulsar_modificar('<?php echo $row['id']; ?>');" type="button btn-primary"  data-toggle="tooltip" data-placement="left" title="Modify" class="btn btn-flush " >
-                                     <i class="material-icons  text-primary">edit</i>
-                                   </button>  
+                        
                                             </td>
                                         </tr>
                                         <?php } ?>
@@ -241,3 +293,5 @@ if(!empty($modificar) and !empty($id)){
                         </div>
                     
                     </div>
+
+                    <?php }?>

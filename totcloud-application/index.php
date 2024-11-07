@@ -206,18 +206,21 @@ include_once "api/config/actualizar_token.php";
                 <div class="container page__container">
 
 
-                   <?php if ($opcion=="home"){?>
-                        <?php   include ('api/app_home_get.php'); ?>
-                    <?php }?>
+                   <?php if ($opcion=="home"){
+                         include ('api/app_home_get.php'); 
+                    }?>
 
-                    <?php if ($opcion=="users"){?>
-                        <?php   include ('api/app_users_home.php'); ?>
-                    <?php }?>
+                    <?php if ($opcion=="users"){
+                        include ('api/app_users_home.php'); 
+                    }?>
 
-                    <?php if ($opcion=="roles"){?>
-                        <?php   include ('api/app_users_roles_home.php'); ?>
-                    <?php }?>                   
+                    <?php if ($opcion=="roles"){
+                         include ('api/app_users_roles_home.php'); 
+                    }?>                   
 
+                    <?php if ($opcion=="users_roles"){
+                        include ('api/app_users_roles_assign_home.php'); 
+                    }?>    
                  
                 </div>
 
@@ -282,6 +285,10 @@ include_once "api/config/actualizar_token.php";
    <?php if ($opcion=="roles") { 
        include ('api/app_footer_users_roles_home.php'); }
    ?>
+
+<?php if ($opcion=="users_roles"){
+         include ('api/app_footer_users_roles_assign_home.php'); 
+        }?>
 
 
 </body>

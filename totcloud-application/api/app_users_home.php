@@ -60,6 +60,33 @@ if(!empty($modificar) and !empty($id)){
             </ol>
 
         <h1 class="h2">Users Management</h1>
+        <ol class="breadcrumb">
+                    <li class="breadcrumb-item "><a href="index.php?opcion=users">Users Management</a></li>
+                    <li class="breadcrumb-item active "><a href="index.php?opcion=roles">Users Rols Management</a></li>
+            </ol>
+
+
+            <?php      if(!empty($_GET["error"])) {?>
+        <?php      if($_GET["error"]==1) {?>
+    <div class="alert alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  
+  <strong>ATENTION - </strong> The action has not been completed successfully.
+  <?php } ?> 
+
+  <?php      if($_GET["error"]==2) {?>
+    <div class="alert alert-dismissible bg-primary text-white border-0 fade show" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  
+  <strong>ATENTION - </strong> The action has  been completed successfully.
+  <?php } ?>
+</div>
+<?php } ?>
+
 
         <div class="card border-left-3 border-left-danger card-2by1">
         <div class="card-body">
@@ -261,6 +288,10 @@ if(!empty($modificar) and !empty($id)){
                                                                                                          
                                    <button id="dropdown1" onclick="pulsar_modificar('<?php echo $row['id']; ?>');" type="button btn-primary"  data-toggle="tooltip" data-placement="left" title="Modify" class="btn btn-flush " >
                                      <i class="material-icons  text-primary">edit</i>
+                                   </button>  
+
+                                   <button id="dropdown1" onclick="window.location.href='index.php?opcion=users_roles&id=<?php echo $row['id']; ?>'" type="button btn-primary"  data-toggle="tooltip" data-placement="left" title="Add Rol" class="btn btn-flush " >
+                                   <i class="material-icons">group_add</i>
                                    </button>  
                                             </td>
                                         </tr>

@@ -16,7 +16,8 @@ if( empty($id) && $modificar==1) {
     $nombre=StringInputCleaner($nombre);
     $descripcion=isset($_POST['descripcion']) ? trim($_POST['descripcion']) : '';
     $descripcion=StringInputCleaner($descripcion);
-    
+	$code=isset($_POST['code']) ? trim($_POST['code']) : '';
+    $code=StringInputCleaner($code);
 
     //if ($activo!=1){$activo=0;}
 
@@ -30,21 +31,23 @@ if(!isset($_SESSION['app_user_token']) || empty($_SESSION['app_user_token'])) {
 
 $resultado="ERROR";   
    if($modificar==1){
-    $stmt = $dbb->prepare('update roles  set role_name=?,description=? where  id=?  ');
+    $stmt = $dbb->prepare('update roles  set role_name=?,description=?,code=? where  id=?  ');
 	$dbb->set_charset("utf8");
-	$stmt->bind_param('ssd',$nombre,$descripcion,$id);
+	$stmt->bind_param('sssd',$nombre,$descripcion,$code,$id);
    }else{
-    $stmt = $dbb->prepare('insert into roles (role_name,description) values (?,?) ');
+    $stmt = $dbb->prepare('insert into roles (role_name,description,code) values (?,?,?) ');
 	$dbb->set_charset("utf8");
-	$stmt->bind_param('ss',$nombre,$descripcion);
+	$stmt->bind_param('sss',$nombre,$descripcion,$code);
 
    }
 	if ($stmt->execute()){
-		header("Location: ../../index.php?opcion=roles");
+		header("Location: ../../index.php?opcion=roles&error=2");
         exit; 
 	} else 
 	{
+		header("Location: ../../index.php?opcion=roles&error=1");
 	$resultado = 'KO'; 	
+	exit; 
 	}
 	echo $resultado;
 ?>
