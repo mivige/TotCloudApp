@@ -1,6 +1,6 @@
-CREATE DATABASE totcloud;
+CREATE DATABASE totcloud_db;
 
-USE totcloud;
+USE totcloud_db;
 
 CREATE TABLE User (
     id INT(11) PRIMARY KEY AUTO_INCREMENT,
@@ -30,7 +30,7 @@ CREATE TABLE PasswordHistory (
     user_id INT(11) NOT NULL,  -- Foreign key referencing users
     password VARCHAR(256) NOT NULL,
     change_date DATETIME NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE  -- Ensures that history is deleted if the user is deleted
+    FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE  -- Ensures that history is deleted if the user is deleted
 );
 
 CREATE TABLE Role (
@@ -43,8 +43,8 @@ CREATE TABLE UserRole (
     id INT(11) PRIMARY KEY AUTO_INCREMENT,
     user_id INT(11) NOT NULL,  -- Foreign key referencing users
     role_id INT(11) NOT NULL,   -- Foreign key referencing roles
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES Role(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Permission (
@@ -57,7 +57,7 @@ CREATE TABLE RolePermission (
     id INT(11) PRIMARY KEY AUTO_INCREMENT,
     role_id INT(11) NOT NULL,  -- Foreign key referencing roles
     permission_id INT(11) NOT NULL,  -- Foreign key referencing permissions
-    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
-    FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES Role(id) ON DELETE CASCADE,
+    FOREIGN KEY (permission_id) REFERENCES Permission(id) ON DELETE CASCADE,
     UNIQUE KEY (role_id, permission_id)  -- Prevent duplicate permission assignments for the same role
 );
