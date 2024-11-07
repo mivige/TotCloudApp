@@ -55,7 +55,9 @@ if(!empty($modificar) and !empty($id)){
         <h1 class="h2">Users Rols Management</h1>
         <ol class="breadcrumb">
                     <li class="breadcrumb-item active"><a href="index.php?opcion=users">Users Management</a></li>
+                    <?php if (tieneRol("DEFROL1")){?>
                     <li class="breadcrumb-item "><a href="index.php?opcion=roles">Users Rols Management</a></li>
+                    <?php } ?> 
             </ol>
             
       <?php      if(!empty($_GET["error"])) {?>

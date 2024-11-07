@@ -38,7 +38,23 @@ $validado='0';
 		  $dbb->set_charset("utf8");
 		  $stmt->bind_param("sss", $token, $fecha_token,$_SESSION['app_user_token']);
 	      $stmt->execute();	
-          $_SESSION['app_user_token']=$token;	
+          $_SESSION['app_user_token']=$token;
+		  $_SESSION['roles']=[];	
+
+		  $stmt1 = $dbb->prepare("
+		  SELECT r.code
+		  FROM roles r
+		  JOIN user_roles ur ON ur.role_id = r.code
+		  WHERE ur.user_id = ?
+	  ");
+	  $dbb->set_charset("utf8");
+	  $stmt1->bind_param('d', $id_user);
+	  $stmt1->execute();
+	  $result1 = $stmt1->get_result();
+	  while ($row = $result1->fetch_assoc()) {
+		$_SESSION['roles'][] = $row['code'];
+	}
+
          	  
 		}
 		
@@ -47,4 +63,34 @@ $validado='0';
 			exit;		
 		
 	}
+
+
+	function tieneRol($rol) {
+		return in_array($rol, $_SESSION['roles']);
+	}
+	
+	
+	function actualizarRolesSesion($userId, $mysqli) {
+		// Preparar la consulta
+		$stmt = $mysqli->prepare("
+			SELECT r.code
+			FROM roles r
+			JOIN user_roles ur ON ur.role_id = r.id
+			WHERE ur.user_id = ?
+		");
+		
+		$stmt->bind_param('i', $userId);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		
+		// Guardar los roles en la sesión
+		$_SESSION['roles'] = [];
+		while ($row = $result->fetch_assoc()) {
+			$_SESSION['roles'][] = $row['code'];
+		}
+		
+		$stmt->close();
+	}
+
+
 	?>

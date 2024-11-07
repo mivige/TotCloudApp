@@ -15,7 +15,15 @@
                                                     </span>
                                                     <span class="flex d-flex flex-column">
 
-                                                        <span class="text-black-70">No tiene Mensajes</span>
+                                                        <span class="text-black-70">
+
+                                                        <?php if (isset($_SESSION['roles'])) {
+                                                            echo "Roles de usuario: <br>";
+                                                            foreach ($_SESSION['roles'] as $role) {
+                                                                echo $role . "<br>";
+                                                            }}
+                                                            ?>
+                                                        </span>
                                                     </span>
                                                 </span>
                                             </a>
