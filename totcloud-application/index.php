@@ -221,6 +221,10 @@ include_once "api/config/actualizar_token.php";
                     <?php if ($opcion=="users_roles"){
                         include ('api/app_users_roles_assign_home.php'); 
                     }?>    
+
+                <?php if ($opcion=="paas"){
+                        include ('api/app_paas_home.php'); 
+                    }?>    
                  
                 </div>
 
