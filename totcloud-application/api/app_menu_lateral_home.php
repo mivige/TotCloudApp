@@ -24,12 +24,12 @@
                             <?php }  ?>
 
                             <li class="sidebar-menu-item">
-                            <a class="sidebar-menu-button" href="index.php?opcion=tiempo">
+                            <a class="sidebar-menu-button" href="index.php?opcion=saas">
                             <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">import_contacts</i> SaaS Services
                             </a>
                         </li>                          
                         <li class="sidebar-menu-item">
-                            <a class="sidebar-menu-button" href="index.php?opcion=incidencias">
+                            <a class="sidebar-menu-button" href="index.php?opcion=paas">
                             <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">import_contacts</i> PaaS Services
                             </a>
                         </li>                       

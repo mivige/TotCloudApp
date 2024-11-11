@@ -66,7 +66,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <div class="d-flex align-items-center">
-                                        <a href="" class="mr-3">
+                                        <a href="index.php?opcion=saas" class="mr-3">
                                             <img src="assets/images/img/saas.png" width="100" alt="" class="rounded">
                                         </a>
                                         <div class="flex">
@@ -77,7 +77,7 @@
                                 </div>
                                 <ul class="list-group list-group-fit">
                                     <li class="list-group-item">
-                                        <a href="" class="text-body text-decoration-0 d-flex align-items-center">
+                                        <a href="index.php?opcion=saas" class="text-body text-decoration-0 d-flex align-items-center">
                                         <?php if ($es_admin==1){ ?>
                                             Management Module for TotCloud's SaaS Services
                                          <?php } else { ?>
@@ -93,18 +93,18 @@
                             <div class="card">
                                 <div class="card-header">
                                     <div class="d-flex align-items-center">
-                                        <a href="" class="mr-3">
+                                        <a href="index.php?opcion=paas" class="mr-3">
                                             <img src="assets/images/img/paas.png" alt="" class="rounded" width="100">
                                         </a>
                                         <div class="flex">
-                                            <h4 class="card-title mb-0"><a href="">PaaS SERVICES</a></h4>
+                                            <h4 class="card-title mb-0"><a href="index.php?opcion=paas">PaaS SERVICES</a></h4>
                                             <span class="badge badge-primary">ACCESS FOR ALL USERS</span>
                                         </div>
                                     </div>
                                 </div>
                                 <ul class="list-group list-group-fit">
                                     <li class="list-group-item">
-                                        <a href="" class="text-body text-decoration-0 d-flex align-items-center">
+                                        <a href="index.php?opcion=paas" class="text-body text-decoration-0 d-flex align-items-center">
                                         <?php if ($es_admin==1){ ?>
                                             Management Module for TotCloud's PaaS Services
                                          <?php } else { ?>

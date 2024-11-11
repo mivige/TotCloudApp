@@ -6,8 +6,8 @@
                                         <?php if ($es_admin==1){ ?>
                                         <a class="dropdown-item" href="index.php?opcion=users">User Managemet</a>
                                         <?php }  ?>
-                                        <a class="dropdown-item" href="index.php?opcion=">SaaS Services</a>
-                                        <a class="dropdown-item" href="index.php?opcion=">PaaS Services</a>
+                                        <a class="dropdown-item" href="index.php?opcion=saas">SaaS Services</a>
+                                        <a class="dropdown-item" href="index.php?opcion=paas">PaaS Services</a>
                                         
                                     </div>
                                 </li>

@@ -226,6 +226,45 @@ include_once "api/config/actualizar_token.php";
                         include ('api/app_paas_home.php'); 
                     }?>    
                  
+                 <?php if ($opcion=="paas_memory"){
+                        include ('api/app_paas_memory_home.php'); 
+                    }?>    
+
+                <?php if ($opcion=="paas_processor"){
+                        include ('api/app_paas_processor_home.php'); 
+                    }?>    
+                    
+                    <?php if ($opcion=="paas_storage"){
+                        include ('api/app_paas_storage_home.php'); 
+                    }?>        
+                    
+                    <?php if ($opcion=="paas_private_bandwidth"){
+                        include ('api/app_paas_private_bandwidth_home.php'); 
+                    }?>   
+                    
+                    <?php if ($opcion=="paas_public_bandwidth"){
+                        include ('api/app_paas_public_bandwidth_home.php'); 
+                    }?>                  
+
+                <?php if ($opcion=="paas_datacenterregion"){
+                        include ('api/app_paas_datacenterregion_home.php'); 
+                    }?>    
+
+                    <?php if ($opcion=="paas_os"){
+                        include ('api/app_paas_os_home.php'); 
+                    }?> 
+                    
+                    
+                    <?php if ($opcion=="paas_commitment_period"){
+                        include ('api/app_paas_commitment_period_home.php'); 
+                    }?>  
+
+                <?php if ($opcion=="requests"){
+                        include ('api/app_paas_requests_home.php'); 
+                    }?>  
+                   
+
+
                 </div>
 
                 <div class="container page__container">
@@ -282,18 +321,52 @@ include_once "api/config/actualizar_token.php";
 
 
     <?php if ($opcion=="users") { 
-        include ('api/app_footer_users_home.php'); }
+        include ('api/footer/app_footer_users_home.php'); }
     ?>
       
 
    <?php if ($opcion=="roles") { 
-       include ('api/app_footer_users_roles_home.php'); }
+       include ('api/footer/app_footer_users_roles_home.php'); }
    ?>
 
 <?php if ($opcion=="users_roles"){
-         include ('api/app_footer_users_roles_assign_home.php'); 
+         include ('api/footer/app_footer_users_roles_assign_home.php'); 
         }?>
 
+<?php if ($opcion=="paas_memory"){
+         include ('api/footer/app_footer_paas_memory_home.php'); 
+        }?>
+ <?php if ($opcion=="paas_processor"){
+         include ('api/footer/app_footer_paas_processor_home.php'); 
+        }?>   
+
+ <?php if ($opcion=="paas_storage"){
+         include ('api/footer/app_footer_paas_storage_home.php'); 
+        }?>   
+
+   <?php if ($opcion=="paas_private_bandwidth"){
+         include ('api/footer/app_footer_paas_private_bandwidth_home.php'); 
+        }?>        
+
+
+   <?php if ($opcion=="paas_public_bandwidth"){
+         include ('api/footer/app_footer_paas_public_bandwidth_home.php'); 
+        }?>   
+    <?php if ($opcion=="paas_datacenterregion"){
+         include ('api/footer/app_footer_paas_datacenterregion_home.php'); 
+        }?>       
+        
+    <?php if ($opcion=="paas_os"){
+         include ('api/footer/app_footer_paas_os_home.php'); 
+        }?>          
+
+<?php if ($opcion=="paas_commitment_period"){
+         include ('api/footer/app_footer_paas_commitment_period_home.php'); 
+        }?>           
+
+<?php if ($opcion=="requests"){
+                        include ('api/footer/app_footer_paas_request_home.php'); 
+                    }?>  
 
 </body>
 
