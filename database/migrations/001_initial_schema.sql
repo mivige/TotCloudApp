@@ -61,3 +61,105 @@ CREATE TABLE RolePermission (
     FOREIGN KEY (permission_id) REFERENCES Permission(id) ON DELETE CASCADE,
     UNIQUE KEY (role_id, permission_id)  -- Prevent duplicate permission assignments for the same role
 );
+
+
+-- SAAS: Web Hosting
+CREATE TABLE Datacenter (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(256) NOT NULL,
+    location VARCHAR(256) NOT NULL,
+    networkProvider VARCHAR(256) NOT NULL
+);
+
+CREATE TABLE SSL (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    provider VARCHAR(256) NOT NULL,
+    validationLevel VARCHAR(256) NOT NULL,
+    certificateType VARCHAR(256) NOT NULL,
+    expirationDate DATETIME
+);
+
+CREATE TABLE DBMS (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(256) NOT NULL,
+    version VARCHAR(256) NOT NULL,
+    licenseType VARCHAR(256) NOT NULL
+);
+
+CREATE TABLE Memory (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    capacity INT NOT NULL,
+    type VARCHAR(256) NOT NULL,
+    speed INT NOT NULL
+);
+
+CREATE TABLE Persistency (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type VARCHAR(256) NOT NULL
+);
+
+CREATE TABLE DB (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(256) NOT NULL,
+    engine VARCHAR(256) NOT NULL,
+    capacity INT NOT NULL,
+    maxConnections INT NOT NULL,
+    iops INT NOT NULL
+    FK_DBMS INT NOT NULL,
+    FK_memory INT NOT NULL,
+    FK_persistency INT NOT NULL,
+    FOREIGN KEY (FK_DBMS) REFERENCES DBMS(id),
+    FOREIGN KEY (FK_memory) REFERENCES Memory(id),
+    FOREIGN KEY (FK_persistency) REFERENCES Persistency(id)
+);
+
+CREATE TABLE WebHosting (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(256) NOT NULL,
+    
+    storageSpace INT NOT NULL,
+    bandwidthAllocation INT NOT NULL,
+    maxConcurrentUsers INT NOT NULL,
+    maxWebsites INT NOT NULL,
+    isSSLIncluded BOOLEAN DEFAULT FALSE,
+    isDomainIncluded BOOLEAN DEFAULT FALSE,
+    isEmailIncluded BOOLEAN DEFAULT FALSE
+    FK_datacenter INT NOT NULL,
+    FK_SSL INT NOT NULL,
+    FK_DB INT,
+    FOREIGN KEY (FK_datacenter) REFERENCES Datacenter(id),
+    FOREIGN KEY (FK_SSL) REFERENCES SSL(id),
+    FOREIGN KEY (FK_DB) REFERENCES DB(id)
+);
+
+CREATE TABLE Modules (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(256) NOT NULL,
+    description TEXT NOT NULL,
+    version VARCHAR(256) NOT NULL,
+    isActive BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE WebHostingXModules (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    FK_webhosting INT NOT NULL,
+    FK_modules INT NOT NULL,
+    FOREIGN KEY (FK_webhosting) REFERENCES WebHosting(id) ON DELETE CASCADE,
+    FOREIGN KEY (FK_modules) REFERENCES Modules(id) ON DELETE CASCADE  
+);
+
+CREATE TABLE CDN (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(256) NOT NULL,
+    endpoint VARCHAR(256) NOT NULL,
+    cacheExpiration INT NOT NULL,
+    bandwidth INT NOT NULL
+);
+
+CREATE TABLE WebHostingXCDN (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    FK_webhosting INT NOT NULL,
+    FK_CDN INT NOT NULL,
+    FOREIGN KEY (FK_webhosting) REFERENCES WebHosting(id) ON DELETE CASCADE,
+    FOREIGN KEY (FK_CDN) REFERENCES CDN(id) ON DELETE CASCADE  
+);
