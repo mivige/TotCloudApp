@@ -100,7 +100,7 @@ CREATE TABLE wh_modules (
     isActive BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE WebHostingXModules (
+CREATE TABLE wh_web_hosting_x_modules (
     id INT AUTO_INCREMENT PRIMARY KEY,
     FK_webhosting INT NOT NULL,
     FK_modules INT NOT NULL,
@@ -124,7 +124,7 @@ CREATE TABLE wh_cdn_geolocation (
     FOREIGN KEY (FK_CDN) REFERENCES wh_cdn(id) ON DELETE CASCADE
 );
 
-CREATE TABLE WebHostingXCDN (
+CREATE TABLE wh_web_hosting_x_cdn (
     id INT AUTO_INCREMENT PRIMARY KEY,
     FK_webhosting INT NOT NULL,
     FK_CDN INT NOT NULL,
