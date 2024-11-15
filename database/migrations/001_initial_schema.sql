@@ -127,9 +127,30 @@ CREATE TABLE WebHosting (
     FK_datacenter INT NOT NULL,
     FK_SSL INT NOT NULL,
     FK_DB INT,
+    CNAME 
     FOREIGN KEY (FK_datacenter) REFERENCES Datacenter(id),
     FOREIGN KEY (FK_SSL) REFERENCES SSL(id),
     FOREIGN KEY (FK_DB) REFERENCES DB(id)
+);
+
+CREATE TABLE DNS (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    domainName VARCHAR(256) NOT NULL,
+    recordType VARCHAR(10) NOT NULL, -- A, AAAA, CNAME, etc.
+    recordValue VARCHAR(256) NOT NULL,
+    ttl INT NOT NULL,
+    FK_webhosting INT NOT NULL,
+    FOREIGN KEY (FK_webhosting) REFERENCES WebHosting(id)
+);
+
+CREATE TABLE Domain (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(256) NOT NULL,
+    registrar VARCHAR(256),
+    expirationDate DATETIME,
+    isAutoRenew BOOLEAN DEFAULT FALSE,
+    FK_webhosting INT NOT NULL,
+    FOREIGN KEY (FK_webhosting) REFERENCES WebHosting(id)
 );
 
 CREATE TABLE Modules (
@@ -145,7 +166,7 @@ CREATE TABLE WebHostingXModules (
     FK_webhosting INT NOT NULL,
     FK_modules INT NOT NULL,
     FOREIGN KEY (FK_webhosting) REFERENCES WebHosting(id) ON DELETE CASCADE,
-    FOREIGN KEY (FK_modules) REFERENCES Modules(id) ON DELETE CASCADE  
+    FOREIGN KEY (FK_modules) REFERENCES Modules(id)
 );
 
 CREATE TABLE CDN (
@@ -156,10 +177,38 @@ CREATE TABLE CDN (
     bandwidth INT NOT NULL
 );
 
+CREATE TABLE CDNGeolocation (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    region VARCHAR(256) NOT NULL,
+    latency INT NOT NULL, -- in ms
+    FK_CDN INT NOT NULL,
+    FOREIGN KEY (FK_CDN) REFERENCES CDN(id) ON DELETE CASCADE
+);
+
 CREATE TABLE WebHostingXCDN (
     id INT AUTO_INCREMENT PRIMARY KEY,
     FK_webhosting INT NOT NULL,
     FK_CDN INT NOT NULL,
     FOREIGN KEY (FK_webhosting) REFERENCES WebHosting(id) ON DELETE CASCADE,
-    FOREIGN KEY (FK_CDN) REFERENCES CDN(id) ON DELETE CASCADE  
+    FOREIGN KEY (FK_CDN) REFERENCES CDN(id)
+);
+
+CREATE TABLE ResourceUsage (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cpuUsage FLOAT NOT NULL, -- Percentage
+    memoryUsage INT NOT NULL, -- in MB
+    diskUsage INT NOT NULL, -- in MB
+    bandwidthUsage INT NOT NULL, -- in MB
+    timestamp DATETIME NOT NULL,
+    FK_webhosting INT NOT NULL,
+    FOREIGN KEY (FK_webhosting) REFERENCES WebHosting(id)
+);
+
+CREATE TABLE Logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    timestamp DATETIME NOT NULL,
+    eventType VARCHAR(256) NOT NULL,
+    details TEXT,
+    FK_webhosting INT,
+    FOREIGN KEY (FK_webhosting) REFERENCES WebHosting(id)
 );
