@@ -314,7 +314,7 @@ CREATE TABLE wh_web_hosting_x_cdn (
     FK_webhosting INT NOT NULL,
     FK_CDN INT NOT NULL,
     FOREIGN KEY (FK_webhosting) REFERENCES saas_web_hosting(id) ON DELETE CASCADE,
-    FOREIGN KEY (FK_CDN) REFERENCES wh_cdn(id)
+    FOREIGN KEY (FK_CDN) REFERENCES wh_cdn(id) ON DELETE SET NULL
 );
 
 -- Possibly common to SaaS and PaaS
