@@ -317,7 +317,9 @@ CREATE TABLE wh_web_hosting_x_cdn (
     FOREIGN KEY (FK_CDN) REFERENCES wh_cdn(id) ON DELETE SET NULL
 );
 
--- Possibly common to SaaS and PaaS
+-- ////////////////////
+-- Common tables
+-- ////////////////////
 CREATE TABLE resource_usage (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cpuUsage FLOAT NOT NULL, -- Percentage
