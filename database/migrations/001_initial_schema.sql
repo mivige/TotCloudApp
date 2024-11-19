@@ -83,141 +83,103 @@ CREATE TABLE currencytype (
 -- PAAS: Dedicated Server
 -- ////////////////////
 
-CREATE TABLE `paas_ds_commitment_period` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(20) NOT NULL,
-  `description` tinytext DEFAULT NULL,
-  `discount` decimal(10,2) DEFAULT NULL,
-  `currency_type` char(3) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`),
-  KEY `currency_type` (`currency_type`),
-  CONSTRAINT `paas_ds_commitment_period_ibfk_1` FOREIGN KEY (`currency_type`) REFERENCES `currencytype` (`currency_code`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+CREATE TABLE ds_datacenterregion (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(20) NOT NULL UNIQUE,
+    region_name VARCHAR(50) NOT NULL,
+    country VARCHAR(50),
+    availability_zone VARCHAR(20),
+    price DECIMAL(10,2),
+    currency_type CHAR(3),
+    description TINYTEXT,
+    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `paas_ds_datacenterregion` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(20) NOT NULL,
-  `region_name` varchar(50) NOT NULL,
-  `country` varchar(50) DEFAULT NULL,
-  `availability_zone` varchar(20) DEFAULT NULL,
-  `price` decimal(10,2) DEFAULT NULL,
-  `currency_type` char(3) DEFAULT NULL,
-  `description` tinytext DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`),
-  KEY `currency_type` (`currency_type`),
-  CONSTRAINT `paas_ds_datacenterregion_ibfk_1` FOREIGN KEY (`currency_type`) REFERENCES `currencytype` (`currency_code`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+CREATE TABLE paas_dedicated_server (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    price DECIMAL(10,2),
+    category_code VARCHAR(20),
+    public_bandwidth_code VARCHAR(20),
+    private_bandwidth_code VARCHAR(20),
+    storage_code VARCHAR(20),
+    memory_code VARCHAR(20),
+    processor_code VARCHAR(20),
+    data_center_region_code VARCHAR(20),
+    os_code VARCHAR(20),
+    commitment_period VARCHAR(20),
+    request_id INT NOT NULL,
+    commitment_id INT,
+    FOREIGN KEY (request_id) REFERENCES request(request_id) ON DELETE CASCADE,
+    FOREIGN KEY (commitment_id) REFERENCES commitment_period(id) ON DELETE SET NULL,
+    FOREIGN KEY (category_code) REFERENCES category(code) ON DELETE SET NULL,
+    FOREIGN KEY (public_bandwidth_code) REFERENCES ds_public_bandwidth(code) ON DELETE SET NULL,
+    FOREIGN KEY (private_bandwidth_code) REFERENCES ds_private_bandwidth(code) ON DELETE SET NULL,
+    FOREIGN KEY (storage_code) REFERENCES ds_storage(code) ON DELETE SET NULL,
+    FOREIGN KEY (memory_code) REFERENCES ds_memory(code) ON DELETE SET NULL,
+    FOREIGN KEY (processor_code) REFERENCES ds_processor(code) ON DELETE SET NULL,
+    FOREIGN KEY (data_center_region_code) REFERENCES ds_datacenterregion(code) ON DELETE SET NULL,
+    FOREIGN KEY (os_code) REFERENCES ds_os(code) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `paas_dedicated_server` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `price` decimal(10,2) DEFAULT NULL,
-  `category_code` varchar(20) DEFAULT NULL,
-  `public_bandwidth_code` varchar(20) DEFAULT NULL,
-  `private_bandwidth_code` varchar(20) DEFAULT NULL,
-  `storage_code` varchar(20) DEFAULT NULL,
-  `memory_code` varchar(20) DEFAULT NULL,
-  `processor_code` varchar(20) DEFAULT NULL,
-  `data_center_region_code` varchar(20) DEFAULT NULL,
-  `os_code` varchar(20) DEFAULT NULL,
-  `commitment_period` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`),
-  KEY `category_code` (`category_code`),
-  KEY `public_bandwidth_code` (`public_bandwidth_code`),
-  KEY `private_bandwidth_code` (`private_bandwidth_code`),
-  KEY `storage_code` (`storage_code`),
-  KEY `memory_code` (`memory_code`),
-  KEY `processor_code` (`processor_code`),
-  KEY `data_center_region_code` (`data_center_region_code`),
-  KEY `os_code` (`os_code`),
-  CONSTRAINT `paas_dedicated_server_ibfk_1` FOREIGN KEY (`category_code`) REFERENCES `category` (`code`) ON DELETE SET NULL,
-  CONSTRAINT `paas_dedicated_server_ibfk_2` FOREIGN KEY (`public_bandwidth_code`) REFERENCES `paas_public_bandwidth` (`code`) ON DELETE SET NULL,
-  CONSTRAINT `paas_dedicated_server_ibfk_3` FOREIGN KEY (`private_bandwidth_code`) REFERENCES `paas_private_bandwidth` (`code`) ON DELETE SET NULL,
-  CONSTRAINT `paas_dedicated_server_ibfk_4` FOREIGN KEY (`storage_code`) REFERENCES `paas_storage` (`code`) ON DELETE SET NULL,
-  CONSTRAINT `paas_dedicated_server_ibfk_5` FOREIGN KEY (`memory_code`) REFERENCES `paas_memory` (`code`) ON DELETE SET NULL,
-  CONSTRAINT `paas_dedicated_server_ibfk_6` FOREIGN KEY (`processor_code`) REFERENCES `paas_processor` (`code`) ON DELETE SET NULL,
-  CONSTRAINT `paas_dedicated_server_ibfk_7` FOREIGN KEY (`data_center_region_code`) REFERENCES `paas_ds_datacenterregion` (`code`) ON DELETE SET NULL,
-  CONSTRAINT `paas_dedicated_server_ibfk_8` FOREIGN KEY (`os_code`) REFERENCES `paas_os` (`code`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci 
+CREATE TABLE ds_memory (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(20) NOT NULL UNIQUE,
+    description TINYTEXT,
+    capacity_gb INT,
+    price DECIMAL(10,2),
+    currency_type CHAR(3),
+    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `paas_ds_memory` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(20) NOT NULL,
-  `description` tinytext DEFAULT NULL,
-  `capacity_gb` int(11) DEFAULT NULL,
-  `price` decimal(10,2) DEFAULT NULL,
-  `currency_type` char(3) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`),
-  KEY `currency_type` (`currency_type`),
-  CONSTRAINT `paas_ds_memory_ibfk_1` FOREIGN KEY (`currency_type`) REFERENCES `currencytype` (`currency_code`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+CREATE TABLE ds_os (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(20) NOT NULL UNIQUE,
+    name VARCHAR(50) NOT NULL,
+    version VARCHAR(20),
+    price DECIMAL(10,2),
+    currency_type CHAR(3),
+    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `paas_ds_os` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(20) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `version` varchar(20) DEFAULT NULL,
-  `price` decimal(10,2) DEFAULT NULL,
-  `currency_type` char(3) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`),
-  KEY `currency_type` (`currency_type`),
-  CONSTRAINT `paas_ds_os_ibfk_1` FOREIGN KEY (`currency_type`) REFERENCES `currencytype` (`currency_code`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci 
+CREATE TABLE ds_private_bandwidth (
+    id INT AUTO_INCREMENT UNIQUE,
+    code VARCHAR(20) NOT NULL PRIMARY KEY,
+    description TINYTEXT,
+    price DECIMAL(10,2),
+    currency_type CHAR(3),
+    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `paas_ds_private_bandwidth` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(20) NOT NULL,
-  `description` tinytext DEFAULT NULL,
-  `price` decimal(10,2) DEFAULT NULL,
-  `currency_type` char(3) DEFAULT NULL,
-  PRIMARY KEY (`code`),
-  UNIQUE KEY `id` (`id`),
-  KEY `currency_type` (`currency_type`),
-  CONSTRAINT `paas_ds_private_bandwidth_ibfk_1` FOREIGN KEY (`currency_type`) REFERENCES `currencytype` (`currency_code`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+CREATE TABLE ds_public_bandwidth (
+    id INT AUTO_INCREMENT UNIQUE,
+    code VARCHAR(20) NOT NULL PRIMARY KEY,
+    description TINYTEXT,
+    price DECIMAL(10,2),
+    currency_type CHAR(3),
+    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
- CREATE TABLE `paas_ds_public_bandwidth` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(20) NOT NULL,
-  `description` tinytext DEFAULT NULL,
-  `price` decimal(10,2) DEFAULT NULL,
-  `currency_type` char(3) DEFAULT NULL,
-  PRIMARY KEY (`code`),
-  UNIQUE KEY `id` (`id`),
-  KEY `currency_type` (`currency_type`),
-  CONSTRAINT `paas_ds_public_bandwidth_ibfk_1` FOREIGN KEY (`currency_type`) REFERENCES `currencytype` (`currency_code`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+CREATE TABLE ds_processor (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(20) NOT NULL UNIQUE,
+    description TINYTEXT,
+    cores INT,
+    speed_ghz DECIMAL(5,2),
+    price DECIMAL(10,2),
+    currency_type CHAR(3),
+    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `paas_ds_processor` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(20) NOT NULL,
-  `description` tinytext DEFAULT NULL,
-  `cores` int(11) DEFAULT NULL,
-  `speed_ghz` decimal(5,2) DEFAULT NULL,
-  `price` decimal(10,2) DEFAULT NULL,
-  `currency_type` char(3) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`),
-  KEY `currency_type` (`currency_type`),
-  CONSTRAINT `paas_ds_processor_ibfk_1` FOREIGN KEY (`currency_type`) REFERENCES `currencytype` (`currency_code`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci 
 
-CREATE TABLE `paas_ds_storage` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(20) NOT NULL,
-  `description` tinytext DEFAULT NULL,
-  `capacity_gb` int(11) DEFAULT NULL,
-  `price` decimal(10,2) DEFAULT NULL,
-  `currency_type` char(3) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`),
-  KEY `currency_type` (`currency_type`),
-  CONSTRAINT `paas_ds_storage_ibfk_1` FOREIGN KEY (`currency_type`) REFERENCES `currencytype` (`currency_code`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE ds_storage (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(20) NOT NULL UNIQUE,
+    description TINYTEXT,
+    capacity_gb INT,
+    price DECIMAL(10,2),
+    currency_type CHAR(3),
+    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ////////////////////
 -- SAAS: Web Hosting
@@ -286,9 +248,13 @@ CREATE TABLE saas_web_hosting (
     FK_datacenter INT NOT NULL,
     FK_SSL INT NOT NULL,
     FK_DB INT,
+    request_id INT NOT NULL,
+    commitment_id INT,
+    FOREIGN KEY (request_id) REFERENCES request(request_id) ON DELETE CASCADE,
+    FOREIGN KEY (commitment_id) REFERENCES commitment_period(id) ON DELETE SET NULL,
     FOREIGN KEY (FK_datacenter) REFERENCES wh_datacenter(id),
     FOREIGN KEY (FK_SSL) REFERENCES wh_ssl(id),
-    FOREIGN KEY (FK_DB) REFERENCES wh_db(id)
+    FOREIGN KEY (FK_DB) REFERENCES wh_db(id) ON DELETE SET NULL
 );
 
 CREATE TABLE wh_dns (
@@ -371,3 +337,12 @@ CREATE TABLE logs (
     FK_webhosting INT,
     FOREIGN KEY (FK_webhosting) REFERENCES saas_web_hosting(id)
 );
+
+CREATE TABLE commitment_period (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(20) NOT NULL UNIQUE,
+    description TINYTEXT,
+    discount DECIMAL(10,2),
+    currency_type CHAR(3),
+    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
