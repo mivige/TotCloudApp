@@ -1,3 +1,5 @@
+-- A trigger that logs the changes in the user table, such as password changes, for auditing purposes.
+
 DELIMITER $$
 
 CREATE TRIGGER log_user_changes
