@@ -195,7 +195,7 @@ CREATE TABLE wh_datacenter (
     name VARCHAR(256) NOT NULL,
     location VARCHAR(256) NOT NULL,
     networkProvider VARCHAR(256) NOT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE wh_ssl (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -203,26 +203,26 @@ CREATE TABLE wh_ssl (
     validationLevel VARCHAR(256) NOT NULL,
     certificateType VARCHAR(256) NOT NULL,
     expirationDate DATETIME
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE wh_db_dbms (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(256) NOT NULL,
     version VARCHAR(256) NOT NULL,
     licenseType VARCHAR(256) NOT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE wh_db_memory (
     id INT AUTO_INCREMENT PRIMARY KEY,
     capacity INT NOT NULL,
     type VARCHAR(256) NOT NULL,
     speed INT NOT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE wh_db_persistency (
     id INT AUTO_INCREMENT PRIMARY KEY,
     type VARCHAR(256) NOT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE wh_db (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -237,7 +237,7 @@ CREATE TABLE wh_db (
     FOREIGN KEY (FK_DBMS) REFERENCES wh_db_dbms(id),
     FOREIGN KEY (FK_memory) REFERENCES wh_db_memory(id),
     FOREIGN KEY (FK_persistency) REFERENCES wh_db_persistency(id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE saas_web_hosting (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -260,7 +260,7 @@ CREATE TABLE saas_web_hosting (
     FOREIGN KEY (FK_datacenter) REFERENCES wh_datacenter(id),
     FOREIGN KEY (FK_SSL) REFERENCES wh_ssl(id),
     FOREIGN KEY (FK_DB) REFERENCES wh_db(id) ON DELETE SET NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE wh_dns (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -270,7 +270,7 @@ CREATE TABLE wh_dns (
     ttl INT NOT NULL,
     FK_webhosting INT NOT NULL,
     FOREIGN KEY (FK_webhosting) REFERENCES saas_web_hosting(id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE wh_domain (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -280,7 +280,7 @@ CREATE TABLE wh_domain (
     isAutoRenew BOOLEAN DEFAULT FALSE,
     FK_webhosting INT NOT NULL,
     FOREIGN KEY (FK_webhosting) REFERENCES saas_web_hosting(id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE wh_modules (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -288,7 +288,7 @@ CREATE TABLE wh_modules (
     description TEXT NOT NULL,
     version VARCHAR(256) NOT NULL,
     isActive BOOLEAN DEFAULT FALSE
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE wh_web_hosting_x_modules (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -296,7 +296,7 @@ CREATE TABLE wh_web_hosting_x_modules (
     FK_modules INT NOT NULL,
     FOREIGN KEY (FK_webhosting) REFERENCES saas_web_hosting(id) ON DELETE CASCADE,
     FOREIGN KEY (FK_modules) REFERENCES wh_modules(id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE wh_cdn (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -304,7 +304,7 @@ CREATE TABLE wh_cdn (
     endpoint VARCHAR(256) NOT NULL,
     cacheExpiration INT NOT NULL,
     bandwidth INT NOT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE wh_cdn_geolocation (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -312,7 +312,7 @@ CREATE TABLE wh_cdn_geolocation (
     latency INT NOT NULL, -- in ms
     FK_CDN INT NOT NULL,
     FOREIGN KEY (FK_CDN) REFERENCES wh_cdn(id) ON DELETE CASCADE
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE wh_web_hosting_x_cdn (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -320,7 +320,7 @@ CREATE TABLE wh_web_hosting_x_cdn (
     FK_CDN INT NOT NULL,
     FOREIGN KEY (FK_webhosting) REFERENCES saas_web_hosting(id) ON DELETE CASCADE,
     FOREIGN KEY (FK_CDN) REFERENCES wh_cdn(id) ON DELETE SET NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ////////////////////
 -- Common tables
@@ -337,7 +337,7 @@ CREATE TABLE resource_usage (
     dedicated_server_id INT,
     FOREIGN KEY (web_hosting_id) REFERENCES saas_web_hosting(id),
     FOREIGN KEY (dedicated_server_id) REFERENCES paas_dedicated_server(id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -348,4 +348,4 @@ CREATE TABLE logs (
     dedicated_server_id INT,
     FOREIGN KEY (web_hosting_id) REFERENCES saas_web_hosting(id),
     FOREIGN KEY (dedicated_server_id) REFERENCES paas_dedicated_server(id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
