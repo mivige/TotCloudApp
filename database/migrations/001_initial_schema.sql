@@ -79,6 +79,15 @@ CREATE TABLE currencytype (
     currency_name VARCHAR(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE commitment_period (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(20) NOT NULL UNIQUE,
+    description TINYTEXT,
+    discount DECIMAL(10,2),
+    currency_type CHAR(3),
+    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- ////////////////////
 -- PAAS: Dedicated Server
 -- ////////////////////
@@ -320,6 +329,7 @@ CREATE TABLE wh_web_hosting_x_cdn (
 -- ////////////////////
 -- Common tables
 -- ////////////////////
+
 CREATE TABLE resource_usage (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cpuUsage FLOAT NOT NULL, -- Percentage
@@ -327,24 +337,19 @@ CREATE TABLE resource_usage (
     diskUsage INT NOT NULL, -- in MB
     bandwidthUsage INT NOT NULL, -- in MB
     timestamp DATETIME NOT NULL,
-    FK_webhosting INT NOT NULL,
-    FOREIGN KEY (FK_webhosting) REFERENCES saas_web_hosting(id)
+    web_hosting_id INT,
+    dedicated_server_id INT,
+    FOREIGN KEY (web_hosting_id) REFERENCES saas_web_hosting(id),
+    FOREIGN KEY (dedicated_server_id) REFERENCES paas_dedicated_server(id)
 );
 
 CREATE TABLE logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     timestamp DATETIME NOT NULL,
-    eventType VARCHAR(256) NOT NULL,
+    eventType VARCHAR(256) NOT NULL, -- Maybe create a table
     details TEXT,
-    FK_webhosting INT,
-    FOREIGN KEY (FK_webhosting) REFERENCES saas_web_hosting(id)
+    web_hosting_id INT,
+    dedicated_server_id INT,
+    FOREIGN KEY (web_hosting_id) REFERENCES saas_web_hosting(id),
+    FOREIGN KEY (dedicated_server_id) REFERENCES paas_dedicated_server(id)
 );
-
-CREATE TABLE commitment_period (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    code VARCHAR(20) NOT NULL UNIQUE,
-    description TINYTEXT,
-    discount DECIMAL(10,2),
-    currency_type CHAR(3),
-    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
