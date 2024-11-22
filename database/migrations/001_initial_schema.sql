@@ -20,12 +20,8 @@ CREATE TABLE user (
     fecha_token DATETIME,
     activo TINYINT(1) DEFAULT 0,
     validated_email TINYINT(1) DEFAULT 0,
-    numero_intentos_validated_email INT DEFAULT 0,
-    fecha_cambio_password DATETIME,
     solicitud_cambio_password TINYINT(1) DEFAULT 0,
     numero_intentos_login INT DEFAULT 0,
-    numero_intentos_cambio_password INT DEFAULT 0,
-    fecha_solicitud_cambio_password DATETIME,
     admin TINYINT(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
