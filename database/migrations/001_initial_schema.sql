@@ -344,8 +344,10 @@ CREATE TABLE logs (
     timestamp DATETIME NOT NULL,
     eventType VARCHAR(256) NOT NULL, -- Maybe create a table
     details TEXT,
+    user_id INT,
     web_hosting_id INT,
     dedicated_server_id INT,
+    FOREIGN KEY (user_id) REFERENCES user(id),
     FOREIGN KEY (web_hosting_id) REFERENCES saas_web_hosting(id),
     FOREIGN KEY (dedicated_server_id) REFERENCES paas_dedicated_server(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
