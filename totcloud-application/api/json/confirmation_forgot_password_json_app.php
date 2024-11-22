@@ -21,7 +21,7 @@ if(!isset($_SESSION['app_user_token']) || empty($_SESSION['app_user_token'])) {
 
 function estokenvalido($dbb,$token,$u){
 	
-	$stmt = $dbb->prepare('SELECT * FROM users    WHERE id= ? and token= ? LIMIT 0,1');
+	$stmt = $dbb->prepare('SELECT * FROM user    WHERE id= ? and token= ? LIMIT 0,1');
 	$dbb->set_charset("utf8");
     $stmt->bind_param('ss', $u,$token);
     $stmt->execute();
@@ -52,7 +52,7 @@ function estokenvalido($dbb,$token,$u){
 
 function comprobar_codigo1_codigo2($dbb,$u,$codigo1,$codigo2){
 	
-	$stmt = $dbb->prepare('SELECT * FROM users    WHERE codigo_email= ? and codigo_sms= ?  and id= ? LIMIT 0,1');
+	$stmt = $dbb->prepare('SELECT * FROM user    WHERE codigo_email= ? and codigo_sms= ?  and id= ? LIMIT 0,1');
 	$dbb->set_charset("utf8");
     $stmt->bind_param('sss', $codigo1,$codigo2,$u);
     $stmt->execute();
@@ -60,7 +60,7 @@ function comprobar_codigo1_codigo2($dbb,$u,$codigo1,$codigo2){
 	if ($row = $result->fetch_assoc()) {
       return true;
     } else {
-	$stmt1 = $dbb->prepare('update users set numero_intentos_cambio_password=numero_intentos_cambio_password+1 WHERE  id= ? ');
+	$stmt1 = $dbb->prepare('update user set numero_intentos_cambio_password=numero_intentos_cambio_password+1 WHERE  id= ? ');
 	$dbb->set_charset("utf8");
     $stmt1->bind_param('s' ,$u);
     $stmt1->execute();
@@ -71,7 +71,7 @@ function comprobar_codigo1_codigo2($dbb,$u,$codigo1,$codigo2){
 
 function comprobar_codigo1_codigo2_no_validado($dbb,$u,$codigo1,$codigo2){
 	
-	$stmt = $dbb->prepare('SELECT * FROM users    WHERE codigo_email= ? and codigo_sms= ? and id= ? and solicitud_cambio_password=1 LIMIT 0,1');
+	$stmt = $dbb->prepare('SELECT * FROM user    WHERE codigo_email= ? and codigo_sms= ? and id= ? and solicitud_cambio_password=1 LIMIT 0,1');
 	$dbb->set_charset("utf8");
     $stmt->bind_param('sss', $codigo1,$codigo2,$u);
     $stmt->execute();
@@ -80,8 +80,8 @@ function comprobar_codigo1_codigo2_no_validado($dbb,$u,$codigo1,$codigo2){
       return true;
     } else {
 		//Borramos el usuario
-		  //$query ="delete from telemed_users where id= ?";
-		  //$stmt = $dbb->prepare('delete from telemed_users where id= ?');
+		  //$query ="delete from u_users where id= ?";
+		  //$stmt = $dbb->prepare('delete from u_user where id= ?');
           //$stmt->bind_param('s', $u);
           //$stmt->execute();
 		  //return false;
@@ -138,7 +138,7 @@ if(
            $codigo_sms = $codigo_sms;
            $password_hash = password_hash($password, PASSWORD_BCRYPT);
 
-           $query = "update users set password= ?, solicitud_cambio_password=0,numero_intentos_login=0, activo=1, token=?, fecha_token=?, fecha_cambio_password=? where id=?";
+           $query = "update user set password= ?, solicitud_cambio_password=0,numero_intentos_login=0, activo=1, token=?, fecha_token=?, fecha_cambio_password=? where id=?";
            $stmt = $dbb->prepare($query);
 		   $dbb->set_charset("utf8");
 	       $fecha_token=date("Y-m-d H:i:s");
@@ -170,7 +170,7 @@ if(
 		  
          //Miramos cuantos intentos llevamos
 		 $numero_intentos=0;
-		 $stmt = $dbb->prepare('SELECT * FROM users    WHERE id= ? and solicitud_cambio_password=1 LIMIT 0,1');
+		 $stmt = $dbb->prepare('SELECT * FROM user    WHERE id= ? and solicitud_cambio_password=1 LIMIT 0,1');
 		 $dbb->set_charset("utf8");
          $stmt->bind_param('s',$u);
          $stmt->execute();
@@ -179,7 +179,7 @@ if(
 			 $numero_intentos=$row['numero_intentos_cambio_password'];
 		 }
 		 if ($numero_intentos>=3){
-		   $stmt = $dbb->prepare('update  users set solicitud_cambio_password=0,numero_intentos_cambio_password=0 where id= ?');
+		   $stmt = $dbb->prepare('update  user set solicitud_cambio_password=0,numero_intentos_cambio_password=0 where id= ?');
 		   $dbb->set_charset("utf8");
            $stmt->bind_param('s', $u);
            $stmt->execute();

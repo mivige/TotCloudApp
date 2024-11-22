@@ -26,7 +26,7 @@ if(!empty($_GET["modificar"]) || isset($_GET["modificar"]))
 
 if(!empty($modificar) and !empty($id)){
 
-    $stmt = $dbb->prepare("SELECT * FROM paas_memory WHERE id= ? ");
+    $stmt = $dbb->prepare("SELECT * FROM ds_memory WHERE id= ? ");
     $stmt->bind_param('s', $id); // 's' indica que el parámetro es una cadena
     $stmt->execute();
     $result = $stmt->get_result(); // Obtener el resultado de la ejecución
@@ -43,7 +43,7 @@ if(!empty($modificar) and !empty($id)){
     }
 } 
 
-  $stmt = $dbb->prepare('select * from paas_memory pm inner join currencytype ct on pm.currency_type =ct.currency_code');
+  $stmt = $dbb->prepare('select * from ds_memory pm inner join currencytype ct on pm.currency_type =ct.currency_code');
   $dbb->set_charset("utf8");
   $stmt->execute();
   $result = $stmt->get_result();
@@ -64,7 +64,7 @@ if(!empty($modificar) and !empty($id)){
             </ol>
             
       <?php      if(!empty($_GET["error"])) {?>
-        <?php      if($_GET["error"]==1) {?>
+        <?php      if(($_GET["error"]==1) || ($_GET["error"]==3)) {?>
     <div class="alert alert-dismissible bg-danger text-white border-0 fade show" role="alert">
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>

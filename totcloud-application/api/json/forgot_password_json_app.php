@@ -44,7 +44,7 @@ $codigo_sms = "";
 
 
 function estokenvalido($dbb,$token,$u){
-	$stmt = $dbb->prepare('SELECT * FROM users    WHERE id= ? and token= ? LIMIT 0,1');
+	$stmt = $dbb->prepare('SELECT * FROM user    WHERE id= ? and token= ? LIMIT 0,1');
 	$dbb->set_charset("utf8");
     $stmt->bind_param('ss', $u,$token);
     $stmt->execute();
@@ -74,8 +74,8 @@ function estokenvalido($dbb,$token,$u){
 
 function emailExists($dbb,$email){
     // query to check if email exists
-    //$query = "SELECT id, firstname, lastname, lastname2,mobile_phone,password,token,codigo_email,codigo_sms,email  FROM users    WHERE email ='".$email."' LIMIT 0,1";
-    $stmt = $dbb->prepare('SELECT id, firstname, lastname, lastname2,mobile_phone,password,token,codigo_email,codigo_sms,email  FROM users    WHERE activo>=0 and email = ? LIMIT 0,1');
+    //$query = "SELECT id, firstname, lastname, lastname2,mobile_phone,password,token,codigo_email,codigo_sms,email  FROM user    WHERE email ='".$email."' LIMIT 0,1";
+    $stmt = $dbb->prepare('SELECT id, firstname, lastname, lastname2,mobile_phone,password,token,codigo_email,codigo_sms,email  FROM user    WHERE activo>=0 and email = ? LIMIT 0,1');
     $dbb->set_charset("utf8");
 	$stmt->bind_param('s', $email);
     $stmt->execute();
@@ -100,7 +100,7 @@ function emailExists($dbb,$email){
 
 function comprobar_codigo1_codigo2($dbb,$u,$codigo1,$codigo2){
 	
-	$stmt = $dbb->prepare('SELECT * FROM users    WHERE codigo_email= ? and codigo_sms= ? and id= ? LIMIT 0,1');
+	$stmt = $dbb->prepare('SELECT * FROM user    WHERE codigo_email= ? and codigo_sms= ? and id= ? LIMIT 0,1');
     $dbb->set_charset("utf8");
 	$stmt->bind_param('sss', $codigo1,$codigo2,$u);
     $stmt->execute();
@@ -108,7 +108,7 @@ function comprobar_codigo1_codigo2($dbb,$u,$codigo1,$codigo2){
 	if ($row = $result->fetch_assoc()) {
       return true;
     } else {
-	$stmt1 = $dbb->prepare('update users set numero_intentos_validated_email=numero_intentos_validated_email+1 WHERE  id= ? ');
+	$stmt1 = $dbb->prepare('update user set numero_intentos_validated_email=numero_intentos_validated_email+1 WHERE  id= ? ');
     $dbb->set_charset("utf8");
 	$stmt1->bind_param('s' ,$u);
     $stmt1->execute();
@@ -119,7 +119,7 @@ function comprobar_codigo1_codigo2($dbb,$u,$codigo1,$codigo2){
 
 function comprobar_codigo1_codigo2_no_validado($dbb,$u,$codigo1,$codigo2){
 	
-	$stmt = $dbb->prepare('SELECT * FROM users    WHERE codigo_email= ? and codigo_sms= ? and id= ? and validated_email=0 LIMIT 0,1');
+	$stmt = $dbb->prepare('SELECT * FROM user    WHERE codigo_email= ? and codigo_sms= ? and id= ? and validated_email=0 LIMIT 0,1');
     $dbb->set_charset("utf8");
 	$stmt->bind_param('sss', $codigo1,$codigo2,$u);
     $stmt->execute();
@@ -128,8 +128,8 @@ function comprobar_codigo1_codigo2_no_validado($dbb,$u,$codigo1,$codigo2){
       return true;
     } else {
 		//Borramos el usuario
-		  $query ="delete from users where id= ?";
-		   $stmt = $dbb->prepare('delete from users where id= ?');
+		  $query ="delete from user where id= ?";
+		   $stmt = $dbb->prepare('delete from user where id= ?');
           $dbb->set_charset("utf8");
 		  $stmt->bind_param('s', $u);
           $stmt->execute();
@@ -196,7 +196,7 @@ if (isset($data->email)){$email = $data->email;}
 
  
 if(!empty($email)) { 
-	 $stmt = $dbb->prepare('SELECT id, firstname, lastname, lastname2,mobile_phone,password,token,codigo_email,codigo_sms,email  FROM users    WHERE activo>=0 and email = ? LIMIT 0,1');
+	 $stmt = $dbb->prepare('SELECT id, firstname, lastname, lastname2,mobile_phone,password,token,codigo_email,codigo_sms,email  FROM user    WHERE activo>=0 and email = ? LIMIT 0,1');
     $dbb->set_charset("utf8");
 	$stmt->bind_param('s', $email);
     $stmt->execute();
@@ -225,7 +225,7 @@ if(!empty($email)) {
          $codigo_email = $codigo_email;
          $codigo_sms = $codigo_sms;
          // hash the password before saving to database	  
-         $query = "update users set codigo_email= ?, codigo_sms=? ,solicitud_cambio_password=1,numero_intentos_cambio_password=0, fecha_solicitud_cambio_password=?, token= ?, fecha_token=? where id=?";
+         $query = "update user set codigo_email= ?, codigo_sms=? ,solicitud_cambio_password=1,numero_intentos_cambio_password=0, fecha_solicitud_cambio_password=?, token= ?, fecha_token=? where id=?";
 	     $stmt = $dbb->prepare($query);
 	     $dbb->set_charset("utf8");
 		 $fecha_solicitud=date("Y-m-d H:i:s");

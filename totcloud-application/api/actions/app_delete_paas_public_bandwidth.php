@@ -19,7 +19,7 @@ if(!isset($_SESSION['app_user_token']) || empty($_SESSION['app_user_token'])) {
 
 $resultado="ERROR";   
 
-    $stmt = $dbb->prepare('delete from paas_public_bandwidth where  id=?  ');
+    $stmt = $dbb->prepare('delete from ds_public_bandwidth where  id=?  ');
 	$dbb->set_charset("utf8");
 	$stmt->bind_param('s',$id);
 	if ($stmt->execute()){

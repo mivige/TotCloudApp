@@ -31,11 +31,11 @@ if(!isset($_SESSION['app_user_token']) || empty($_SESSION['app_user_token'])) {
 
 $resultado="ERROR";   
    if($modificar==1){
-    $stmt = $dbb->prepare('update paas_memory  set price=?,description=?,code=? where  id=?  ');
+    $stmt = $dbb->prepare('update ds_memory  set price=?,description=?,code=? where  id=?  ');
 	$dbb->set_charset("utf8");
 	$stmt->bind_param('dssd',$price,$description,$code,$id);
    }else{
-    $stmt = $dbb->prepare('insert into paas_memory (price,description,code,currency_type) values (?,?,?,"978") ');
+    $stmt = $dbb->prepare('insert into ds_memory (price,description,code,currency_type) values (?,?,?,"978") ');
 	$dbb->set_charset("utf8");
 	$stmt->bind_param('dss',$price,$description,$code);
 

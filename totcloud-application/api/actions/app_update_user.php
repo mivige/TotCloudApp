@@ -36,7 +36,7 @@ if(!isset($_SESSION['app_user_token']) || empty($_SESSION['app_user_token'])) {
 
 $resultado="ERROR";   
    if($modificar==1){
-    $stmt = $dbb->prepare('update users  set firstname=?,lastname=?,lastname2=?,email=?,mobile_phone=?,activo=?,validated_email=1 where  id=?  ');
+    $stmt = $dbb->prepare('update user  set firstname=?,lastname=?,lastname2=?,email=?,mobile_phone=?,activo=?,validated_email=1 where  id=?  ');
 	$dbb->set_charset("utf8");
 	$stmt->bind_param('ssssssd',$firstname,$lastname,$lastname2,$email,$mobile_phone,$activo,$id);
    }else{

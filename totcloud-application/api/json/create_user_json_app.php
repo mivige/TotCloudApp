@@ -88,8 +88,8 @@ $codigo_sms = "";
 function emailExists($dbb,$email){
  
     // query to check if email exists
-    //$query = "SELECT id, firstname, lastname, lastname2,mobile_phone,password,token,codigo_email,codigo_sms,email  FROM users    WHERE email ='".$email."' LIMIT 0,1";
-    $stmt = $dbb->prepare('SELECT id, firstname, lastname, lastname2,mobile_phone,password,token,codigo_email,codigo_sms,email  FROM users    WHERE activo>=0 and email = ? LIMIT 0,1');
+    //$query = "SELECT id, firstname, lastname, lastname2,mobile_phone,password,token,codigo_email,codigo_sms,email  FROM user    WHERE email ='".$email."' LIMIT 0,1";
+    $stmt = $dbb->prepare('SELECT id, firstname, lastname, lastname2,mobile_phone,password,token,codigo_email,codigo_sms,email  FROM user    WHERE activo>=0 and email = ? LIMIT 0,1');
     $dbb->set_charset("utf8");
 	$stmt->bind_param('s', $email);
     $stmt->execute();
@@ -162,7 +162,7 @@ if(
     // hash the password before saving to database
     $password_hash = password_hash($password, PASSWORD_BCRYPT);
 
-     $query = "INSERT INTO users (firstname,lastname,lastname2,mobile_phone,email,token,codigo_email,codigo_sms,password,fecha_token) values ";
+     $query = "INSERT INTO user (firstname,lastname,lastname2,mobile_phone,email,token,codigo_email,codigo_sms,password,fecha_token) values ";
 	 $query=$query." (?,?,?,?,?,?,?,?,?,?)" ;  
      $stmt = $dbb->prepare($query);
 	 $dbb->set_charset("utf8");

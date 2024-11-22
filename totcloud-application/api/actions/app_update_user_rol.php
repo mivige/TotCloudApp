@@ -31,11 +31,11 @@ if(!isset($_SESSION['app_user_token']) || empty($_SESSION['app_user_token'])) {
 
 $resultado="ERROR";   
    if($modificar==1){
-    $stmt = $dbb->prepare('update roles  set role_name=?,description=?,code=? where  id=?  ');
+    $stmt = $dbb->prepare('update u_role  set role_name=?,description=?,code=? where  id=?  ');
 	$dbb->set_charset("utf8");
 	$stmt->bind_param('sssd',$nombre,$descripcion,$code,$id);
    }else{
-    $stmt = $dbb->prepare('insert into roles (role_name,description,code) values (?,?,?) ');
+    $stmt = $dbb->prepare('insert into u_role (role_name,description,code) values (?,?,?) ');
 	$dbb->set_charset("utf8");
 	$stmt->bind_param('sss',$nombre,$descripcion,$code);
 

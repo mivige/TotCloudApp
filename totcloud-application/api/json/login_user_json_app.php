@@ -59,7 +59,7 @@ if(
 	 {   
 	 
 	    
-	     $stmt = $dbb->prepare('SELECT * FROM users    WHERE activo>0 and validated_email=1 and solicitud_cambio_password=0 and numero_intentos_login<3 and  email= ? ');
+	     $stmt = $dbb->prepare('SELECT * FROM user    WHERE activo>0 and validated_email=1 and solicitud_cambio_password=0 and numero_intentos_login<3 and  email= ? ');
          $dbb->set_charset("utf8");
 		 $stmt->bind_param('s',$email);
          $stmt->execute();
@@ -82,7 +82,7 @@ if(
 	         if (!password_verify($password,$password_hash)) {
 			     
 		 		 if ($numero_intentos_login>=2){
-		 		    $stmt = $dbb->prepare('update users set numero_intentos_login=3  where id= ?');
+		 		    $stmt = $dbb->prepare('update user set numero_intentos_login=3  where id= ?');
                     $dbb->set_charset("utf8");
 					$stmt->bind_param('s', $id);
                     if ($stmt->execute()){
@@ -92,7 +92,7 @@ if(
 					  echo json_encode(array("message" => "Error al actualizar datos del usuario"));  
 				    }
 				 } else {
-		 		    $stmt = $dbb->prepare('update users set numero_intentos_login=numero_intentos_login+1 where id= ?');
+		 		    $stmt = $dbb->prepare('update user set numero_intentos_login=numero_intentos_login+1 where id= ?');
                     $dbb->set_charset("utf8");
 					$stmt->bind_param('s', $id);
                     if ($stmt->execute()){
@@ -105,12 +105,12 @@ if(
 				 }
 			 } else {
 			    $fecha_token=date("Y-m-d H:i:s");
-			    $stmt = $dbb->prepare('UPDATE users set activo=1=1,token=?,fecha_token=? where id= ?');
+			    $stmt = $dbb->prepare('UPDATE user set activo=1=1,token=?,fecha_token=? where id= ?');
                 $dbb->set_charset("utf8");
 				$stmt->bind_param('sss', $token,$fecha_token,$id);
                 if ($stmt->execute()){
 					//Ponemos numero de intentos a 0
-					 $stmt = $dbb->prepare('UPDATE users set numero_intentos_login=0 where id= ?');
+					 $stmt = $dbb->prepare('UPDATE user set numero_intentos_login=0 where id= ?');
                       $dbb->set_charset("utf8");
 					  $stmt->bind_param('s', $id);
 					  $stmt->execute();
@@ -153,7 +153,7 @@ if(
 			      // set response code
 				  
 				  //Aqui miramos activo y password pendiente cambiar
-	          $stmt = $dbb->prepare('SELECT * FROM users    WHERE activo>0  and  email= ? ');
+	          $stmt = $dbb->prepare('SELECT * FROM user    WHERE activo>0  and  email= ? ');
               $dbb->set_charset("utf8");
 			  $stmt->bind_param('s',$email);
               $stmt->execute();
@@ -172,7 +172,7 @@ if(
 			   else{		  
 				  
                  
-	          $stmt = $dbb->prepare('SELECT * FROM users    WHERE activo=0 and email= ? ');
+	          $stmt = $dbb->prepare('SELECT * FROM user    WHERE activo=0 and email= ? ');
               $dbb->set_charset("utf8");
 			  $stmt->bind_param('s',$email);
               $stmt->execute();
@@ -188,7 +188,7 @@ if(
 			  }
 	         } else {
 				 
-                $stmt = $dbb->prepare('SELECT * FROM users    WHERE activo=-1 and email= ? ');
+                $stmt = $dbb->prepare('SELECT * FROM user    WHERE activo=-1 and email= ? ');
                 $dbb->set_charset("utf8");
 				$stmt->bind_param('s',$email);
                 $stmt->execute();

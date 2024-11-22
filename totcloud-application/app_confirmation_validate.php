@@ -31,7 +31,7 @@ if (isset($_GET['u']) && !empty($_GET['u'])&& isset($_GET['token']) && !empty($_
 
 
 if ($variables){
-    $stmt = $dbb->prepare('SELECT * FROM users    WHERE id= ? and token= ? LIMIT 0,1');
+    $stmt = $dbb->prepare('SELECT * FROM user    WHERE id= ? and token= ? LIMIT 0,1');
     $dbb->set_charset("utf8");
 	$stmt->bind_param('ss', $u,$token);
     $stmt->execute();

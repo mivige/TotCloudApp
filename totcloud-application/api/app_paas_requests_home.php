@@ -2,13 +2,28 @@
 <?php
 
 $id="";
-$titulo="";
-$descripcion="";
+$fila = "";
+$category_code="";
+$public_bandwidth_code="";
+$private_bandwidth_code="";
+$storage_code="";
+$memory_code="";
+$processor_code="";
+$data_center_region_code="";
+$os_code="";
+$commitment_period_code="";
+$request_id="";
+$encontrado=true;
 $encontrado=false;
-$estado="";
-$fecha_creacion="";
+
+//$fecha_creacion="";
 
 
+include_once "config/actualizar_token.php";
+   
+
+
+   
 
 
 if(!empty($_GET["id"]) || isset($_GET["id"]))
@@ -21,7 +36,7 @@ if(!empty($_GET["modificar"]) || isset($_GET["modificar"]))
 
 if(!empty($modificar) and !empty($id)){
 
-    $stmt = $dbb->prepare("SELECT * FROM paas_request WHERE id= ? ");
+    $stmt = $dbb->prepare("SELECT * FROM paas_dedicated_server pds join request rq on pds.request_id=rq.request_id WHERE id= ? ");
     $stmt->bind_param('s', $id); // 's' indica que el parámetro es una cadena
     $stmt->execute();
     $result = $stmt->get_result(); // Obtener el resultado de la ejecución
@@ -29,20 +44,39 @@ if(!empty($modificar) and !empty($id)){
     if ($result->num_rows > 0) {
         // Obtener el único resultado
         $fila = $result->fetch_assoc();
-        $titulo=$fila['titulo'];
-        $descripcion=$fila['descripcion'];
-        $estado=$fila['estado'];
+        $category_code=$fila['category_code'];
+        $public_bandwidth_code=$fila['public_bandwidth_code'];
+        $private_bandwidth_code=$fila['private_bandwidth_code'];
+        $storage_code=$fila['storage_code'];
+        $memory_code=$fila['memory_code'];
+        $processor_code=$fila['processor_code'];
+        $data_center_region_code=$fila['data_center_region_code'];
+        $os_code=$fila['os_code'];
+        $state=$fila['state'];
+        $commitment_period_code=$fila['commitment_period'];
+        $request_id=$fila['request_id'];
         $encontrado=true;
-        $fecha_creacion=$fila['fecha_creacion'];
-        $fecha_creacion = explode(" ",$fecha_creacion)[0]; 
+        //$fecha_creacion=$fila['fecha_creacion'];
+        //$fecha_creacion = explode(" ",$fecha_creacion)[0]; 
     }
 } 
 
-  $stmt = $dbb->prepare('select * from paas_request pr inner join paas_dedicated_server pds on pr.dedicated_server_code=pds.id inner join category cat on cat.code=pds.category_code inner join users us on us.id=pr.user_id');
+if ($es_admin==1){
+
+  $stmt = $dbb->prepare('select pr.request_id,pr.date,pr.state,pr.user_id,us.email,pds.id as pdsid,cat.name from request pr inner join paas_dedicated_server pds on pr.request_id=pds.request_id inner join category cat on cat.code=pds.category_code inner join user us on us.id=pr.user_id');
   $dbb->set_charset("utf8");
   $stmt->execute();
   $result = $stmt->get_result();
-  
+} else{
+
+    $stmt = $dbb->prepare('select pr.request_id,pr.date,pr.state,pr.user_id,us.email,pds.id as pdsid,cat.name from request pr inner join paas_dedicated_server pds on pr.request_id=pds.request_id inner join category cat on cat.code=pds.category_code inner join user us on us.id=pr.user_id and us.id=?');
+    
+    $stmt->bind_param('s', $id_user); // 's' indica que el parámetro es una cadena
+    $dbb->set_charset("utf8");
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+}
 ?>
 
 <div class="row m-0">
@@ -108,7 +142,7 @@ if(!empty($modificar) and !empty($id)){
                 <?php }?>
                 
 
-                <?php $stmt_tmp = $dbb->prepare('select * from paas_processor pp inner join currencytype ct  on pp.currency_type = ct.currency_code;');
+                <?php $stmt_tmp = $dbb->prepare('select * from ds_processor pp inner join currencytype ct  on pp.currency_type = ct.currency_code;');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>
@@ -118,7 +152,8 @@ if(!empty($modificar) and !empty($id)){
                 <select id="custom-select" class="form-control custom-select" id="processor" name="processor" required>
                     <option value="" disabled selected>Select a Processor</option>
                     <?php while ($processor = $result_tmp->fetch_assoc()): ?>
-                        <option value="<?php echo htmlspecialchars($processor['code']); ?>"><?php echo htmlspecialchars($processor['description']); echo" +";echo htmlspecialchars($processor['price']);echo" ";echo htmlspecialchars($processor['currency_name'])?></option>
+                        
+                        <option  <?php if ($processor_code==$processor['code']){?>selected<?php };?> value="<?php echo htmlspecialchars($processor['code']); ?>"><?php echo htmlspecialchars($processor['description']); echo" +";echo htmlspecialchars($processor['price']);echo" ";echo htmlspecialchars($processor['currency_name'])?></option>
                     <?php endwhile; ?>
                 </select>
                 <div class="invalid-feedback">
@@ -126,7 +161,7 @@ if(!empty($modificar) and !empty($id)){
                 </div>
             </div>
 
-            <?php $stmt_tmp = $dbb->prepare('select * from paas_memory pm inner join currencytype ct  on pm.currency_type = ct.currency_code;');
+            <?php $stmt_tmp = $dbb->prepare('select * from ds_memory pm inner join currencytype ct  on pm.currency_type = ct.currency_code;');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>           
@@ -135,7 +170,7 @@ if(!empty($modificar) and !empty($id)){
                 <select id="custom-select" class="form-control custom-select" id="memory" name="memory" required>
                     <option value="" disabled selected>Select a Memory</option>
                     <?php while ($memory = $result_tmp->fetch_assoc()): ?>
-                        <option value="<?php echo htmlspecialchars($memory['code']); ?>"><?php echo htmlspecialchars($memory['description']); echo" +";echo htmlspecialchars($memory['price']);echo" ";echo htmlspecialchars($memory['currency_name']) ?></option>
+                        <option <?php if ($memory_code==$memory['code']){?>selected<?php };?>    value="<?php echo htmlspecialchars($memory['code']); ?>"><?php echo htmlspecialchars($memory['description']); echo" +";echo htmlspecialchars($memory['price']);echo" ";echo htmlspecialchars($memory['currency_name']) ?></option>
                     <?php endwhile; ?>
                 </select>
                 <div class="invalid-feedback">
@@ -148,7 +183,7 @@ if(!empty($modificar) and !empty($id)){
 
 
             <div class="row mb-3">
-            <?php $stmt_tmp = $dbb->prepare('select * from paas_private_bandwidth pp inner join currencytype ct  on pp.currency_type = ct.currency_code;');
+            <?php $stmt_tmp = $dbb->prepare('select code,description,price,currency_name from ds_private_bandwidth pp inner join currencytype ct  on pp.currency_type = ct.currency_code;');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>
@@ -158,7 +193,7 @@ if(!empty($modificar) and !empty($id)){
                 <select id="custom-select" class="form-control custom-select" id="private_bandwith" name="private_bandwith" required>
                     <option value="" disabled selected>Select a Private Bandwith</option>
                     <?php while ($private_bandwith = $result_tmp->fetch_assoc()): ?>
-                        <option value="<?php echo htmlspecialchars($private_bandwith['code']); ?>"><?php echo htmlspecialchars($private_bandwith['description']); ; echo" +";echo htmlspecialchars($private_bandwith['price']);echo" ";echo htmlspecialchars($private_bandwith['currency_name']) ?></option>
+                        <option <?php if ($private_bandwidth_code==$private_bandwith['code']){?>selected<?php };?>  value="<?php echo htmlspecialchars($private_bandwith['code']); ?>"><?php echo htmlspecialchars($private_bandwith['description']); ; echo" +";echo htmlspecialchars($private_bandwith['price']);echo" ";echo htmlspecialchars($private_bandwith['currency_name']) ?></option>
                     <?php endwhile; ?>
                 </select>
                 <div class="invalid-feedback">
@@ -166,7 +201,7 @@ if(!empty($modificar) and !empty($id)){
                 </div>
             </div>
 
-            <?php $stmt_tmp = $dbb->prepare('select * from paas_public_bandwidth pp inner join currencytype ct  on pp.currency_type = ct.currency_code;');
+            <?php $stmt_tmp = $dbb->prepare('select * from ds_public_bandwidth pp inner join currencytype ct  on pp.currency_type = ct.currency_code;');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>           
@@ -175,7 +210,7 @@ if(!empty($modificar) and !empty($id)){
                 <select id="custom-select" class="form-control custom-select" id="public_bandwith" name="public_bandwith" required>
                     <option value="" disabled selected>Select a Public Bandwith</option>
                     <?php while ($public_bandwith = $result_tmp->fetch_assoc()): ?>
-                        <option value="<?php echo htmlspecialchars($public_bandwith['code']); ?>"><?php echo htmlspecialchars($public_bandwith['description']); ; echo" +";echo htmlspecialchars($public_bandwith['price']);echo" ";echo htmlspecialchars($public_bandwith['currency_name']) ?></option>
+                        <option <?php if ($public_bandwidth_code==$public_bandwith['code']){?>selected<?php };?>   value="<?php echo htmlspecialchars($public_bandwith['code']); ?>"><?php echo htmlspecialchars($public_bandwith['description']); ; echo" +";echo htmlspecialchars($public_bandwith['price']);echo" ";echo htmlspecialchars($public_bandwith['currency_name']) ?></option>
                     <?php endwhile; ?>
                 </select>
                 <div class="invalid-feedback">
@@ -187,7 +222,7 @@ if(!empty($modificar) and !empty($id)){
 
 
             <div class="row mb-3">
-            <?php $stmt_tmp = $dbb->prepare('select * from paas_storage ps inner join currencytype ct  on ps.currency_type = ct.currency_code;');
+            <?php $stmt_tmp = $dbb->prepare('select * from ds_storage ps inner join currencytype ct  on ps.currency_type = ct.currency_code;');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>
@@ -197,7 +232,7 @@ if(!empty($modificar) and !empty($id)){
                 <select id="custom-select" class="form-control custom-select" id="storage" name="storage" required>
                     <option value="" disabled selected>Select a Storage</option>
                     <?php while ($storage = $result_tmp->fetch_assoc()): ?>
-                        <option value="<?php echo htmlspecialchars($storage['code']); ?>"><?php echo htmlspecialchars($storage['description']); echo" +";echo htmlspecialchars($storage['price']);echo" ";echo htmlspecialchars($storage['currency_name']) ?></option>
+                        <option <?php if ($storage_code==$storage['code']){?>selected<?php };?>   value="<?php echo htmlspecialchars($storage['code']); ?>"><?php echo htmlspecialchars($storage['description']); echo" +";echo htmlspecialchars($storage['price']);echo" ";echo htmlspecialchars($storage['currency_name']) ?></option>
                     <?php endwhile; ?>
                 </select>
                 <div class="invalid-feedback">
@@ -205,7 +240,7 @@ if(!empty($modificar) and !empty($id)){
                 </div>
             </div>
 
-            <?php $stmt_tmp = $dbb->prepare('select * from paas_os po inner join currencytype ct  on po.currency_type = ct.currency_code;');
+            <?php $stmt_tmp = $dbb->prepare('select * from ds_os po inner join currencytype ct  on po.currency_type = ct.currency_code;');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>           
@@ -214,7 +249,7 @@ if(!empty($modificar) and !empty($id)){
                 <select id="custom-select" class="form-control custom-select" id="os" name="os" required>
                     <option value="" disabled selected>Select a Operating Systemy</option>
                     <?php while ($os = $result_tmp->fetch_assoc()): ?>
-                        <option value="<?php echo htmlspecialchars($os['code']); ?>"><?php echo htmlspecialchars($os['name']);  echo" +";echo htmlspecialchars($os['price']);echo" ";echo htmlspecialchars($os['currency_name'])?></option>
+                        <option <?php if ($os_code==$os['code']){?>selected<?php };?>   value="<?php echo htmlspecialchars($os['code']); ?>"><?php echo htmlspecialchars($os['name']);  echo" +";echo htmlspecialchars($os['price']);echo" ";echo htmlspecialchars($os['currency_name'])?></option>
                     <?php endwhile; ?>
                 </select>
                 <div class="invalid-feedback">
@@ -226,7 +261,7 @@ if(!empty($modificar) and !empty($id)){
 
 
             <div class="row mb-3">
-            <?php $stmt_tmp = $dbb->prepare('SELECT * FROM paas_datacenterregion');
+            <?php $stmt_tmp = $dbb->prepare('SELECT * FROM ds_datacenterregion');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>
@@ -236,7 +271,7 @@ if(!empty($modificar) and !empty($id)){
                 <select id="custom-select" class="form-control custom-select" id="datacenterregion" name="datacenterregion" required>
                     <option value="" disabled selected>Select a Data Center Region</option>
                     <?php while ($datacenterregion = $result_tmp->fetch_assoc()): ?>
-                        <option value="<?php echo htmlspecialchars($datacenterregion['code']); ?>"><?php echo htmlspecialchars($datacenterregion['description']); ?></option>
+                        <option <?php if ($data_center_region_code==$datacenterregion['code']){?>selected<?php };?>   value="<?php echo htmlspecialchars($datacenterregion['code']); ?>"><?php echo htmlspecialchars($datacenterregion['description']); ?></option>
                     <?php endwhile; ?>
                 </select>
                 <div class="invalid-feedback">
@@ -244,7 +279,7 @@ if(!empty($modificar) and !empty($id)){
                 </div>
             </div>
 
-            <?php $stmt_tmp = $dbb->prepare('SELECT * FROM paas_commitment_period');
+            <?php $stmt_tmp = $dbb->prepare('SELECT * FROM commitment_period');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>           
@@ -253,7 +288,7 @@ if(!empty($modificar) and !empty($id)){
                 <select id="custom-select" class="form-control custom-select" id="commitment_period" name="commitment_period" required>
                     <option value="" disabled selected>Select a Commitment Period</option>
                     <?php while ($commitment_period = $result_tmp->fetch_assoc()): ?>
-                        <option value="<?php echo htmlspecialchars($commitment_period['code']); ?>"><?php echo htmlspecialchars($commitment_period['description']); ?></option>
+                        <option <?php if ($commitment_period_code==$commitment_period['code']){?>selected<?php };?> value="<?php echo htmlspecialchars($commitment_period['code']); ?>"><?php echo htmlspecialchars($commitment_period['description']); ?></option>
                     <?php endwhile; ?>
                 </select>
                 <div class="invalid-feedback">
@@ -262,8 +297,30 @@ if(!empty($modificar) and !empty($id)){
             </div>   
             </div>  
             
-            
+            <?php if ($es_admin==1 && $encontrado==true){      ?>
+                <input type="hidden" name="request_id" value="<?php echo $request_id ?>">
+            <div class="card border-left-3 border-left-primary">
+  <div class="card-body">
 
+
+  <div class="col-6">
+                <label for="state" class="form-label">State</label>
+                <select id="custom-select" class="form-control custom-select" id="state" name="state" required>
+                    <option value="" disabled selected>Select a State</option>
+                    
+                        <option <?php if ($state=="0"){?>selected<?php };?> value="0">OPEN</option>
+                        <option <?php if ($state=="1"){?>selected<?php };?> value="1">ON PROGRESS</option>
+                        <option <?php if ($state=="2"){?>selected<?php };?> value="2">CLOSED</option>
+                    
+                </select>
+                <div class="invalid-feedback">
+                    Please, select a Commitment Period.
+                </div>
+            </div>
+
+  </div>
+</div>
+<?php } ?>
 
             <?php if ($encontrado) {?>
                 <button type="submit" class="btn btn-primary">Modify</button>
@@ -318,15 +375,15 @@ if(!empty($modificar) and !empty($id)){
                                             <td class="text-center">
                                                 <div class="d-flex align-items-center">
                                                     <small class="text-uppercase text-muted mr-2">Status</small>
-                                                    <?php if ($row["estado"]=='0'){ 
+                                                    <?php if ($row["state"]=='0'){ 
                                                         $est="OPEN";?>
                                                     <i class="material-icons text-danger md-18 mr-2">lens</i>
                                                     <?php }?>
-                                                    <?php if ($row["estado"]=='1'){ 
+                                                    <?php if ($row["state"]=='1'){ 
                                                         $est="ON PROGRESS";?>
                                                     <i class="material-icons text-primary md-18 mr-2">lens</i>
                                                     <?php }?>    
-                                                    <?php if ($row["estado"]=='2'){
+                                                    <?php if ($row["state"]=='2'){
                                                         $est="CLOSED";?>
                                                     <i class="material-icons text-success md-18 mr-2">lens</i>
                                                     <?php }?>                                                                                                   
@@ -349,7 +406,7 @@ if(!empty($modificar) and !empty($id)){
                                    </button>
                                    
                                                                                                          
-                                   <button id="dropdown1" onclick="pulsar_modificar('<?php echo $row['request_id']; ?>');" type="button btn-primary"  data-toggle="tooltip" data-placement="left" title="Modificar" class="btn btn-flush " >
+                                   <button id="dropdown1" onclick="pulsar_modificar('<?php echo $row['pdsid']; ?>');" type="button btn-primary"  data-toggle="tooltip" data-placement="left" title="Modificar" class="btn btn-flush " >
                                      <i class="material-icons  text-primary">edit</i>
                                    </button>  
                                             </td>

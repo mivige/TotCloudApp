@@ -21,7 +21,7 @@ if(!empty($_GET["modificar"]) || isset($_GET["modificar"]))
 
 if(!empty($modificar) and !empty($id)){
 
-    $stmt = $dbb->prepare("SELECT * FROM roles WHERE id= ? ");
+    $stmt = $dbb->prepare("SELECT * FROM u_role WHERE id= ? ");
     $stmt->bind_param('s', $id); // 's' indica que el parámetro es una cadena
     $stmt->execute();
     $result = $stmt->get_result(); // Obtener el resultado de la ejecución
@@ -38,7 +38,7 @@ if(!empty($modificar) and !empty($id)){
     }
 } 
 
-  $stmt = $dbb->prepare('select * from roles');
+  $stmt = $dbb->prepare('select * from u_role');
   $dbb->set_charset("utf8");
   $stmt->execute();
   $result = $stmt->get_result();
@@ -55,13 +55,13 @@ if(!empty($modificar) and !empty($id)){
         <h1 class="h2">Users Rols Management</h1>
         <ol class="breadcrumb">
                     <li class="breadcrumb-item active"><a href="index.php?opcion=users">Users Management</a></li>
-                    <?php if (tieneRol("DEFROL1")){?>
+                    <?php if (tieneRol("DEFROL1") or ($es_admin==1)){?>
                     <li class="breadcrumb-item "><a href="index.php?opcion=roles">Users Rols Management</a></li>
                     <?php } ?> 
             </ol>
             
       <?php      if(!empty($_GET["error"])) {?>
-        <?php      if($_GET["error"]==1) {?>
+        <?php      if(($_GET["error"]==1) || ($_GET["error"]==3)) {?>
     <div class="alert alert-dismissible bg-danger text-white border-0 fade show" role="alert">
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>

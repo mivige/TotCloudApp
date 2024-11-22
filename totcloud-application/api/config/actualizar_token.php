@@ -1,6 +1,6 @@
 <?php
 $validado='0';
-    $stmt = $dbb->prepare('SELECT * FROM users    WHERE  token= ? and activo=1 LIMIT 0,1');
+    $stmt = $dbb->prepare('SELECT * FROM user    WHERE  token= ? and activo=1 LIMIT 0,1');
     $dbb->set_charset("utf8");
 	$stmt->bind_param('s',$_SESSION['app_user_token']);
     $stmt->execute();
@@ -34,7 +34,7 @@ $validado='0';
           $token = bin2hex($token);
           // create the user
 		  $fecha_token=date("Y-m-d H:i:s");
-          $stmt = $dbb->prepare('update users  set  token= ?,fecha_token=? where token=? ');
+          $stmt = $dbb->prepare('update user  set  token= ?,fecha_token=? where token=? ');
 		  $dbb->set_charset("utf8");
 		  $stmt->bind_param("sss", $token, $fecha_token,$_SESSION['app_user_token']);
 	      $stmt->execute();	
@@ -43,8 +43,8 @@ $validado='0';
 
 		  $stmt1 = $dbb->prepare("
 		  SELECT r.code
-		  FROM roles r
-		  JOIN user_roles ur ON ur.role_id = r.code
+		  FROM u_role r
+		  JOIN u_user_x_role ur ON ur.role_id = r.code
 		  WHERE ur.user_id = ?
 	  ");
 	  $dbb->set_charset("utf8");
@@ -74,8 +74,8 @@ $validado='0';
 		// Preparar la consulta
 		$stmt = $mysqli->prepare("
 			SELECT r.code
-			FROM roles r
-			JOIN user_roles ur ON ur.role_id = r.id
+			FROM u_role r
+			JOIN u_user_x_role ur ON ur.role_id = r.id
 			WHERE ur.user_id = ?
 		");
 		

@@ -40,7 +40,7 @@ $codigo_sms = "";
 
 function estokenvalido($dbb,$token,$u){
 	
-	$stmt = $dbb->prepare('SELECT * FROM users    WHERE id= ? and token= ? LIMIT 0,1');
+	$stmt = $dbb->prepare('SELECT * FROM user    WHERE id= ? and token= ? LIMIT 0,1');
 $dbb->set_charset("utf8");   
    $stmt->bind_param('ss', $u,$token);
     $stmt->execute();
@@ -58,7 +58,7 @@ $dbb->set_charset("utf8");
         $diferencia_dias=$interval->format('%a')*24*60;		
 		$diferencia_total=$diferencia_min+$diferencia_dias+$diferencia_horas;
 		if ($diferencia_total>1500) {
-		  $stmt = $dbb->prepare('delete from users where id= ?');
+		  $stmt = $dbb->prepare('delete from user where id= ?');
           $dbb->set_charset("utf8");
 		  $stmt->bind_param('s', $u);
           $stmt->execute();
@@ -74,7 +74,7 @@ $dbb->set_charset("utf8");
 
 function comprobar_codigo1_codigo2($dbb,$u,$codigo1,$codigo2){
 	
-	$stmt = $dbb->prepare('SELECT * FROM users    WHERE codigo_email= ? and codigo_sms= ?  and id= ? LIMIT 0,1');
+	$stmt = $dbb->prepare('SELECT * FROM user    WHERE codigo_email= ? and codigo_sms= ?  and id= ? LIMIT 0,1');
     $dbb->set_charset("utf8");
 	$stmt->bind_param('sss', $codigo1,$codigo2,$u);
     $stmt->execute();
@@ -82,7 +82,7 @@ function comprobar_codigo1_codigo2($dbb,$u,$codigo1,$codigo2){
 	if ($row = $result->fetch_assoc()) {
       return true;
     } else {
-	$stmt1 = $dbb->prepare('update users set numero_intentos_validated_email=numero_intentos_validated_email+1 WHERE  id= ? ');
+	$stmt1 = $dbb->prepare('update user set numero_intentos_validated_email=numero_intentos_validated_email+1 WHERE  id= ? ');
     $dbb->set_charset("utf8");
 	$stmt1->bind_param('s' ,$u);
     $stmt1->execute();
@@ -93,7 +93,7 @@ function comprobar_codigo1_codigo2($dbb,$u,$codigo1,$codigo2){
 
 function comprobar_codigo1_codigo2_no_validado($dbb,$u,$codigo1,$codigo2){
 	
-	$stmt = $dbb->prepare('SELECT * FROM users    WHERE codigo_email= ? and codigo_sms= ? and id= ? and validated_email=0 LIMIT 0,1');
+	$stmt = $dbb->prepare('SELECT * FROM user    WHERE codigo_email= ? and codigo_sms= ? and id= ? and validated_email=0 LIMIT 0,1');
     $dbb->set_charset("utf8");
 	$stmt->bind_param('sss', $codigo1,$codigo2,$u);
     $stmt->execute();
@@ -102,8 +102,8 @@ function comprobar_codigo1_codigo2_no_validado($dbb,$u,$codigo1,$codigo2){
       return true;
     } else {
 		//Borramos el usuario
-		  //$query ="delete from telemed_users where id= ?";
-		  //$stmt = $dbb->prepare('delete from telemed_users where id= ?');
+		  //$query ="delete from u_user where id= ?";
+		  //$stmt = $dbb->prepare('delete from u_user where id= ?');
           //$stmt->bind_param('s', $u);
           //$stmt->execute();
 		  //return false;
@@ -137,9 +137,9 @@ if(
             $token = openssl_random_pseudo_bytes(32);
             //Convert the binary data into hexadecimal representation.
             $token = bin2hex($token);	  
-		    $query ="UPDATE users set validated_email=1,token=? where id= ?";
+		    $query ="UPDATE user set validated_email=1,token=? where id= ?";
 		    $fecha_token=date("Y-m-d H:i:s");
-		    $stmt = $dbb->prepare('UPDATE users set activo=1,validated_email=1,token=?,fecha_token=?,fecha_cambio_password=? where id= ?');
+		    $stmt = $dbb->prepare('UPDATE user set activo=1,validated_email=1,token=?,fecha_token=?,fecha_cambio_password=? where id= ?');
             $dbb->set_charset("utf8");
 			$stmt->bind_param('ssss', $token,$fecha_token,$fecha_token,$u);
             if ($stmt->execute()){
@@ -156,7 +156,7 @@ if(
        }else{
          //Miramos cuantos intentos llevamos
 		 $numero_intentos=0;
-		 $stmt = $dbb->prepare('SELECT * FROM users    WHERE id= ? and validated_email=0 LIMIT 0,1');
+		 $stmt = $dbb->prepare('SELECT * FROM user    WHERE id= ? and validated_email=0 LIMIT 0,1');
          $dbb->set_charset("utf8");
 		 $stmt->bind_param('s',$u);
          $stmt->execute();
@@ -165,7 +165,7 @@ if(
 			 $numero_intentos=$row['numero_intentos_validated_email'];
 		 }
 		 if ($numero_intentos>=3){
-		   $stmt = $dbb->prepare('delete from users where id= ?');
+		   $stmt = $dbb->prepare('delete from user where id= ?');
            $dbb->set_charset("utf8");
 		   $stmt->bind_param('s', $u);
            $stmt->execute();

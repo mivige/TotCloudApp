@@ -31,7 +31,7 @@ if(empty($id)){
 
 if(!empty($id)){
 
-    $stmt = $dbb->prepare("SELECT * FROM users WHERE id= ? ");
+    $stmt = $dbb->prepare("SELECT * FROM user WHERE id= ? ");
     $stmt->bind_param('s', $id); // 's' indica que el parámetro es una cadena
     $stmt->execute();
     $result = $stmt->get_result(); // Obtener el resultado de la ejecución
@@ -70,14 +70,14 @@ if(!empty($id)){
         <h1 class="h2">Roles from a User Management</h1>
         <ol class="breadcrumb">
                     <li class="breadcrumb-item "><a href="index.php?opcion=users">Users Management</a></li>
-                    <?php if (tieneRol("DEFROL1")){?>
+                    <?php if (tieneRol("DEFROL1") or  ($es_admin==1)){?>
                     <li class="breadcrumb-item active "><a href="index.php?opcion=roles">Users Rols Management</a></li>
                 <?php } ?>
             </ol>
 
 
             <?php      if(!empty($_GET["error"])) {?>
-        <?php      if($_GET["error"]==1) {?>
+        <?php      if(($_GET["error"]==1) || ($_GET["error"]==3)) {?>
     <div class="alert alert-dismissible bg-danger text-white border-0 fade show" role="alert">
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
@@ -152,7 +152,7 @@ if(!empty($id)){
         
         <div class="row mb-3">
 
-<?php $stmt = $dbb->prepare('SELECT code, role_name FROM roles');
+<?php $stmt = $dbb->prepare('SELECT code, role_name FROM u_role');
 $stmt->execute();
 
 // Obtenemos los resultados
@@ -220,7 +220,7 @@ $stmt->close();
                             </div>
                             <h2 class="h2">Roles assigned to the selected User</h2>
                             
-                            <?php                         $stmt = $dbb->prepare('select ur.id as id1,u.id,r.code,r.description,r.role_name from user_roles as ur inner join users u on ur.user_id=u.id inner join roles r on ur.role_id=r.code and u.id=?');
+                            <?php                         $stmt = $dbb->prepare('select ur.id as id1,u.id,r.code,r.description,r.role_name from u_user_x_role as ur inner join user u on ur.user_id=u.id inner join u_role r on ur.role_id=r.code and u.id=?');
   $stmt->bind_param('s', $id); // 's' indica que el parámetro es una cadena
   $dbb->set_charset("utf8");
   $stmt->execute();

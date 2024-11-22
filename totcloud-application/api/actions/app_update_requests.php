@@ -35,6 +35,11 @@ if( empty($id) && $modificar==1) {
     $fecha_creacion=isset($_POST['fecha_creacion']) ? trim($_POST['fecha_creacion']) : '';
     $fecha_creacion=StringInputCleaner($fecha_creacion);
 
+    $request_id=isset($_POST['request_id']) ? trim($_POST['request_id']) : '';
+    $request_id=StringInputCleaner($request_id);
+    $state=isset($_POST['state']) ? trim($_POST['state']) : '';
+    $state=StringInputCleaner($state);
+
 }
 
 
@@ -45,22 +50,52 @@ if(!isset($_SESSION['app_user_token']) || empty($_SESSION['app_user_token'])) {
 
 $resultado="ERROR";   
    if($modificar==1){
-    $stmt = $dbb->prepare('update paas_dedicated_servert  set titulo=?,descripcion=?,estado=?,fecha_creacion=? where  id=?  ');
+    $stmt = $dbb->prepare('update paas_dedicated_server  set public_bandwidth_code=?,private_bandwidth_code=?,storage_code=?,memory_code=?,processor_code=?,data_center_region_code=?,os_code=?,commitment_period=? where  id=?  ');
 	$dbb->set_charset("utf8");
-	$stmt->bind_param('sssss',$titulo,$descripcion,$estado,$fecha_creacion,$id);
-   }else{
-    $stmt = $dbb->prepare('insert into paas_dedicated_server (category_code,public_bandwidth_code,private_bandwidth_code,storage_code,memory_code,processor_code,data_center_region_code,os_code,commitment_period) values ("DDS001",?,?,?,?,?,?,?,?) ');
-	$dbb->set_charset("utf8");
-	$stmt->bind_param('ssssssss',$public_bandwith,$private_bandwith,$storage,$memory,$processor,$datacenterregion,$os,$commitment_period);
+	$stmt->bind_param('sssssssss',$public_bandwith,$private_bandwith,$storage,$memory,$processor,$datacenterregion,$os,$commitment_period,$id);
 
-   }
-	if ($stmt->execute()){
-        $id_server=$dbb->insert_id;
-        $fecha_request=date("Y-m-d H:i:s");
-        
-        $stmt = $dbb->prepare('insert into paas_request (date,dedicated_server_code,user_id) values (?,?,?) ');
+
+
+
+
+    if ($stmt->execute()){
+
+        $stmt = $dbb->prepare('update request  set state=? where  request_id=?  ');
         $dbb->set_charset("utf8");
-        $stmt->bind_param('sss',$fecha_request,$id_server,$id_user);
+        $stmt->bind_param('ss',$state,$request_id);
+    
+        if ($stmt->execute()){
+
+
+		header("Location: ../../index.php?opcion=requests&error=2");
+        }else{
+
+            header("Location: ../../index.php?opcion=requests&error=3");
+        }
+        }else{
+          //echo $private_bandwith."-".$public_bandwith."-".$storage."-".$memory."-".$processor."-".$datacenterregion."-".$os."-".$commitment_period."-".$id;
+            header("Location: ../../index.php?opcion=requests&error=3");
+        }
+        exit; 
+
+
+   }else{
+
+
+    $fecha_request=date("Y-m-d H:i:s");
+    $stmt = $dbb->prepare('insert into request (date,user_id) values (?,?) ');
+    $dbb->set_charset("utf8");
+    $stmt->bind_param('ss',$fecha_request,$id_user);
+
+
+
+    if ($stmt->execute()){
+        $request_id=$dbb->insert_id;
+
+        $stmt = $dbb->prepare('insert into paas_dedicated_server (request_id,category_code,public_bandwidth_code,private_bandwidth_code,storage_code,memory_code,processor_code,data_center_region_code,os_code,commitment_period) values (?,"DDS001",?,?,?,?,?,?,?,?) ');
+        $dbb->set_charset("utf8");
+        $stmt->bind_param('dssssssss',$request_id,$public_bandwith,$private_bandwith,$storage,$memory,$processor,$datacenterregion,$os,$commitment_period);
+
         if ($stmt->execute()){
 		header("Location: ../../index.php?opcion=requests&error=2");
         }else{
@@ -74,5 +109,9 @@ $resultado="ERROR";
         exit; 
 	$resultado = 'KO'; 	
 	}
+
+
+   }
+	
 	echo $resultado;
 ?>

@@ -26,7 +26,7 @@ if(!empty($_GET["modificar"]) || isset($_GET["modificar"]))
 
 if(!empty($modificar) and !empty($id)){
 
-    $stmt = $dbb->prepare("SELECT * FROM paas_commitment_period WHERE id= ? ");
+    $stmt = $dbb->prepare("SELECT * FROM commitment_period WHERE id= ? ");
     $stmt->bind_param('s', $id); // 's' indica que el parámetro es una cadena
     $stmt->execute();
     $result = $stmt->get_result(); // Obtener el resultado de la ejecución
@@ -43,7 +43,7 @@ if(!empty($modificar) and !empty($id)){
     }
 } 
 
-  $stmt = $dbb->prepare('select * from paas_commitment_period ');
+  $stmt = $dbb->prepare('select * from commitment_period ');
   $dbb->set_charset("utf8");
   $stmt->execute();
   $result = $stmt->get_result();
@@ -64,7 +64,7 @@ if(!empty($modificar) and !empty($id)){
             </ol>
             
       <?php      if(!empty($_GET["error"])) {?>
-        <?php      if($_GET["error"]==1) {?>
+        <?php      if(($_GET["error"]==1) || ($_GET["error"]==3)) {?>
     <div class="alert alert-dismissible bg-danger text-white border-0 fade show" role="alert">
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>

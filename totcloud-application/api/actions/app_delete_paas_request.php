@@ -19,7 +19,7 @@ if(!isset($_SESSION['app_user_token']) || empty($_SESSION['app_user_token'])) {
 
 $resultado="ERROR";   
     //sustituir por borrar paas_dedicated_server
-    $stmt = $dbb->prepare('delete from paas_request  where  request_id=?  ');
+    $stmt = $dbb->prepare('delete from request  where  request_id=?  ');
 	$dbb->set_charset("utf8");
 	$stmt->bind_param('s',$id);
 	if ($stmt->execute()){

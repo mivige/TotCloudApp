@@ -19,7 +19,7 @@ if(!isset($_SESSION['app_user_token']) || empty($_SESSION['app_user_token'])) {
 
 $resultado="ERROR";   
 
-    $stmt = $dbb->prepare('delete from users  where  id=?  ');
+    $stmt = $dbb->prepare('delete from user  where  id=?  ');
 	$dbb->set_charset("utf8");
 	$stmt->bind_param('s',$id);
 	if ($stmt->execute()){

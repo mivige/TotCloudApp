@@ -28,7 +28,7 @@ if(!isset($_SESSION['app_user_token']) || empty($_SESSION['app_user_token'])) {
 
 $resultado="ERROR";   
    if($modificar==0){
-    $stmt = $dbb->prepare('insert into user_roles (user_id,role_id) values (?,?) ');
+    $stmt = $dbb->prepare('insert into u_user_x_role (user_id,role_id) values (?,?) ');
 	$dbb->set_charset("utf8");
 	$stmt->bind_param('ss',$id,$role);
 
