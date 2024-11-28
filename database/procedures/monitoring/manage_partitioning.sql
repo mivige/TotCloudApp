@@ -1,4 +1,4 @@
-DELIMITER $$
+DELIMITER //
 
 CREATE PROCEDURE ManagePartitions()
 BEGIN
@@ -39,6 +39,6 @@ BEGIN
         EXECUTE stmt;
         DEALLOCATE PREPARE stmt;
     END IF;
-END $$
+END //
 
 DELIMITER ;
