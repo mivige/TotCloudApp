@@ -337,7 +337,13 @@ CREATE TABLE resource_usage (
     dedicated_server_id INT,
     FOREIGN KEY (web_hosting_id) REFERENCES saas_web_hosting(id),
     FOREIGN KEY (dedicated_server_id) REFERENCES paas_dedicated_server(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+PARTITION BY RANGE (YEAR(timestamp) * 100 + MONTH(timestamp)) (
+    PARTITION p202411 VALUES LESS THAN (202411),
+    PARTITION p202412 VALUES LESS THAN (202412),
+    PARTITION p202501 VALUES LESS THAN (202501),
+    PARTITION pMax VALUES LESS THAN MAXVALUE
+);
 
 CREATE TABLE event_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
