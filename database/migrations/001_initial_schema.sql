@@ -10,18 +10,18 @@ CREATE TABLE user (
     id INT AUTO_INCREMENT PRIMARY KEY,
     firstname VARCHAR(50) NOT NULL,
     lastname VARCHAR(50) NOT NULL,
-    lastname2 VARCHAR(50),
+    lastname2 VARCHAR(50), -- Maybe remove?
     mobile_phone VARCHAR(20) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     token VARCHAR(256),
-    codigo_email VARCHAR(10),
-    codigo_sms VARCHAR(10),
+    codigo_email VARCHAR(10), -- Not english
+    codigo_sms VARCHAR(10), -- Not english
     password VARCHAR(256) NOT NULL,
-    fecha_token DATETIME,
-    activo TINYINT(1) DEFAULT 0,
+    fecha_token DATETIME, -- Not english
+    activo TINYINT(1) DEFAULT 0, -- Not english
     validated_email TINYINT(1) DEFAULT 0,
-    solicitud_cambio_password TINYINT(1) DEFAULT 0,
-    numero_intentos_login INT DEFAULT 0,
+    solicitud_cambio_password TINYINT(1) DEFAULT 0, -- Not english
+    numero_intentos_login INT DEFAULT 0, -- Not english
     admin TINYINT(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -354,7 +354,7 @@ CREATE TABLE logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     timestamp DATETIME NOT NULL,
     eventType INT NOT NULL,
-    details TEXT,
+    details VARCHAR(256),
     user_id INT,
     web_hosting_id INT,
     dedicated_server_id INT,
