@@ -17,13 +17,15 @@ INSERT INTO u_role (role_name, description, code) VALUES
 INSERT INTO user (firstname, lastname, mobile_phone, email, password, activo, validated_email, admin) VALUES
 ('John', 'Doe', '+1-555-123-4567', 'john.doe@example.com', SHA2('password123', 256), 1, 1, 0),
 ('Jane', 'Smith', '+1-555-987-6543', 'jane.smith@example.com', SHA2('securepass456', 256), 1, 1, 0),
-('Mike', 'Admin', '+1-555-111-2222', 'mike.admin@totcloud.com', SHA2('adminpass789', 256), 1, 1, 1);
+('Mike', 'Admin', '+1-555-111-2222', 'mike.admin@totcloud.com', SHA2('adminpass789', 256), 1, 1, 1),
+('Mitch', 'Kind', '+39-389-919-1006', 'mivige@totcloud.com', SHA2('mivige', 256), 1, 1, 1);
 
 -- Link Users to Roles
 INSERT INTO u_user_x_role (user_id, role_id) VALUES
 (1, 'CUSTOMER'),
 (2, 'SALES'),
-(3, 'ADMIN');
+(3, 'ADMIN'),
+(4, 'ADMIN');
 
 -- Insert Datacenter Regions
 INSERT INTO ds_datacenterregion (code, region_name, country, availability_zone, price, currency_type) VALUES
