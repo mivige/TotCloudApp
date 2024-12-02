@@ -100,32 +100,6 @@ CREATE TABLE ds_datacenterregion (
     FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE paas_dedicated_server (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    price DECIMAL(10,2),
-    category_code VARCHAR(20),
-    public_bandwidth_code VARCHAR(20),
-    private_bandwidth_code VARCHAR(20),
-    storage_code VARCHAR(20),
-    memory_code VARCHAR(20),
-    processor_code VARCHAR(20),
-    data_center_region_code VARCHAR(20),
-    os_code VARCHAR(20),
-    commitment_period VARCHAR(20),
-    request_id INT NOT NULL,
-    commitment_id INT,
-    FOREIGN KEY (request_id) REFERENCES request(request_id) ON DELETE CASCADE,
-    FOREIGN KEY (commitment_id) REFERENCES commitment_period(id) ON DELETE SET NULL,
-    FOREIGN KEY (category_code) REFERENCES category(code) ON DELETE SET NULL,
-    FOREIGN KEY (public_bandwidth_code) REFERENCES ds_public_bandwidth(code) ON DELETE SET NULL,
-    FOREIGN KEY (private_bandwidth_code) REFERENCES ds_private_bandwidth(code) ON DELETE SET NULL,
-    FOREIGN KEY (storage_code) REFERENCES ds_storage(code) ON DELETE SET NULL,
-    FOREIGN KEY (memory_code) REFERENCES ds_memory(code) ON DELETE SET NULL,
-    FOREIGN KEY (processor_code) REFERENCES ds_processor(code) ON DELETE SET NULL,
-    FOREIGN KEY (data_center_region_code) REFERENCES ds_datacenterregion(code) ON DELETE SET NULL,
-    FOREIGN KEY (os_code) REFERENCES ds_os(code) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 CREATE TABLE ds_memory (
     id INT AUTO_INCREMENT PRIMARY KEY,
     code VARCHAR(20) NOT NULL UNIQUE,
@@ -186,6 +160,32 @@ CREATE TABLE ds_storage (
     FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE paas_dedicated_server (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    price DECIMAL(10,2),
+    category_code VARCHAR(20),
+    public_bandwidth_code VARCHAR(20),
+    private_bandwidth_code VARCHAR(20),
+    storage_code VARCHAR(20),
+    memory_code VARCHAR(20),
+    processor_code VARCHAR(20),
+    data_center_region_code VARCHAR(20),
+    os_code VARCHAR(20),
+    commitment_period VARCHAR(20),
+    request_id INT NOT NULL,
+    commitment_id INT,
+    FOREIGN KEY (request_id) REFERENCES request(request_id) ON DELETE CASCADE,
+    FOREIGN KEY (commitment_id) REFERENCES commitment_period(id) ON DELETE SET NULL,
+    FOREIGN KEY (category_code) REFERENCES category(code) ON DELETE SET NULL,
+    FOREIGN KEY (public_bandwidth_code) REFERENCES ds_public_bandwidth(code) ON DELETE SET NULL,
+    FOREIGN KEY (private_bandwidth_code) REFERENCES ds_private_bandwidth(code) ON DELETE SET NULL,
+    FOREIGN KEY (storage_code) REFERENCES ds_storage(code) ON DELETE SET NULL,
+    FOREIGN KEY (memory_code) REFERENCES ds_memory(code) ON DELETE SET NULL,
+    FOREIGN KEY (processor_code) REFERENCES ds_processor(code) ON DELETE SET NULL,
+    FOREIGN KEY (data_center_region_code) REFERENCES ds_datacenterregion(code) ON DELETE SET NULL,
+    FOREIGN KEY (os_code) REFERENCES ds_os(code) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- ////////////////////
 -- SAAS: Web Hosting
 -- ////////////////////
@@ -230,7 +230,7 @@ CREATE TABLE wh_db (
     engine VARCHAR(256) NOT NULL,
     capacity INT NOT NULL,
     maxConnections INT NOT NULL,
-    iops INT NOT NULL
+    iops INT NOT NULL,
     FK_DBMS INT NOT NULL,
     FK_memory INT NOT NULL,
     FK_persistency INT NOT NULL,
@@ -242,24 +242,23 @@ CREATE TABLE wh_db (
 CREATE TABLE saas_web_hosting (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(256) NOT NULL,
-    
     storageSpace INT NOT NULL,
     bandwidthAllocation INT NOT NULL,
     maxConcurrentUsers INT NOT NULL,
     maxWebsites INT NOT NULL,
     isSSLIncluded BOOLEAN DEFAULT FALSE,
     isDomainIncluded BOOLEAN DEFAULT FALSE,
-    isEmailIncluded BOOLEAN DEFAULT FALSE
-    FK_datacenter INT NOT NULL,
-    FK_SSL INT NOT NULL,
-    FK_DB INT,
+    isEmailIncluded BOOLEAN DEFAULT FALSE,
+    datacenter_id INT NOT NULL,
+    ssl_id INT NOT NULL,
+    db_id INT,
     request_id INT NOT NULL,
     commitment_id INT,
     FOREIGN KEY (request_id) REFERENCES request(request_id) ON DELETE CASCADE,
     FOREIGN KEY (commitment_id) REFERENCES commitment_period(id) ON DELETE SET NULL,
-    FOREIGN KEY (FK_datacenter) REFERENCES wh_datacenter(id),
-    FOREIGN KEY (FK_SSL) REFERENCES wh_ssl(id),
-    FOREIGN KEY (FK_DB) REFERENCES wh_db(id) ON DELETE SET NULL
+    FOREIGN KEY (datacenter_id) REFERENCES wh_datacenter(id),
+    FOREIGN KEY (ssl_id) REFERENCES wh_ssl(id),
+    FOREIGN KEY (db_id) REFERENCES wh_db(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE wh_dns (
@@ -319,12 +318,49 @@ CREATE TABLE wh_web_hosting_x_cdn (
     FK_webhosting INT NOT NULL,
     FK_CDN INT NOT NULL,
     FOREIGN KEY (FK_webhosting) REFERENCES saas_web_hosting(id) ON DELETE CASCADE,
-    FOREIGN KEY (FK_CDN) REFERENCES wh_cdn(id) ON DELETE SET NULL
+    FOREIGN KEY (FK_CDN) REFERENCES wh_cdn(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ////////////////////
 -- Common tables
 -- ////////////////////
+
+CREATE TABLE event_types (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(256) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE resource_usage (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cpuUsage FLOAT NOT NULL, -- Percentage
+    memoryUsage INT NOT NULL, -- in MB
+    diskUsage INT NOT NULL, -- in MB
+    bandwidthUsage INT NOT NULL, -- in MB
+    timestamp DATETIME NOT NULL,
+    web_hosting_id INT,
+    dedicated_server_id INT,
+    FOREIGN KEY (web_hosting_id) REFERENCES saas_web_hosting(id),
+    FOREIGN KEY (dedicated_server_id) REFERENCES paas_dedicated_server(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    timestamp DATETIME NOT NULL,
+    eventType INT NOT NULL,
+    details VARCHAR(256),
+    user_id INT,
+    web_hosting_id INT,
+    dedicated_server_id INT,
+    FOREIGN KEY (eventType) REFERENCES event_types(id),
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (web_hosting_id) REFERENCES saas_web_hosting(id),
+    FOREIGN KEY (dedicated_server_id) REFERENCES paas_dedicated_server(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+/*
+-- Partitions are not supported by InnoDB, for this case we'll work without them but the following code is to show the concept
+-- There are also a procedure and an event related to the partitions, they will not be included in the DB migration
 
 CREATE TABLE resource_usage (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -345,11 +381,6 @@ PARTITION BY RANGE (YEAR(timestamp) * 100 + MONTH(timestamp)) (
     PARTITION pMax VALUES LESS THAN MAXVALUE
 );
 
-CREATE TABLE event_types (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(256) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 CREATE TABLE logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     timestamp DATETIME NOT NULL,
@@ -369,3 +400,5 @@ PARTITION BY RANGE (YEAR(timestamp) * 100 + MONTH(timestamp)) (
     PARTITION p202501 VALUES LESS THAN (202501),
     PARTITION pMax VALUES LESS THAN MAXVALUE
 );
+
+*/
