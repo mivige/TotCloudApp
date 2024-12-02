@@ -21,14 +21,7 @@ include_once "../config/variables.php";
 
 
 
-function sanitize_my_email($field) {
-    $field = filter_var($field, FILTER_SANITIZE_EMAIL);
-    if (filter_var($field, FILTER_VALIDATE_EMAIL)) {
-        return true;
-    } else {
-        return false;
-    }
-}
+
 
 $id = "";
 $firstname = "";
@@ -43,101 +36,7 @@ $email = "";
 $codigo_sms = "";
 
 
-function estokenvalido($dbb,$token,$u){
-	$stmt = $dbb->prepare('SELECT * FROM user    WHERE id= ? and token= ? LIMIT 0,1');
-	$dbb->set_charset("utf8");
-    $stmt->bind_param('ss', $u,$token);
-    $stmt->execute();
-    $result = $stmt->get_result();
-	if ($row = $result->fetch_assoc()) {
-		//Miramos validez fecha token
-		$fecha=$row['fecha_token'];
-		$datetime1 = date_create($fecha);
-        $datetime2 = new DateTime();
-        $interval = date_diff($datetime1, $datetime2);
-        $diferencia_min=$interval->format('%i');	
-        $diferencia_horas=$interval->format('%h')*60;
-        $diferencia_dias=$interval->format('%a')*24*60;		
-		$diferencia_total=$diferencia_min+$diferencia_dias+$diferencia_horas;
-		if ($diferencia_total>1500) {
-    	//borramos token ya pasado
-			return false;
-	   }else{
-          return true;
-	   }
-    }
- 
-    // return false if email does not exist in the database
-    return false;
-}
 
-
-function emailExists($dbb,$email){
-    // query to check if email exists
-    //$query = "SELECT id, firstname, lastname, lastname2,mobile_phone,password,token,codigo_email,codigo_sms,email  FROM user    WHERE email ='".$email."' LIMIT 0,1";
-    $stmt = $dbb->prepare('SELECT id, firstname, lastname, lastname2,mobile_phone,password,token,codigo_email,codigo_sms,email  FROM user    WHERE activo>=0 and email = ? LIMIT 0,1');
-    $dbb->set_charset("utf8");
-	$stmt->bind_param('s', $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-	if ($row = $result->fetch_assoc()) {
-       // assign values to object properties
-        $id = $row['id'];
-        $firstname = $row['firstname'];
-        $lastname = $row['lastname'];
-		$lastname2 = $row['lastname2'];
-		$mobile_phone = $row['mobile_phone'];
-		$token = $row['token'];
-		$codigo_email = $row['codigo_email'];
-		$codigo_sms = $row['codigo_sms'];
-        $password = $row['password'];
-         // return true because email exists in the database
-        return true;
-    }
-     // return false if email does not exist in the database
-    return false;
-}
-
-function comprobar_codigo1_codigo2($dbb,$u,$codigo1,$codigo2){
-	
-	$stmt = $dbb->prepare('SELECT * FROM user    WHERE codigo_email= ? and codigo_sms= ? and id= ? LIMIT 0,1');
-    $dbb->set_charset("utf8");
-	$stmt->bind_param('sss', $codigo1,$codigo2,$u);
-    $stmt->execute();
-    $result = $stmt->get_result();
-	if ($row = $result->fetch_assoc()) {
-      return true;
-    } else {
-	$stmt1 = $dbb->prepare('update user set numero_intentos_validated_email=numero_intentos_validated_email+1 WHERE  id= ? ');
-    $dbb->set_charset("utf8");
-	$stmt1->bind_param('s' ,$u);
-    $stmt1->execute();
-	return false;
-	}
-    return false;
-}
-
-function comprobar_codigo1_codigo2_no_validado($dbb,$u,$codigo1,$codigo2){
-	
-	$stmt = $dbb->prepare('SELECT * FROM user    WHERE codigo_email= ? and codigo_sms= ? and id= ? and validated_email=0 LIMIT 0,1');
-    $dbb->set_charset("utf8");
-	$stmt->bind_param('sss', $codigo1,$codigo2,$u);
-    $stmt->execute();
-    $result = $stmt->get_result();
-	if ($row = $result->fetch_assoc()) {
-      return true;
-    } else {
-		//Borramos el usuario
-		  $query ="delete from user where id= ?";
-		   $stmt = $dbb->prepare('delete from user where id= ?');
-          $dbb->set_charset("utf8");
-		  $stmt->bind_param('s', $u);
-          $stmt->execute();
-		  return false;
-	}
-    return false;
-}
- 
 
 
 function enviar_email_confirm_password($codigo_email,$to_email,$codigo_token){
@@ -196,7 +95,7 @@ if (isset($data->email)){$email = $data->email;}
 
  
 if(!empty($email)) { 
-	 $stmt = $dbb->prepare('SELECT id, firstname, lastname, lastname2,mobile_phone,password,token,codigo_email,codigo_sms,email  FROM user    WHERE activo>=0 and email = ? LIMIT 0,1');
+	 $stmt = $dbb->prepare('SELECT id, firstname, lastname, lastname2,mobile_phone,password,token,email_code,sms_code,email  FROM user    WHERE active>=0 and email = ? LIMIT 0,1');
     $dbb->set_charset("utf8");
 	$stmt->bind_param('s', $email);
     $stmt->execute();
@@ -208,8 +107,8 @@ if(!empty($email)) {
 		$lastname2 = $row['lastname2'];
 		$mobile_phone = $row['mobile_phone'];
 		$token = $row['token'];
-		$codigo_email = $row['codigo_email'];
-		$codigo_sms = $row['codigo_sms'];
+		$codigo_email = $row['email_code'];
+		$codigo_sms = $row['sms_code'];
         $password = $row['password'];
 	
         //Generate a random string.
@@ -225,28 +124,27 @@ if(!empty($email)) {
          $codigo_email = $codigo_email;
          $codigo_sms = $codigo_sms;
          // hash the password before saving to database	  
-         $query = "update user set codigo_email= ?, codigo_sms=? ,solicitud_cambio_password=1,numero_intentos_cambio_password=0, fecha_solicitud_cambio_password=?, token= ?, fecha_token=? where id=?";
+         $query = "update user set email_code= ?, sms_code=? ,password_change_request=1,password_change_attempts=0, password_change_request_date=?, token= ?, token_date=? where id=?";
 	     $stmt = $dbb->prepare($query);
 	     $dbb->set_charset("utf8");
 		 $fecha_solicitud=date("Y-m-d H:i:s");
 	     $stmt->bind_param("ssssss", $codigo_email, $codigo_sms, $fecha_solicitud,$token,$fecha_solicitud,$id);
 	     if ($stmt->execute()){
 		   $cadena_token="u=".$id."&token=".$token; 
-	       //enviar_email_confirm_password($codigo_email,$email,$cadena_token);
-           enviar_sms_change_pwd_user($codigo_sms,$email,$mobile_phone);		 
+           enviar_sms_change_pwd_user($codigo_sms,$codigo_email,$email,$mobile_phone);		 
 			 
 	        http_response_code(200);
 			$cadena_token="u=".$id."&token=".$token;
-            echo json_encode(array("message" => " Solicitud realizada correctamente","cadena_token" => $cadena_token));
+            echo json_encode(array("message" => " Request made successfully","cadena_token" => $cadena_token));
 		 } else {
 	        http_response_code(200);
-            echo json_encode(array("message" => " Error en la solicitud"));			 
+            echo json_encode(array("message" => " Error in request"));			 
 		 }
 	} else 
 	{
 		
        http_response_code(400);
-       echo json_encode(array("message" => " Email Incorrecto"));		
+       echo json_encode(array("message" => " Incorrect Email"));		
 		
 	}
 
@@ -255,6 +153,6 @@ if(!empty($email)) {
 		
 	   // set response code
        http_response_code(400);
-       echo json_encode(array("message" => " Email Incorrecto"));	
+       echo json_encode(array("message" => " Incorrect Email"));	
 	}
 ?>

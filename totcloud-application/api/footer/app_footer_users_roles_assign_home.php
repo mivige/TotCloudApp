@@ -24,6 +24,7 @@ function pulsar_delete(id) {
                 type: "POST",
                 url: "api/actions/app_delete_user_rol_assign.php",
                 success: function(data) {
+					data = data.trim();
                     if (data === 'OK') {
                         Swal.fire({
                             title: "Deleted",

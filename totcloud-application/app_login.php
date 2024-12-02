@@ -38,14 +38,14 @@ include_once "api/config/variables.php";
 		} 
 		else
 		{
-		cadena=cadena+"<span class='far fa-times-circle'></span> El password no tiene 6 o más caracteres"+"<br>";
+		cadena=cadena+"<span class='far fa-times-circle'></span> The password does not have 6 or more characters"+"<br>";
 		}
 		
 		
 		var pwd1=/^(?=.*[A-Z])/;
 		if(form_log.password.value != "" &&  pwd1.test(form_log.password.value) == false) 
 		{
-		cadena=cadena+"<span class='far fa-times-circle'></span> El password ha de tener al menos un letra mayúscula"+"<br>";
+		cadena=cadena+"<span class='far fa-times-circle'></span> The password must contain at least one uppercase letter"+"<br>";
 		} 
 		else
 		{
@@ -57,7 +57,7 @@ include_once "api/config/variables.php";
 		} 
 		else
 		{
-		cadena=cadena+"<span class='far fa-times-circle'></span> El password ha de tener al menos un letra minúscula"+"<br>";
+		cadena=cadena+"<span class='far fa-times-circle'></span> The password must contain at least one lowercase letter"+"<br>";
 		}		
 
         var pwd3=/^(?=.*[0-9])/;
@@ -66,7 +66,7 @@ include_once "api/config/variables.php";
 		} 
 		else
 		{
-		cadena=cadena+"<span class='far fa-times-circle'></span> El password ha de tener al menos un número"+"<br>";
+		cadena=cadena+"<span class='far fa-times-circle'></span> The password must contain at least one number"+"<br>";
 		}	  
 	  
 	  
@@ -84,7 +84,7 @@ include_once "api/config/variables.php";
 		} 
 		else
 		{
-		   cadena=cadena+"<span class='far fa-times-circle'></span> El password ha de tener al menos un caracter especial"+"<br>";
+		   cadena=cadena+"<span class='far fa-times-circle'></span> The password must contain at least one special character"+"<br>";
 		}	
 		cadena=cadena+""+"<br>";
 		document.getElementById("modal_error_login_2").innerHTML =cadena;
@@ -118,7 +118,7 @@ include_once "api/config/variables.php";
 		else
 		{
 			
-		   cadena=cadena+"<span class='far fa-times-circle'></span> El password ha de tener al menos un caracter especial"+"<br>";
+		   cadena=cadena+"<span class='far fa-times-circle'></span> The password must contain at least one special character"+"<br>";
 		
 		cadena=cadena+""+"<br>";
 		document.getElementById("modal_error_login_2").innerHTML =cadena;
@@ -203,7 +203,7 @@ include_once "api/config/variables.php";
             <div class="card navbar-shadow">
                 <div class="card-header text-center">
                     <h4 class="card-title">Login</h4>
-                    <p class="card-subtitle">Accede a tu cuenta</p>
+                    <p class="card-subtitle">Access your account</p>
                 </div>
                 <div class="card-body">
 				
@@ -220,11 +220,11 @@ include_once "api/config/variables.php";
 				</div>	
 			
 		        <div class="card-header text-center">
-                    <h4 class="card-title">ERROR DE AUTENTICACION
+                    <h4 class="card-title">AUTHENTICATION ERROR
 	            <?php if ($existe_email){ ?>
-					<br>PASSWORD INCORRECTO
+					<br>INCORRECT PASSWORD
 				<?php } else { ?>
-					<br>USUARIO <?php echo($email);?><br>NO EXISTE
+					<br>USER <?php echo($email);?><br>DOESN`T EXIST
 				<?php } ?>					
 				   </h4>
                     <p class="card-subtitle"></p>
@@ -250,11 +250,11 @@ include_once "api/config/variables.php";
                      <form id="form_log"  >
 					<div class="was-validated">
                         <div class="form-group">
-                            <label class="form-label" for="email">Tú dirección de email:</label>
+                            <label class="form-label" for="email">Your email address:</label>
                             <div class="input-group input-group-merge">
-                                <input id="email" name="email" type="email" required class="form-control form-control-prepended" placeholder="Tu dirección de email">
-								<div class="invalid-feedback">Por favor introduce un email.</div>
-                                 <div class="valid-feedback">Parece un email correcto!</div>
+                                <input id="email" name="email" type="email" required class="form-control form-control-prepended" placeholder="Your mail">
+								<div class="invalid-feedback">Please enter an email.</div>
+                                 <div class="valid-feedback">It looks like a correct email!</div>
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
                                         <span class="far fa-user"></span>
@@ -268,7 +268,7 @@ include_once "api/config/variables.php";
 					
 					<div class="was-validated">
                         <div class="form-group">
-                            <label class="form-label" for="password">Tú password:</label>
+                            <label class="form-label" for="password">Your password:</label>
                             <div class="input-group input-group-merge">
                                 <input id="password" name="password" type="password" required="" class="form-control form-control-appended pwd" placeholder="Your password">
 							
@@ -278,8 +278,8 @@ include_once "api/config/variables.php";
 										 
                                     </div>
                                 </div>
-									 <div class="invalid-feedback">Por favor introduce un password.</div>
-                                 <div class="valid-feedback">Parece un password correcto!</div>
+									 <div class="invalid-feedback">Please enter a password.</div>
+                                 <div class="valid-feedback">It seems like a correct password!</div>
 	
                             </div>
                         </div>
@@ -291,7 +291,7 @@ include_once "api/config/variables.php";
                       <span class="sr-only">Loading...</span>
   
                        </div>
-                     <p><h3>Enviando</h3></p>
+                     <p><h3>Sending</h3></p>
                      </div>	
 						
 						
@@ -300,13 +300,13 @@ include_once "api/config/variables.php";
                         </div>
                     					
                         <div class="text-center">
-                            <a href="app_forgot_password.php" class="text-black-70" style="text-decoration: underline;">¿Has olvidado tu password?</a>
+                            <a href="app_forgot_password.php" class="text-black-70" style="text-decoration: underline;">Have you forgotten your password?</a>
                         </div>
                     </form>
                 </div>
 				<?php if (true) { ?>
                 <div class="card-footer text-center text-black-50">
-                    Aun no eres usuario? <a href="app_signup.php">Registrate</a>
+                Aren't you a user yet? <a href="app_signup.php">Sign up</a>
                 </div>
 				<?php }?>
             </div>
@@ -359,7 +359,7 @@ include_once "api/config/variables.php";
 						</div>						
 						
 						  <div class="text-center mt-5 mb-1">
-							  <h4 class="modal-title" id="modal_error_login_1">ERROR DE VALIDACIÓN</h5>
+							  <h4 class="modal-title" id="modal_error_login_1">VALIDATION ERROR</h5>
 							  <h5 class="modal-title" id="modal_error_login_2">&nbsp;</h5>
 							  <h5 class="modal-title" id="modal_error_login_3"><span class="far fa-times-circle"></span> </h5>
 							  <h5 class="modal-title" id="modal_error_login_4">&nbsp;</h5>
@@ -387,7 +387,7 @@ include_once "api/config/variables.php";
 						</div>						
 						
 						  <div class="text-center mt-5 mb-1">
-							  <h4 class="modal-title" id="modal_error_pwd_1">ERROR DE VALIDACIÓN</h5>
+							  <h4 class="modal-title" id="modal_error_pwd_1">VALIDATION ERROR</h5>
 							  <h5 class="modal-title" id="modal_error_pwd_2">&nbsp;</h5>
 							  <h5 class="modal-title" id="modal_error_pwd_3"><span class="far fa-times-circle"></span> </h5>
 							  <h5 class="modal-title" id="modal_error_pwd_4">&nbsp;</h5>
@@ -485,7 +485,7 @@ $.ajax({
 				cadena="";
 			cadena=cadena+"<span class='far fa-times-circle'></span> "+response.message+"<br>";
 			cadena=cadena+""+"<br>";
-			document.getElementById("modal_error_pwd_1").innerHTML ='CONTRASEÑA CADUCADA';
+			document.getElementById("modal_error_pwd_1").innerHTML ='EXPIRED PASSWORD';
 		    document.getElementById("modal_error_pwd_3").innerHTML =cadena;
 		    document.getElementById("modal_error_pwd_5").innerHTML = "<img width='20%' src='assets/images/logos_app/logo.png'>";
 			document.getElementById("btnsignup").disabled = false;

@@ -44,7 +44,7 @@ if(!empty($id)){
         $lastname2=$fila['lastname2'];
         $email=$fila['email'];
         $mobile_phone=$fila['mobile_phone'];
-        $activo=$fila['activo'];
+        $activo=$fila['active'];
         $admin=$fila['admin'];
         $encontrado=true;
         //$fecha_creacion=$fila['fecha_creacion'];

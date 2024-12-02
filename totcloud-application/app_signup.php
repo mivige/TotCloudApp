@@ -62,8 +62,8 @@ include_once "api/config/variables.php";
             </div>
             <div class="card navbar-shadow">
                 <div class="card-header text-center">
-                    <h4 class="card-title">Regístrate</h4>
-                    <p class="card-subtitle">Crear una cuenta Nueva</p>
+                    <h4 class="card-title">Sign Up</h4>
+                    <p class="card-subtitle">Create a new account</p>
                 </div>
 				
 
@@ -90,7 +90,7 @@ include_once "api/config/variables.php";
 			  var cadena;
 	        cadena="";
 			
-			cadena=cadena+"<span class='far fa-times-circle'></span> Telefono Móvil Incorrecto<br>";
+			cadena=cadena+"<span class='far fa-times-circle'></span> Incorrect Mobile Phone<br>";
 			cadena=cadena+""+"<br>";
 		    document.getElementById("errorphone3").innerHTML =cadena;
 		    document.getElementById("errorphone5").innerHTML = "<img width='20%' src='assets/images/logos_apps/logo.png'>";
@@ -118,7 +118,7 @@ include_once "api/config/variables.php";
 		}
 		else
 		{	
-		    cadena=cadena+"<span class='far fa-times-circle'></span> El password y su confirmación  no son iguales"+"<br>";
+		    cadena=cadena+"<span class='far fa-times-circle'></span> The password and its confirmation do not match"+"<br>";
 		}
 		
 		
@@ -127,14 +127,14 @@ include_once "api/config/variables.php";
 		} 
 		else
 		{
-		cadena=cadena+"<span class='far fa-times-circle'></span> El password no tiene 6 o más caracteres"+"<br>";
+		cadena=cadena+"<span class='far fa-times-circle'></span> The password does not have 6 or more characters."+"<br>";
 		}
 		
 		
 		var pwd1=/^(?=.*[A-Z])/;
 		if(form_log.password.value != "" &&  pwd1.test(form_log.password.value) == false) 
 		{
-		cadena=cadena+"<span class='far fa-times-circle'></span> El password ha de tener al menos un letra mayúscula"+"<br>";
+		cadena=cadena+"<span class='far fa-times-circle'></span> The password must contain at least one uppercase letter."+"<br>";
 		} 
 		else
 		{
@@ -146,7 +146,7 @@ include_once "api/config/variables.php";
 		} 
 		else
 		{
-		cadena=cadena+"<span class='far fa-times-circle'></span> El password ha de tener al menos un letra minúscula"+"<br>";
+		cadena=cadena+"<span class='far fa-times-circle'></span> The password must contain at least one lowercase letter."+"<br>";
 		}		
 
       var pwd3=/^(?=.*[0-9])/;
@@ -155,7 +155,7 @@ include_once "api/config/variables.php";
 		} 
 		else
 		{
-		cadena=cadena+"<span class='far fa-times-circle'></span> El password ha de tener al menos un número"+"<br>";
+		cadena=cadena+"<span class='far fa-times-circle'></span> The password must contain at least one number"+"<br>";
 		}	  
 	  
 	  
@@ -173,7 +173,7 @@ include_once "api/config/variables.php";
 			} 
 		else
 		{
-		   cadena=cadena+"<span class='far fa-times-circle'></span> El password ha de tener al menos un caracter especial"+"<br>";
+		   cadena=cadena+"<span class='far fa-times-circle'></span> The password must contain at least one special character."+"<br>";
 		}	
 		cadena=cadena+""+"<br>";
 		document.getElementById("exampleModalLongTitle2").innerHTML =cadena;
@@ -202,7 +202,7 @@ include_once "api/config/variables.php";
 		{
 		   return true;
 		}	else {
-			cadena=cadena+"<span class='far fa-times-circle'></span> El password y su confirmación no son iguales"+"<br>";
+			cadena=cadena+"<span class='far fa-times-circle'></span> The password and its confirmation do not match."+"<br>";
 		
 		   cadena=cadena+""+"<br>";
 		   document.getElementById("exampleModalLongTitle2").innerHTML =cadena;
@@ -218,7 +218,7 @@ include_once "api/config/variables.php";
 		else
 		{
 			
-		   cadena=cadena+"<span class='far fa-times-circle'></span> El password ha de tener al menos un caracter especial"+"<br>";
+		   cadena=cadena+"<span class='far fa-times-circle'></span> The password must contain at least one special character."+"<br>";
 		
 		   cadena=cadena+""+"<br>";
 		   document.getElementById("exampleModalLongTitle2").innerHTML =cadena;
@@ -236,11 +236,11 @@ include_once "api/config/variables.php";
 					<input type="hidden" id="mobile_completo" name="mobile_completo" value="" >
 					<div class="was-validated">
                         <div class="form-group">
-                            <label class="form-label" for="firstname">Nombre:</label>
+                            <label class="form-label" for="firstname">Name:</label>
                             <div class="input-group input-group-merge">
-                                <input id="firstname" name="firstname" value="<?php if (isset($_POST['firstname'])) {echo($firstname);}?>" type="text" required="" class="form-control form-control-prepended" placeholder="Nombre">
-								<div class="invalid-feedback">Por Favor introduce tu nombre.</div>
-                                 <div class="valid-feedback">Parece un nombre correcto</div>
+                                <input id="firstname" name="firstname" value="<?php if (isset($_POST['firstname'])) {echo($firstname);}?>" type="text" required="" class="form-control form-control-prepended" placeholder="Name">
+								<div class="invalid-feedback">Please enter your name.</div>
+                                 <div class="valid-feedback">It seems like a correct name</div>
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
                                         <span class="far fa-user"></span>
@@ -252,11 +252,11 @@ include_once "api/config/variables.php";
 						
 					<div class="was-validated">
                         <div class="form-group">
-                            <label class="form-label" for="lastname">Primer Apellido:</label>
+                            <label class="form-label" for="lastname">First Surname:</label>
                             <div class="input-group input-group-merge">
-                                <input id="lastname" name="lastname" value="<?php if (isset($_POST['lastname'])) {echo($lastname);}?>" type="text" required="" class="form-control form-control-prepended" placeholder="Primer Apellido">
-								<div class="invalid-feedback">Por Favor introduce tu Primer Apellido.</div>
-                                 <div class="valid-feedback">Parece apellido correcto</div>
+                                <input id="lastname" name="lastname" value="<?php if (isset($_POST['lastname'])) {echo($lastname);}?>" type="text" required="" class="form-control form-control-prepended" placeholder="First Surname">
+								<div class="invalid-feedback">Please enter your First Surname.</div>
+                                 <div class="valid-feedback">It seems like a correct last name</div>
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
                                         <span class="far fa-user"></span>
@@ -268,11 +268,11 @@ include_once "api/config/variables.php";
 
 					<div class="was-validated">
                         <div class="form-group">
-                            <label class="form-label" for="lastname2">Segundo Apellido:</label>
+                            <label class="form-label" for="lastname2">Second Surname:</label>
                             <div class="input-group input-group-merge">
-                                <input id="lastname2" name="lastname2" value="<?php if (isset($_POST['lastname'])) {echo($lastname);}?>" type="text" required="" class="form-control form-control-prepended" placeholder="Segundo Apellido">
-								<div class="invalid-feedback">Por Favor introduce tu Segundo Apellido.</div>
-                                 <div class="valid-feedback">Parece apellido correcto</div>
+                                <input id="lastname2" name="lastname2" value="<?php if (isset($_POST['lastname'])) {echo($lastname);}?>" type="text" required="" class="form-control form-control-prepended" placeholder="Second Surname">
+								<div class="invalid-feedback">Please enter your Second Surname.</div>
+                                 <div class="valid-feedback">It seems like a correct last name</div>
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
                                         <span class="far fa-user"></span>
@@ -286,10 +286,10 @@ include_once "api/config/variables.php";
 
 					<div class="was-validated">
                         <div class="form-group">
-                            <label class="form-label" for="mobile_phone">Telefono Movil:</label>
+                            <label class="form-label" for="mobile_phone">Mobile Phone:</label>
                             <div class="input-group input-group-merge">
                                 <input id="mobile_phone" name="mobile_phone" value="<?php if (isset($_POST['mobile_phone'])) {echo($mobile_phone);}?>" >
-								<div id="invalid-feedback" class="invalid-feedback" style="display: block;"> Por favor Introduce el móvil</div>
+								<div id="invalid-feedback" class="invalid-feedback" style="display: block;"> Please enter the mobile number</div>
                             </div>
                         </div>
 						</div>
@@ -315,7 +315,7 @@ var iti = window.intlTelInput(input, {
 });
 
 var handleChange = function() {
-  var text = (iti.isValidNumber()) ? "<span style='width:100%;margin-top:.25rem;font-size:.75rem;color:#66bb6a'>Número móvil Correcto: " + iti.getNumber()+"</span>" : "<span style='width:100%;margin-top:.25rem;font-size:.75rem;color:#f44336'>Número móvil Incorrecto: " + iti.getNumber()+"</span>";
+  var text = (iti.isValidNumber()) ? "<span style='width:100%;margin-top:.25rem;font-size:.75rem;color:#66bb6a'>Correct mobile number: " + iti.getNumber()+"</span>" : "<span style='width:100%;margin-top:.25rem;font-size:.75rem;color:#f44336'>Incorrect mobile number: " + iti.getNumber()+"</span>";
   var textNode = document.createTextNode(text);
   output.innerHTML = "";
   output.innerHTML = text;
@@ -332,11 +332,11 @@ input.addEventListener('keyup', handleChange);
 			
 						<div class="was-validated">
                         <div class="form-group">
-                            <label class="form-label" for="email">Email:</label>
+                            <label class="form-label" for="email">Mail:</label>
                             <div class="input-group input-group-merge">
-                                <input id="email" name="email" value="<?php if (isset($_POST['email'])) {echo($email);}?>" type="email" required="" class="form-control form-control-prepended" placeholder="Tú dirección de correo">
-								<div class="invalid-feedback">Por favor proporciona tu dirección de correo.</div>
-                                 <div class="valid-feedback">Parece una dirección de correo válida!</div>								
+                                <input id="email" name="email" value="<?php if (isset($_POST['email'])) {echo($email);}?>" type="email" required="" class="form-control form-control-prepended" placeholder="Your mail">
+								<div class="invalid-feedback">Please provide your email address.</div>
+                                 <div class="valid-feedback">It seems like a valid email address!</div>								
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
                                         <span class="far fa-envelope"></span>
@@ -352,7 +352,7 @@ input.addEventListener('keyup', handleChange);
 						
      		<div class="was-validated">
                         <div class="form-group">
-                            <label class="form-label" for="password">Contraseña</label>
+                            <label class="form-label" for="password">Password</label>
                             <div class="input-group input-group-merge">
                                 <input id="password" name="password" type="password" required="" class="form-control form-control-appended pwd" placeholder="Your password">
 							
@@ -362,10 +362,10 @@ input.addEventListener('keyup', handleChange);
 										 
                                     </div>
                                 </div>
-									 <div class="invalid-feedback">Por favor introduce un password.</div>
-                                 <div class="valid-feedback">Parece un password correcto!</div>
+									 <div class="invalid-feedback">Please enter a password.</div>
+                                 <div class="valid-feedback">It seems like a correct password!</div>
 								 <div >
-  <small >El password ha de tener al menos 8 caracteres y ha de tener al menos una letra mayúscula, una letra minúscula, un símbolo especial y un número</small>
+  <small >The password must have at least 8 characters and must contain at least one uppercase letter, one lowercase letter, one special symbol, and one number.</small>
 </div>
                             </div>
                         </div>
@@ -375,7 +375,7 @@ input.addEventListener('keyup', handleChange);
 						
   		<div class="was-validated">
                         <div class="form-group">
-                            <label class="form-label" for="password">Validar Contraseña:</label>
+                            <label class="form-label" for="password">Validate Password:</label>
                             <div class="input-group input-group-merge">
                                 <input id="password2" name="password2" type="password" required="" class="form-control form-control-appended pwd2" placeholder="Your password">
 							
@@ -385,8 +385,8 @@ input.addEventListener('keyup', handleChange);
 										 
                                     </div>
                                 </div>
-									 <div class="invalid-feedback">Por favor introduce un password.</div>
-                                 <div class="valid-feedback">Parece un password correcto!</div>
+									 <div class="invalid-feedback">Please enter a password.</div>
+                                 <div class="valid-feedback">It seems like a correct password!</div>
                             </div>
                         </div>
 						</div>
@@ -395,14 +395,14 @@ input.addEventListener('keyup', handleChange);
                       <span class="sr-only">Loading...</span>
   
                        </div>
-                     <p><h3>Enviando</h3></p>
+                     <p><h3>Sending</h3></p>
                      </div>
-                        <button type="submit" id="btnsignup" name="signup" value="Registrar" class="btn btn-primary btn-block mb-3">Registrate</button>
+                        <button type="submit" id="btnsignup" name="signup" value="Registrar" class="btn btn-primary btn-block mb-3">Sign up</button>
 						
                         <div class="form-group text-center mb-0">
                             <div class="custom-control custom-checkbox">
                                 <input id="terms" type="checkbox" name="terms" class="custom-control-input" d checked required="">
-                                <label for="terms" class="custom-control-label text-black-70">Acepto <button data-toggle="modal" data-target="#exampleModalLong" type="button" class="btn btn-link btn-rounded btn-sm"> las Condiciones de Uso</button></label> 
+                                <label for="terms" class="custom-control-label text-black-70">Accept <button data-toggle="modal" data-target="#exampleModalLong" type="button" class="btn btn-link btn-rounded btn-sm"> Terms of Use</button></label> 
                             </div>
                         </div>
 
@@ -418,7 +418,7 @@ input.addEventListener('keyup', handleChange);
 						</div>						
 						
 						  <div class="text-center mt-5 mb-1">
-							  <h4 class="modal-title" id="exampleModalLongTitle1">Error de Password </h5>
+							  <h4 class="modal-title" id="exampleModalLongTitle1">Password Error </h5>
 							  <h5 class="modal-title" id="exampleModalLongTitle5">&nbsp;</h5>
 							  <h5 class="modal-title" id="exampleModalLongTitle2"><span class="far fa-times-circle"></span> </h5>
 							  <h5 class="modal-title" id="exampleModalLongTitle3">&nbsp;</h5>
@@ -444,7 +444,7 @@ input.addEventListener('keyup', handleChange);
 						</div>						
 						
 						  <div class="text-center mt-5 mb-1">
-							  <h4 class="modal-title" id="erroremail1">ERROR AL REGISTRARTE</h5>
+							  <h4 class="modal-title" id="erroremail1">Sign up Error</h5>
 							  <h5 class="modal-title" id="erroremail2">&nbsp;</h5>
 							  <h5 class="modal-title" id="erroremail3"><span class="far fa-times-circle"></span> </h5>
 							  <h5 class="modal-title" id="erroremail4">&nbsp;</h5>
@@ -473,7 +473,7 @@ input.addEventListener('keyup', handleChange);
 						</div>						
 						
 						  <div class="text-center mt-5 mb-1">
-							  <h4 class="modal-title" id="errorphone1">ERROR EN EL MÓVIL</h5>
+							  <h4 class="modal-title" id="errorphone1">Mobile Error</h5>
 							  <h5 class="modal-title" id="errorphone2">&nbsp;</h5>
 							  <h5 class="modal-title" id="errorphone3"><span class="far fa-times-circle"></span> </h5>
 							  <h5 class="modal-title" id="errorphone4">&nbsp;</h5>
@@ -508,7 +508,7 @@ input.addEventListener('keyup', handleChange);
 							
 						  </div>
 						  <div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 						   
 						  </div>
 						</div>
@@ -533,7 +533,7 @@ input.addEventListener('keyup', handleChange);
 						</div>						
 						
 						  <div class="text-center mt-5 mb-1">
-							  <h4 class="modal-title" id="modal_error_login_1">ERROR DE VALIDACIÓN</h5>
+							  <h4 class="modal-title" id="modal_error_login_1">Validation Error</h5>
 							  <h5 class="modal-title" id="modal_error_login_2">&nbsp;</h5>
 							  <h5 class="modal-title" id="modal_error_login_3"><span class="far fa-times-circle"></span> </h5>
 							  <h5 class="modal-title" id="modal_error_login_4">&nbsp;</h5>
@@ -561,7 +561,7 @@ input.addEventListener('keyup', handleChange);
 						</div>						
 						
 						  <div class="text-center mt-5 mb-1">
-							  <h4 class="modal-title" id="modal_error_pwd_1">ERROR DE VALIDACIÓN</h5>
+							  <h4 class="modal-title" id="modal_error_pwd_1">Validation Error</h5>
 							  <h5 class="modal-title" id="modal_error_pwd_2">&nbsp;</h5>
 							  <h5 class="modal-title" id="modal_error_pwd_3"><span class="far fa-times-circle"></span> </h5>
 							  <h5 class="modal-title" id="modal_error_pwd_4">&nbsp;</h5>
@@ -579,7 +579,7 @@ input.addEventListener('keyup', handleChange);
 				
 					
                 </div>
-                <div class="card-footer text-center text-black-50">Ya estás registrado? <a href="app_login.php">Accede</a></div>
+                <div class="card-footer text-center text-black-50">Are you already registered?<a href="app_login.php">Log in</a></div>
             </div>
         </div>
     </div>

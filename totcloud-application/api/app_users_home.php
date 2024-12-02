@@ -37,7 +37,7 @@ if(!empty($modificar) and !empty($id)){
         $lastname2=$fila['lastname2'];
         $email=$fila['email'];
         $mobile_phone=$fila['mobile_phone'];
-        $activo=$fila['activo'];
+        $activo=$fila['active'];
         $admin=$fila['admin'];
         $encontrado=true;
         //$fecha_creacion=$fila['fecha_creacion'];
@@ -242,11 +242,11 @@ if(!empty($modificar) and !empty($id)){
                                             <td class="text-center">
                                                 <div class="d-flex align-items-center">
                                                     <small class="text-uppercase text-muted mr-2">ACTIVE</small>
-                                                    <?php if ($row["activo"]==1){ ?>
+                                                    <?php if ($row["active"]==1){ ?>
                                                     <i class="material-icons text-primary md-18 mr-2">lens</i>
                                                     <small class="text-uppercase js-lists-values-status">ACTIVE</small>
                                                     <?php }?>
-                                                    <?php if ($row["activo"]!=1){ ?>
+                                                    <?php if ($row["active"]!=1){ ?>
                                                     <i class="material-icons text-danger md-18 mr-2">lens</i>
                                                     <small class="text-uppercase js-lists-values-status">NO ACTIVE</small>
                                                     <?php }?>    

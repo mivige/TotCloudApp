@@ -38,7 +38,7 @@ if ($variables){
     $result = $stmt->get_result();
 	if ($row = $result->fetch_assoc()) {
 		$encontrado=true;
-		$fecha=$row['fecha_token'];
+		$fecha=$row['token_date'];
 		
         $datetime1 = date_create($fecha);
         $datetime2 = new DateTime();
@@ -59,7 +59,7 @@ if ($variables){
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Confirmación Registro</title>
+    <title>Registration Confirmation</title>
 
     <!-- Prevent the demo from appearing in search engines (REMOVE THIS) -->
     <meta name="robots" content="noindex">
@@ -98,8 +98,8 @@ if ($variables){
             </div>
             <div class="card navbar-shadow">
                 <div class="card-header text-center">
-                    <h4 class="card-title">Validación Registro</h4>
-                    <p class="card-subtitle">Doble sistema de validación de tu registro</p>
+                    <h4 class="card-title">Registration Validation</h4>
+                    <p class="card-subtitle">Two-factor validation of your registration</p>
                 </div>
 				
 				
@@ -110,19 +110,19 @@ if ($variables){
 				
                     <div class="alert alert-light border-1 border-left-3 border-left-primary d-flex" role="alert">
                         <i class="material-icons text-success mr-3">check_circle</i>
-                        <div class="text-body">Se ha enviado un email con el Código 1 de activación de tu cuenta y  un SMS con el Código 2 de activación de tu cuenta.<br> Introduce los códigos recibidos en los campos de abajo para poder validar tu cuenta.</div>
+                        <div class="text-body">An email with Activation Code 1 for your account has been sent, and an SMS with Activation Code 2 for your account.<br> Please enter the received codes in the fields below to validate your account.</div>
                     </div>
 
                     <form id="form_log" >
 
                         <div class="was-validated">
 						<div class="form-group">
-                            <label class="form-label" for="codigo_1">Código 1 recibido en el email:</label>
+                            <label class="form-label" for="codigo_1">Code 1 received in the email:</label>
                             <div class="input-group input-group-merge">
 						
-                                <input id="codigo_1" name="codigo_1" type="text" required="" class="form-control form-control-prepended" placeholder="Introduce el Código 1">
-    								<div class="invalid-feedback">Por favor proporciona tu Código 1.</div>
-                                    <div class="valid-feedback">Parece Código en formato correcto</div>	                            
+                                <input id="codigo_1" name="codigo_1" type="text" required="" class="form-control form-control-prepended" placeholder="Please provide your Code 1">
+    								<div class="invalid-feedback">Please provide your Code 1.</div>
+                                    <div class="valid-feedback">The code appears to be in the correct format</div>	                            
 								<div class="input-group-prepend">
                                     <div class="input-group-text">
                                         <span class="far fa-envelope"></span>
@@ -133,11 +133,11 @@ if ($variables){
 						</div>
 						<div class="was-validated">
                         <div class="form-group">
-                            <label class="form-label" for="codigo_2">Código 2 recibido en el Móvil:</label>
+                            <label class="form-label" for="codigo_2">Code 2 received on the mobile:</label>
                             <div class="input-group input-group-merge">
-                                <input id="codigo_2" name="codigo_2" type="text" required="" class="form-control form-control-prepended" placeholder="Introduce el Código 2">
-    								<div class="invalid-feedback">Por favor proporciona tu Código 2.</div>
-                                 <div class="valid-feedback">Parece Código en formato correcto</div>	                                 
+                                <input id="codigo_2" name="codigo_2" type="text" required="" class="form-control form-control-prepended" placeholder="Please provide your Code 2">
+    								<div class="invalid-feedback">Please provide your Code 2.</div>
+                                 <div class="valid-feedback">The code appears to be in the correct format</div>	                                 
 								<div class="input-group-prepend">
                                     <div class="input-group-text">
                                         <span class="far fa-envelope"></span>
@@ -154,9 +154,9 @@ if ($variables){
                       <span class="sr-only">Loading...</span>
   
                        </div>
-                     <p><h3>Enviando</h3></p>
+                     <p><h3>Sending</h3></p>
                      </div>					
-						<button id="btnsignup" name="signup"type="submit" class="btn btn-primary btn-block">Validar Usuario</button>
+						<button id="btnsignup" name="signup"type="submit" class="btn btn-primary btn-block">Validate User</button>
                     </form>
 					
 			<!-- Modal Error EMAIL-->
@@ -171,7 +171,7 @@ if ($variables){
 						</div>						
 						
 						  <div class="text-center mt-5 mb-1">
-							  <h4 class="modal-title" id="erroremail1">ERROR AL REGISTRARTE</h5>
+							  <h4 class="modal-title" id="erroremail1">REGISTRATION ERROR</h5>
 							  <h5 class="modal-title" id="erroremail2">&nbsp;</h5>
 							  <h5 class="modal-title" id="erroremail3"><span class="far fa-times-circle"></span> </h5>
 							  <h5 class="modal-title" id="erroremail4">&nbsp;</h5>
@@ -198,7 +198,7 @@ if ($variables){
 						</div>						
 						
 						  <div class="text-center mt-5 mb-1">
-							  <h4 class="modal-title" id="ok1">USUARIO REGISTRADO SATISFACTORIAMENTE</h5>
+							  <h4 class="modal-title" id="ok1">USER SUCCESSFULLY REGISTERED</h5>
 							  <h5 class="modal-title" id="ok2">&nbsp;</h5>
 							  <h5 class="modal-title" id="ok3"><span class="far fa-times-circle"></span> </h5>
 							  <h5 class="modal-title" id="ok4">&nbsp;</h5>
@@ -217,21 +217,21 @@ if ($variables){
 				
 			<?php	if (!$variables) {?>
                <div class="alert alert-dark text-center" role="alert">
-			   <h3>Token inválido</h3>
+			   <h3>Invalid token</h3>
 				</div>
 		<?php		} else 	if (!$encontrado) {?>
                <div class="alert alert-dark text-center" role="alert">
-			   <h3>Token inválido</h3>
+			   <h3>Invalid token</h3>
 				</div>
 			<?php	} else 	if ($diferencia_total>$app_tiempo_validez_token) {?>
                <div class="alert alert-dark text-center" role="alert">
-			   <h3>Se ha sobrepasado el tiempo de respuesta para el token indicado<?php	 echo $app_tiempo_validez_token; ?></h3>
+			   <h3>The response time for the provided token has been exceeded<?php	 echo $app_tiempo_validez_token; ?></h3>
 				</div>
 			<?php	}		?>			
 			   <?php } ?>
             </div>
 			
-			<div class="card-footer text-center text-black-50">Accede a la pantalla de Login <a href="app_login.php">Accede</a></div>
+			<div class="card-footer text-center text-black-50">Access the Login screen <a href="app_login.php">Access the Login screen</a></div>
         </div>
     </div>
 

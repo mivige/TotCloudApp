@@ -8,7 +8,7 @@ include_once "../config/variables.php";
 $modificar= isset($_POST['modificar']) ? trim($_POST['modificar']) : '';
 $id= isset($_POST['id']) ? trim($_POST['id']) : '';
 if( empty($id) && $modificar==1) {
-			echo "ERROR DE ID";
+			echo "ID ERROR";
    			exit;
 } else {
     
@@ -25,7 +25,7 @@ if( empty($id) && $modificar==1) {
 
 
 if(!isset($_SESSION['app_user_token']) || empty($_SESSION['app_user_token'])) {
-			echo "ERROR DE TOKEN";
+			echo "TOKEN ERROR";
 			exit;
 }
 

@@ -37,7 +37,7 @@ if ($variables){
     $result = $stmt->get_result();
 	if ($row = $result->fetch_assoc()) {
 		$encontrado=true;
-		$fecha=$row['fecha_solicitud_cambio_password'];
+		$fecha=$row['password_change_request_date'];
 		
         $datetime1 = date_create($fecha);
         $datetime2 = new DateTime();
@@ -58,7 +58,7 @@ if ($variables){
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Confirmación Registro</title>
+    <title>Registration Confirmation</title>
 
     <!-- Prevent the demo from appearing in search engines (REMOVE THIS) -->
     <meta name="robots" content="noindex">
@@ -97,8 +97,8 @@ if ($variables){
             </div>
             <div class="card navbar-shadow">
                 <div class="card-header text-center">
-                    <h4 class="card-title">Cambio de Contraseña</h4>
-                    <p class="card-subtitle">Doble sistema de validación para cambio de contraseña</p>
+                    <h4 class="card-title">Password Change</h4>
+                    <p class="card-subtitle">Two-step verification for password change</p>
                 </div>
 				
 				
@@ -135,7 +135,7 @@ if ($variables){
 		}
 		else
 		{	
-		    cadena=cadena+"<span class='far fa-times-circle'></span> El password y su confirmación  no son iguales"+"<br>";
+		    cadena=cadena+"<span class='far fa-times-circle'></span> The password and its confirmation do not match"+"<br>";
 		}
 		
 		
@@ -144,14 +144,14 @@ if ($variables){
 		} 
 		else
 		{
-		cadena=cadena+"<span class='far fa-times-circle'></span> El password no tiene 6 o más caracteres"+"<br>";
+		cadena=cadena+"<span class='far fa-times-circle'></span> The password does not have 6 or more characterss"+"<br>";
 		}
 		
 		
 		var pwd1=/^(?=.*[A-Z])/;
 		if(form_log.password.value != "" &&  pwd1.test(form_log.password.value) == false) 
 		{
-		cadena=cadena+"<span class='far fa-times-circle'></span> El password ha de tener al menos un letra mayúscula"+"<br>";
+		cadena=cadena+"<span class='far fa-times-circle'></span> The password must contain at least one uppercase letter"+"<br>";
 		} 
 		else
 		{
@@ -163,7 +163,7 @@ if ($variables){
 		} 
 		else
 		{
-		cadena=cadena+"<span class='far fa-times-circle'></span> El password ha de tener al menos un letra minúscula"+"<br>";
+		cadena=cadena+"<span class='far fa-times-circle'></span> The password must contain at least one lowercase letter"+"<br>";
 		}		
 
       var pwd3=/^(?=.*[0-9])/;
@@ -172,7 +172,7 @@ if ($variables){
 		} 
 		else
 		{
-		cadena=cadena+"<span class='far fa-times-circle'></span> El password ha de tener al menos un número"+"<br>";
+		cadena=cadena+"<span class='far fa-times-circle'></span> The password must contain at least one number"+"<br>";
 		}	  
 	  
 	  
@@ -190,7 +190,7 @@ if ($variables){
 			} 
 		else
 		{
-		   cadena=cadena+"<span class='far fa-times-circle'></span> El password ha de tener al menos un caracter especial"+"<br>";
+		   cadena=cadena+"<span class='far fa-times-circle'></span> The password must contain at least one special character"+"<br>";
 		}	
 		cadena=cadena+""+"<br>";
 		document.getElementById("exampleModalLongTitle2").innerHTML =cadena;
@@ -219,7 +219,7 @@ if ($variables){
 		{
 		   return true;
 		}	else {
-			cadena=cadena+"<span class='far fa-times-circle'></span> El password y su confirmación no son iguales"+"<br>";
+			cadena=cadena+"<span class='far fa-times-circle'></span> The password and its confirmation do not match"+"<br>";
 		
 		   cadena=cadena+""+"<br>";
 		   document.getElementById("exampleModalLongTitle2").innerHTML =cadena;
@@ -235,7 +235,7 @@ if ($variables){
 		else
 		{
 			
-		   cadena=cadena+"<span class='far fa-times-circle'></span> El password ha de tener al menos un caracter especial"+"<br>";
+		   cadena=cadena+"<span class='far fa-times-circle'></span>  The password must contain at least one special character"+"<br>";
 		
 		   cadena=cadena+""+"<br>";
 		   document.getElementById("exampleModalLongTitle2").innerHTML =cadena;
@@ -255,19 +255,19 @@ if ($variables){
 				
                     <div class="alert alert-light border-1 border-left-3 border-left-primary d-flex" role="alert">
                         <i class="material-icons text-success mr-3">check_circle</i>
-                        <div class="text-body">Se ha enviado un email con el Código 1 de cambio de tu contraseña y  un SMS con el Código 2 de cambio de contraseña.<br> Introduce los códigos recibidos en los campos de abajo y la nueva contraseña para poder activarla en tu cuenta.</div>
+                        <div class="text-body">An email has been sent with Code 1 for changing your password and an SMS with Code 2 for changing your password.<br> Enter the codes received in the fields below and the new password to activate it on your account.</div>
                     </div>
 
                     <form id="form_log" >
 
                         <div class="was-validated">
 						<div class="form-group">
-                            <label class="form-label" for="codigo_1">Código 1 recibido en el email:</label>
+                            <label class="form-label" for="codigo_1">Code 1 received in the email:</label>
                             <div class="input-group input-group-merge">
 						
-                                <input id="codigo_1" name="codigo_1" type="text" required="" class="form-control form-control-prepended" placeholder="Introduce el Código 1">
-    								<div class="invalid-feedback">Por favor proporciona tu Código 1.</div>
-                                    <div class="valid-feedback">Parece Código en formato correcto</div>	                            
+                                <input id="codigo_1" name="codigo_1" type="text" required="" class="form-control form-control-prepended" placeholder="Please provide your Code 1">
+    								<div class="invalid-feedback">Please provide your Code 1.</div>
+                                    <div class="valid-feedback">The code seems to be in the correct format.</div>	                            
 								<div class="input-group-prepend">
                                     <div class="input-group-text">
                                         <span class="far fa-envelope"></span>
@@ -278,11 +278,11 @@ if ($variables){
 						</div>
 						<div class="was-validated">
                         <div class="form-group">
-                            <label class="form-label" for="codigo_2">Código 2 recibido en el Móvil:</label>
+                            <label class="form-label" for="codigo_2">Code 2 received in the mobile phone:</label>
                             <div class="input-group input-group-merge">
-                                <input id="codigo_2" name="codigo_2" type="text" required="" class="form-control form-control-prepended" placeholder="Introduce el Código 2">
-    								<div class="invalid-feedback">Por favor proporciona tu Código 2.</div>
-                                 <div class="valid-feedback">Parece Código en formato correcto</div>	                                 
+                                <input id="codigo_2" name="codigo_2" type="text" required="" class="form-control form-control-prepended" placeholder="Please provide your Code 2">
+    								<div class="invalid-feedback">Please provide your Code 2.</div>
+                                 <div class="valid-feedback">The code seems to be in the correct format</div>	                                 
 								<div class="input-group-prepend">
                                     <div class="input-group-text">
                                         <span class="far fa-envelope"></span>
@@ -295,7 +295,7 @@ if ($variables){
 
         		<div class="was-validated">
                         <div class="form-group">
-                            <label class="form-label" for="password">Nueva Contraseña:</label>
+                            <label class="form-label" for="password">New Password:</label>
                             <div class="input-group input-group-merge">
                                 <input id="password" name="password" type="password" required="" class="form-control form-control-appended pwd" placeholder="Your password">
 							
@@ -305,10 +305,10 @@ if ($variables){
 										 
                                     </div>
                                 </div>
-									 <div class="invalid-feedback">Por favor introduce un password.</div>
-                                 <div class="valid-feedback">Parece un password correcto!</div>
+									 <div class="invalid-feedback">Please enter a password.</div>
+                                 <div class="valid-feedback">The password seems correct!</div>
 								 					 <div >
-  <small >El password ha de tener al menos 8 caracteres y ha de tener al menos una letra mayúscula, una letra minúscula, un símbolo especial y un número</small>
+  <small >The password must be at least 8 characters long and must contain at least one uppercase letter, one lowercase letter, one special character, and one number.</small>
 </div>
                             </div>
                         </div>
@@ -318,7 +318,7 @@ if ($variables){
 						
 		<div class="was-validated">
                         <div class="form-group">
-                            <label class="form-label" for="password">Tú password:</label>
+                            <label class="form-label" for="password">Password Confirmation:</label>
                             <div class="input-group input-group-merge">
                                 <input id="password2" name="password2" type="password" required="" class="form-control form-control-appended pwd2" placeholder="Your password">
 							
@@ -328,8 +328,8 @@ if ($variables){
 										 
                                     </div>
                                 </div>
-									 <div class="invalid-feedback">Por favor introduce un password.</div>
-                                 <div class="valid-feedback">Parece un password correcto!</div>
+									 <div class="invalid-feedback">Please enter a password.</div>
+                                 <div class="valid-feedback">It seems like a correct password!</div>
                             </div>
                         </div>
 						</div>
@@ -344,9 +344,9 @@ if ($variables){
                       <span class="sr-only">Loading...</span>
   
                        </div>
-                     <p><h3>Enviando</h3></p>
+                     <p><h3>Sending</h3></p>
                      </div>					
-						<button id="btnsignup" name="signup"type="submit" class="btn btn-primary btn-block">Solicitar cambio contraseña</button>
+						<button id="btnsignup" name="signup"type="submit" class="btn btn-primary btn-block">Request password change</button>
                     </form>
 					
 			<!-- Modal Error EMAIL-->
@@ -361,7 +361,7 @@ if ($variables){
 						</div>						
 						
 						  <div class="text-center mt-5 mb-1">
-							  <h4 class="modal-title" id="erroremail1">ERROR AL REGISTRARTE</h5>
+							  <h4 class="modal-title" id="erroremail1">Error while registering</h5>
 							  <h5 class="modal-title" id="erroremail2">&nbsp;</h5>
 							  <h5 class="modal-title" id="erroremail3"><span class="far fa-times-circle"></span> </h5>
 							  <h5 class="modal-title" id="erroremail4">&nbsp;</h5>
@@ -388,7 +388,7 @@ if ($variables){
 						</div>						
 						
 						  <div class="text-center mt-5 mb-1">
-							  <h4 class="modal-title" id="ok1">USUARIO REGISTRADO SATISFACTORIAMENTE</h5>
+							  <h4 class="modal-title" id="ok1">USER REGISTERED SUCCESSFULLY</h5>
 							  <h5 class="modal-title" id="ok2">&nbsp;</h5>
 							  <h5 class="modal-title" id="ok3"><span class="far fa-times-circle"></span> </h5>
 							  <h5 class="modal-title" id="ok4">&nbsp;</h5>
@@ -415,7 +415,7 @@ if ($variables){
 						</div>						
 						
 						  <div class="text-center mt-5 mb-1">
-							  <h4 class="modal-title" id="exampleModalLongTitle1">Error de Password </h5>
+							  <h4 class="modal-title" id="exampleModalLongTitle1">Password Error </h5>
 							  <h5 class="modal-title" id="exampleModalLongTitle5">&nbsp;</h5>
 							  <h5 class="modal-title" id="exampleModalLongTitle2"><span class="far fa-times-circle"></span> </h5>
 							  <h5 class="modal-title" id="exampleModalLongTitle3">&nbsp;</h5>
@@ -433,19 +433,19 @@ if ($variables){
 				
 			<?php	if (!$variables) {?>
                <div class="alert alert-dark text-center" role="alert">
-			   <h3>Token inválido</h3>
+			   <h3>Invalid token</h3>
 				</div>
 		<?php		} else 	if (!$encontrado) {?>
                <div class="alert alert-dark text-center" role="alert">
-			   <h3>Token inválido</h3>
+			   <h3>Invalid token</h3>
 				</div>
 			<?php	} else 	if ($diferencia_total>$app_tiempo_validez_confirmacion_password) {?>
                <div class="alert alert-dark text-center" role="alert">
-			   <h3>Se ha sobrepasado el tiempo de respuesta para el token indicado</h3>
+			   <h3>The response time for the specified token has been exceeded</h3>
 				</div>
 		       <form method="get" action="app_forgot_password.php">
     
-						<button id="btnsignup" name="signup" type="submit" class="btn btn-primary btn-block">Solicitar cambio contraseña</button>				
+						<button id="btnsignup" name="signup" type="submit" class="btn btn-primary btn-block">Request password change</button>				
 		
 </form>		
 				
@@ -453,7 +453,7 @@ if ($variables){
 			   <?php } ?>
             </div>
 			
-			<div class="card-footer text-center text-black-50">Accede a la pantalla de Login <a href="app_login.php">Accede</a></div>
+			<div class="card-footer text-center text-black-50">Access the login screen <a href="app_login.php">Log in</a></div>
         </div>
     </div>
 

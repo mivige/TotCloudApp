@@ -15,14 +15,7 @@ include_once "../config/variables.php";
 
 
 
-function sanitize_my_email($field) {
-    $field = filter_var($field, FILTER_SANITIZE_EMAIL);
-    if (filter_var($field, FILTER_VALIDATE_EMAIL)) {
-        return true;
-    } else {
-        return false;
-    }
-}
+
 
 function enviar_email_create_user($codigo_email,$to_email,$codigo_token){
   global $app_titulo_principal;
@@ -88,8 +81,7 @@ $codigo_sms = "";
 function emailExists($dbb,$email){
  
     // query to check if email exists
-    //$query = "SELECT id, firstname, lastname, lastname2,mobile_phone,password,token,codigo_email,codigo_sms,email  FROM user    WHERE email ='".$email."' LIMIT 0,1";
-    $stmt = $dbb->prepare('SELECT id, firstname, lastname, lastname2,mobile_phone,password,token,codigo_email,codigo_sms,email  FROM user    WHERE activo>=0 and email = ? LIMIT 0,1');
+    $stmt = $dbb->prepare('SELECT id, firstname, lastname, lastname2,mobile_phone,password,token,email_code,sms_code,email  FROM user    WHERE active>=0 and email = ? LIMIT 0,1');
     $dbb->set_charset("utf8");
 	$stmt->bind_param('s', $email);
     $stmt->execute();
@@ -102,8 +94,8 @@ function emailExists($dbb,$email){
 		$lastname2 = $row['lastname2'];
 		$mobile_phone = $row['mobile_phone'];
 		$token = $row['token'];
-		$codigo_email = $row['codigo_email'];
-		$codigo_sms = $row['codigo_sms'];
+		$codigo_email = $row['email_code'];
+		$codigo_sms = $row['sms_code'];
         $password = $row['password'];
  
         // return true because email exists in the database
@@ -162,7 +154,7 @@ if(
     // hash the password before saving to database
     $password_hash = password_hash($password, PASSWORD_BCRYPT);
 
-     $query = "INSERT INTO user (firstname,lastname,lastname2,mobile_phone,email,token,codigo_email,codigo_sms,password,fecha_token) values ";
+     $query = "INSERT INTO user (firstname,lastname,lastname2,mobile_phone,email,token,email_code,sms_code,password,token_date) values ";
 	 $query=$query." (?,?,?,?,?,?,?,?,?,?)" ;  
      $stmt = $dbb->prepare($query);
 	 $dbb->set_charset("utf8");
@@ -181,7 +173,7 @@ if(
     
 	// set response code
 	header('Content-Type: application/json');
-    $datos = array('estado' => 'ok','message' => "Se ha creado el usuario.",'cadena_token' => $cadena_token);
+    $datos = array('estado' => 'ok','message' => "User has been created.",'cadena_token' => $cadena_token);
     http_response_code(200);
     echo json_encode($datos,JSON_FORCE_OBJECT);
 }
@@ -191,13 +183,13 @@ else{
  
     header('Content-Type: application/json');
     
-    $datos = array('estado' => 'ok','message' => "No se ha podido crear el usuario <br>");
+    $datos = array('estado' => 'ok','message' => "User has not been created <br>");
     http_response_code(400);
     echo json_encode($datos ,JSON_FORCE_OBJECT);
 } 
 	}else{
 		header('Content-Type: application/json');
-        $datos = array('estado' => 'ok','message' => "Ya existe un usuario con este email <br>");
+        $datos = array('estado' => 'ok','message' => "There is already a user with this email <br>");
         http_response_code(400);
         echo json_encode($datos ,JSON_FORCE_OBJECT);	
 	}

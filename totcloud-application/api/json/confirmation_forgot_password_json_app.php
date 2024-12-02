@@ -13,82 +13,41 @@ date_default_timezone_set('UTC');
 
 include_once "../config/variables.php";
 
-if(!isset($_SESSION['app_user_token']) || empty($_SESSION['app_user_token'])) {
-			echo "ERROR DE TOKEN";
-			exit;
-}
 
 
-function estokenvalido($dbb,$token,$u){
+function comprobar_pwd_history($dbb,$password,$u){
 	
-	$stmt = $dbb->prepare('SELECT * FROM user    WHERE id= ? and token= ? LIMIT 0,1');
+	$stmt = $dbb->prepare('SELECT * FROM u_password_history    WHERE user_id= ?  ');
 	$dbb->set_charset("utf8");
-    $stmt->bind_param('ss', $u,$token);
+    $stmt->bind_param('i', $u);
     $stmt->execute();
     $result = $stmt->get_result();
-	if ($row = $result->fetch_assoc()) {
-		
-		//Miramos validez fecha token
-		$fecha=$row['fecha_token'];
-		$datetime1 = date_create($fecha);
-        $datetime2 = new DateTime();
-        $interval = date_diff($datetime1, $datetime2);
-        $diferencia_min=$interval->format('%i');	
-        $diferencia_horas=$interval->format('%h')*60;
-        $diferencia_dias=$interval->format('%a')*24*60;		
-		$diferencia_total=$diferencia_min+$diferencia_dias+$diferencia_horas;
-		if ($diferencia_total>1500) {
-			
-		//token ya pasado el usuario debera solicitar de nuevo cambio de password
-		  return false;
-	   }else{
-        return true;
-	   }
+    $already_used = false;
+
+    while ($row = $result->fetch_assoc()) {
+        if (password_verify($password, $row['password'])) {
+            $already_used = true;
+            break;
+        }
     }
- 
-    // return false if email does not exist in the database
-    return false;
-}
 
-function comprobar_codigo1_codigo2($dbb,$u,$codigo1,$codigo2){
-	
-	$stmt = $dbb->prepare('SELECT * FROM user    WHERE codigo_email= ? and codigo_sms= ?  and id= ? LIMIT 0,1');
-	$dbb->set_charset("utf8");
-    $stmt->bind_param('sss', $codigo1,$codigo2,$u);
-    $stmt->execute();
-    $result = $stmt->get_result();
-	if ($row = $result->fetch_assoc()) {
-      return true;
-    } else {
-	$stmt1 = $dbb->prepare('update user set numero_intentos_cambio_password=numero_intentos_cambio_password+1 WHERE  id= ? ');
-	$dbb->set_charset("utf8");
-    $stmt1->bind_param('s' ,$u);
-    $stmt1->execute();
-	return false;
-	}
-    return false;
-}
+    $stmt = $dbb->prepare('SELECT * FROM user   WHERE id= ?  ');
+    $dbb->set_charset("utf8");
+      $stmt->bind_param('i', $u);
+      $stmt->execute();
+      $result = $stmt->get_result();
+     
+  
+      while ($row = $result->fetch_assoc()) {
+          if (password_verify($password, $row['password'])) {
+              $already_used = true;
+              break;
+          }
+      }
 
-function comprobar_codigo1_codigo2_no_validado($dbb,$u,$codigo1,$codigo2){
-	
-	$stmt = $dbb->prepare('SELECT * FROM user    WHERE codigo_email= ? and codigo_sms= ? and id= ? and solicitud_cambio_password=1 LIMIT 0,1');
-	$dbb->set_charset("utf8");
-    $stmt->bind_param('sss', $codigo1,$codigo2,$u);
-    $stmt->execute();
-    $result = $stmt->get_result();
-	if ($row = $result->fetch_assoc()) {
-      return true;
-    } else {
-		//Borramos el usuario
-		  //$query ="delete from u_users where id= ?";
-		  //$stmt = $dbb->prepare('delete from u_user where id= ?');
-          //$stmt->bind_param('s', $u);
-          //$stmt->execute();
-		  //return false;
-	}
-    return false;
+
+    return$already_used;
 }
- 
 
 $codigo_1 ="";
 $codigo_2 ="";
@@ -122,8 +81,10 @@ if(
      if (estokenvalido($dbb,$token,$u)){
     //Comprobamos que existe un usuario con el token e id indicado
 	  if (comprobar_codigo1_codigo2($dbb,$u,$codigo_1,$codigo_2)){
-		  if (comprobar_codigo1_codigo2_no_validado($dbb,$u,$codigo_1,$codigo_2)	) {
-	
+		  if (comprobar_codigo1_codigo2_no_validado($dbb,$u,$codigo_1,$codigo_2,1)	) {
+
+       if (!comprobar_pwd_history($dbb,$password,$u)){
+	     
             //Generate a random string.
             $token = openssl_random_pseudo_bytes(32);
            //Convert the binary data into hexadecimal representation.
@@ -138,7 +99,7 @@ if(
            $codigo_sms = $codigo_sms;
            $password_hash = password_hash($password, PASSWORD_BCRYPT);
 
-           $query = "update user set password= ?, solicitud_cambio_password=0,numero_intentos_login=0, activo=1, token=?, fecha_token=?, fecha_cambio_password=? where id=?";
+           $query = "update user set password= ?, password_change_request=0,login_attempts=0, active=1, token=?, token_date=?, password_change_date=? where id=?";
            $stmt = $dbb->prepare($query);
 		   $dbb->set_charset("utf8");
 	       $fecha_token=date("Y-m-d H:i:s");
@@ -148,21 +109,26 @@ if(
         
               $cadena_token="u=".$u."&token=".$token;
 	          header('Content-Type: application/json');
-              $datos = array('message' => "Se ha modificado la contraseña.",'cadena_token' => $cadena_token);
+              $datos = array('message' => "Password has been changed.",'cadena_token' => $cadena_token);
               http_response_code(200);
               echo json_encode($datos,JSON_FORCE_OBJECT);
             }else{
  
               header('Content-Type: application/json');
-              $datos = array('message' => "No se ha podido cambiar la contraseña <br>");
+              $datos = array('message' => "Failed to change password <br>");
               http_response_code(400);
               echo json_encode($datos ,JSON_FORCE_OBJECT);
             } 
-	 
+          }else{
+
+            http_response_code(400);
+            echo json_encode(array("message" => "This password has already been used before"));  
+
+          }
 		  }else{
 			  
 			 http_response_code(400);
-               echo json_encode(array("message" => "Esta Contraseña ya ha sido modificada anteriormente"));  
+               echo json_encode(array("message" => "This password has already been changed before"));  
 		  }
 	  }else{
 		  
@@ -170,39 +136,39 @@ if(
 		  
          //Miramos cuantos intentos llevamos
 		 $numero_intentos=0;
-		 $stmt = $dbb->prepare('SELECT * FROM user    WHERE id= ? and solicitud_cambio_password=1 LIMIT 0,1');
+		 $stmt = $dbb->prepare('SELECT * FROM user    WHERE id= ? and password_change_request=1 LIMIT 0,1');
 		 $dbb->set_charset("utf8");
          $stmt->bind_param('s',$u);
          $stmt->execute();
          $result = $stmt->get_result();
 	     if ($row = $result->fetch_assoc()) {
-			 $numero_intentos=$row['numero_intentos_cambio_password'];
+			 $numero_intentos=$row['password_change_attempts'];
 		 }
 		 if ($numero_intentos>=3){
-		   $stmt = $dbb->prepare('update  user set solicitud_cambio_password=0,numero_intentos_cambio_password=0 where id= ?');
+		   $stmt = $dbb->prepare('update  user set password_change_request=0,password_change_attempts=0 where id= ?');
 		   $dbb->set_charset("utf8");
            $stmt->bind_param('s', $u);
            $stmt->execute();
 		 }
          http_response_code(400);
          if ($numero_intentos>=3){
-          echo json_encode(array("message" => "Ha superado el número máximo de intentos"));
+          echo json_encode(array("message" => "You have exceeded the maximum number of attempts"));
 		 }else{
-			  echo json_encode(array("message" => "Los Códigos introducidos son Incorrectos(Lleva ".$numero_intentos." de 3 intentos)"));
+			  echo json_encode(array("message" => "The codes entered are incorrect (It takes ".$numero_intentos." out of 3 attempts)"));
 		 }	  
 		  
 	  }
 	 }else{
 		 
 		header('Content-Type: application/json');
-        $datos = array('message' => "No se ha podido cambiar la contraseña");
+        $datos = array('message' => "Failed to change password");
         http_response_code(400);
         echo json_encode($datos ,JSON_FORCE_OBJECT);		 
 	 }
 	 
    }else{
 		header('Content-Type: application/json');
-        $datos = array('message' => "No se ha podido cambiar la contraseña1".$password);
+        $datos = array('message' => "Failed to change password".$password);
         http_response_code(400);
         echo json_encode($datos ,JSON_FORCE_OBJECT);	
 	}

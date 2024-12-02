@@ -62,8 +62,8 @@ include_once "api/config/variables.php";
             </div>
             <div class="card navbar-shadow">
                 <div class="card-header text-center">
-                    <h4 class="card-title">¿Has olvidado la contraseña?</h4>
-                    <p class="card-subtitle">Recuperar tu password</p>
+                    <h4 class="card-title">Have you forgotten your password?</h4>
+                    <p class="card-subtitle">Recover your password</p>
                 </div>
                 <div class="card-body">
   
@@ -72,11 +72,11 @@ include_once "api/config/variables.php";
 					
 					<div class="was-validated">
                         <div class="form-group">
-                            <label class="form-label" for="email">Introduce el EMAIL:</label>
+                            <label class="form-label" for="email">Enter the EMAIL</label>
                             <div class="input-group input-group-merge">
-                                <input id="email" name="email" value="<?php if (isset($_POST['email'])) {echo($email);}?>" type="email" required="" class="form-control form-control-prepended" placeholder="Introduce tu Email">
-								<div class="invalid-feedback">Por Favor introduce tu email.</div>
-                                 <div class="valid-feedback">Parece un email correcto</div>
+                                <input id="email" name="email" value="<?php if (isset($_POST['email'])) {echo($email);}?>" type="email" required="" class="form-control form-control-prepended" placeholder="Your mail">
+								<div class="invalid-feedback">Please enter your email</div>
+                                 <div class="valid-feedback">It seems like a correct email</div>
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
                                         <span class="far fa-user"></span>
@@ -91,16 +91,16 @@ include_once "api/config/variables.php";
                       <span class="sr-only">Loading...</span>
   
                        </div>
-                     <p><h3>Enviando</h3></p>
+                     <p><h3>Sending</h3></p>
                      </div>
 					 
 				 
 					 
 					 
-                        <button type="submit" id="btnsignup" name="signup" value="Registrar" class="btn btn-primary btn-block mb-3">Solicita tu contraseña</button>
+                        <button type="submit" id="btnsignup" name="signup" value="Registrar" class="btn btn-primary btn-block mb-3">Request your password</button>
                     </form>
                 </div>
-                <div class="card-footer text-center text-black-50">¿Te acuerdas de tu password? <a href="app_login.php">Login</a></div>
+                <div class="card-footer text-center text-black-50">Do you remember your password? <a href="app_login.php">Login</a></div>
             </div>
         </div>
 		
@@ -118,7 +118,7 @@ include_once "api/config/variables.php";
 						</div>						
 						
 						  <div class="text-center mt-5 mb-1">
-							  <h4 class="modal-title" id="erroremail1">ERROR AL SOLICITAR CONTRASEÑA</h5>
+							  <h4 class="modal-title" id="erroremail1">ERROR REQUESTING PASSWORD</h5>
 							  <h5 class="modal-title" id="erroremail2">&nbsp;</h5>
 							  <h5 class="modal-title" id="erroremail3"><span class="far fa-times-circle"></span> </h5>
 							  <h5 class="modal-title" id="erroremail4">&nbsp;</h5>

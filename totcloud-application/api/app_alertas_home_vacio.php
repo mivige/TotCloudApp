@@ -1,10 +1,10 @@
 <div data-perfect-scrollbar class="position-relative">
-                                        <div class="dropdown-header"><strong>Mensajes</strong></div>
+                                        <div class="dropdown-header"><strong>Messages</strong></div>
                                         <div class="list-group list-group-flush mb-0">
 
                                         <a href="#" class="list-group-item list-group-item-action">
                                                 <span class="d-flex align-items-center mb-1">
-                                                    <small class="text-muted">Ahora mismo</small>
+                                                    <small class="text-muted">Now</small>
 
                                                 </span>
                                                 <span class="d-flex">
@@ -18,9 +18,13 @@
                                                         <span class="text-black-70">
 
                                                         <?php if (isset($_SESSION['roles'])) {
-                                                            echo "Roles de usuario: <br>";
+                                                            echo "User Role: <br>";
                                                             foreach ($_SESSION['roles'] as $role) {
-                                                                echo $role . "<br>";
+                                                                echo$role . "<br>";
+
+
+
+                                                                
                                                             }}
                                                             ?>
                                                         </span>

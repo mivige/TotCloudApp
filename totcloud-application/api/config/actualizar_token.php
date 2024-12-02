@@ -1,13 +1,13 @@
 <?php
 $validado='0';
-    $stmt = $dbb->prepare('SELECT * FROM user    WHERE  token= ? and activo=1 LIMIT 0,1');
+    $stmt = $dbb->prepare('SELECT * FROM user    WHERE  token= ? and active=1 LIMIT 0,1');
     $dbb->set_charset("utf8");
 	$stmt->bind_param('s',$_SESSION['app_user_token']);
     $stmt->execute();
     $result = $stmt->get_result();
 	if ($row = $result->fetch_assoc()) {
 		
-		$fecha=$row['fecha_token'];
+		$fecha=$row['token_date'];
 		$id_user=$row['id'];
 		$firstname_user=$row['firstname'];
 		$lastname_user=$row['lastname'];
@@ -34,27 +34,23 @@ $validado='0';
           $token = bin2hex($token);
           // create the user
 		  $fecha_token=date("Y-m-d H:i:s");
-          $stmt = $dbb->prepare('update user  set  token= ?,fecha_token=? where token=? ');
+          $stmt = $dbb->prepare('update user  set  token= ?,token_date=? where token=? ');
 		  $dbb->set_charset("utf8");
 		  $stmt->bind_param("sss", $token, $fecha_token,$_SESSION['app_user_token']);
 	      $stmt->execute();	
           $_SESSION['app_user_token']=$token;
 		  $_SESSION['roles']=[];	
 
-		  $stmt1 = $dbb->prepare("
-		  SELECT r.code
-		  FROM u_role r
-		  JOIN u_user_x_role ur ON ur.role_id = r.code
-		  WHERE ur.user_id = ?
-	  ");
-	  $dbb->set_charset("utf8");
-	  $stmt1->bind_param('d', $id_user);
-	  $stmt1->execute();
-	  $result1 = $stmt1->get_result();
-	  while ($row = $result1->fetch_assoc()) {
-		$_SESSION['roles'][] = $row['code'];
-	}
-
+	
+	  	  $stmt1 = $dbb->prepare("Call GetUserRoles(?)");
+	  	  $dbb->set_charset("utf8");
+	      $stmt1->bind_param('i', $id_user);
+	      $stmt1->execute();
+	      $result1 = $stmt1->get_result();
+	      while ($row = $result1->fetch_assoc()) {
+		    $_SESSION['roles'][] = $row['code'];
+	      }
+	      $stmt1->close();
          	  
 		}
 		

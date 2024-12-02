@@ -166,14 +166,14 @@ function enviar_sms_create_user($codigo_sms,$codigo_email,$email,$movil)
  curl_close($ch);
 }
 
-function enviar_sms_change_pwd_user($codigo_sms,$email,$movil)
+function enviar_sms_change_pwd_user($codigo_sms,$codigo_email,$email,$movil)
 {
   global $app_titulo_principal;
   global $app_remitente_sms;
 
  $ch = curl_init();
 //Set the URL that you want to GET by using the CURLOPT_URL option.
- $encoded_message = urlencode( "El código 2 para poder cambiar el password de su cuenta: \n".$email."\nen ".$app_titulo_principal." es:\nCódigo 2: ".$codigo_sms."\nTambién necesitará el Código 1 recibido en su email.\nGracias por utilizar ".$app_titulo_principal);
+ $encoded_message = urlencode( "El código 2 para poder cambiar el password de su cuenta: \n".$email."\nen ".$app_titulo_principal." es:\nCódigo 2: ".$codigo_sms."\nTambién necesitará el Código 1 recibido en su email(".$codigo_email.").\nGracias por utilizar ".$app_titulo_principal);
  curl_setopt($ch, CURLOPT_URL, "https://www.ovh.com/cgi-bin/sms/http2sms.cgi?account=sms-ct14388-1&login=tcontest&password=XtrM6345&from=".$app_remitente_sms."&to=".$movil."&message=".$encoded_message);
  //Set CURLOPT_RETURNTRANSFER so that the content is returned as a variable.
  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -185,5 +185,93 @@ function enviar_sms_change_pwd_user($codigo_sms,$email,$movil)
  curl_close($ch);
 }
 
+function sanitize_my_email($field) {
+    $field = filter_var($field, FILTER_SANITIZE_EMAIL);
+    if (filter_var($field, FILTER_VALIDATE_EMAIL)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function estokenvalido($dbb,$token,$u){
+	
+	$stmt = $dbb->prepare('SELECT * FROM user    WHERE id= ? and token= ? LIMIT 0,1');
+   $dbb->set_charset("utf8");   
+   $stmt->bind_param('ss', $u,$token);
+    $stmt->execute();
+    $result = $stmt->get_result();
+	if ($row = $result->fetch_assoc()) {
+		
+		//Miramos validez fecha token
+		$fecha=$row['token_date'];
+		
+        $datetime1 = date_create($fecha);
+        $datetime2 = new DateTime();
+        $interval = date_diff($datetime1, $datetime2);
+        $diferencia_min=$interval->format('%i');	
+        $diferencia_horas=$interval->format('%h')*60;
+        $diferencia_dias=$interval->format('%a')*24*60;		
+		$diferencia_total=$diferencia_min+$diferencia_dias+$diferencia_horas;
+		if ($diferencia_total>1500) {
+		  $stmt = $dbb->prepare('delete from user where id= ?');
+          $dbb->set_charset("utf8");
+		  $stmt->bind_param('s', $u);
+          $stmt->execute();
+		return false;
+	   }else{
+        return true;
+	   }
+    }
+ 
+    // return false if email does not exist in the database
+    return false;
+}
+
+
+
+
+function comprobar_codigo1_codigo2($dbb,$u,$codigo1,$codigo2){
+	
+	$stmt = $dbb->prepare('SELECT * FROM user    WHERE email_code= ? and sms_code= ?  and id= ? LIMIT 0,1');
+	$dbb->set_charset("utf8");
+    $stmt->bind_param('sss', $codigo1,$codigo2,$u);
+    $stmt->execute();
+    $result = $stmt->get_result();
+	if ($row = $result->fetch_assoc()) {
+      return true;
+    } else {
+	$stmt1 = $dbb->prepare('update user set password_change_attempts=password_change_attempts+1 WHERE  id= ? ');
+	$dbb->set_charset("utf8");
+    $stmt1->bind_param('s' ,$u);
+    $stmt1->execute();
+	return false;
+	}
+    return false;
+}
+
+function comprobar_codigo1_codigo2_no_validado($dbb,$u,$codigo1,$codigo2,$sql){
+	
+    if($sql==1){
+	$stmt = $dbb->prepare('SELECT * FROM user    WHERE email_code= ? and sms_code= ? and id= ? and password_change_request=1 LIMIT 0,1');
+    }else{
+        $stmt = $dbb->prepare('SELECT * FROM user    WHERE email_code= ? and sms_code= ? and id= ? and email_verified=0 LIMIT 0,1');    
+    }
+    $dbb->set_charset("utf8");
+    $stmt->bind_param('sss', $codigo1,$codigo2,$u);
+    $stmt->execute();
+    $result = $stmt->get_result();
+	if ($row = $result->fetch_assoc()) {
+      return true;
+    } else {
+		//Borramos el usuario
+		  //$query ="delete from u_users where id= ?";
+		  //$stmt = $dbb->prepare('delete from u_user where id= ?');
+          //$stmt->bind_param('s', $u);
+          //$stmt->execute();
+		  //return false;
+	}
+    return false;
+}
 
 ?>

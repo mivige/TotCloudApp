@@ -27,6 +27,7 @@ function pulsar_delete(id) {
                 type: "POST",
                 url: "api/actions/app_delete_paas_private_bandwidth.php",
                 success: function(data) {
+					data = data.trim();
                     if (data === 'OK') {
                         Swal.fire({
                             title: "Deleted",
