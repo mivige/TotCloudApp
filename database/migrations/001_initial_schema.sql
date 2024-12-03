@@ -28,7 +28,7 @@ CREATE TABLE user (
     login_attempts INT DEFAULT 0, 
     admin TINYINT(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
+  
 CREATE TABLE u_password_history (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE u_user_x_role (
 -- ////////////////////
 -- Request
 -- ////////////////////
-
+ 
 CREATE TABLE request (
     request_id INT AUTO_INCREMENT PRIMARY KEY,
     date DATETIME NOT NULL,
