@@ -14,14 +14,18 @@ CREATE TABLE user (
     mobile_phone VARCHAR(20) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     token VARCHAR(256),
-    codigo_email VARCHAR(10), -- Not english
-    codigo_sms VARCHAR(10), -- Not english
+    email_code VARCHAR(10),
+    sms_code VARCHAR(10), 
     password VARCHAR(256) NOT NULL,
-    fecha_token DATETIME, -- Not english
-    activo TINYINT(1) DEFAULT 0, -- Not english
-    validated_email TINYINT(1) DEFAULT 0,
-    solicitud_cambio_password TINYINT(1) DEFAULT 0, -- Not english
-    numero_intentos_login INT DEFAULT 0, -- Not english
+    token_date DATETIME, 
+    active TINYINT(1) DEFAULT 0,
+    email_verified TINYINT(1) DEFAULT 0,
+    email_validation_attempts int DEFAULT 0,
+    password_change_date datetime DEFAULT NULL,
+    password_change_request TINYINT(1) DEFAULT 0, 
+    password_change_attempts int DEFAULT 0,
+    password_change_request_date datetime DEFAULT NULL,
+    login_attempts INT DEFAULT 0, 
     admin TINYINT(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
