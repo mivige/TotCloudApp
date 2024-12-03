@@ -1,3 +1,5 @@
+USE totcloud_db;
+
 -- Disable foreign key checks to allow insertion
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -14,7 +16,7 @@ INSERT INTO u_role (role_name, description, code) VALUES
 ('Customer', 'Standard user with limited access', 'CUSTOMER');
 
 -- Insert Users
-INSERT INTO user (firstname, lastname, mobile_phone, email, password, activo, validated_email, admin) VALUES
+INSERT INTO user (firstname, lastname, mobile_phone, email, password, active, email_verified, admin) VALUES
 ('John', 'Doe', '+1-555-123-4567', 'john.doe@example.com', SHA2('password123', 256), 1, 1, 0),
 ('Jane', 'Smith', '+1-555-987-6543', 'jane.smith@example.com', SHA2('securepass456', 256), 1, 1, 0),
 ('Mike', 'Admin', '+1-555-111-2222', 'mike.admin@totcloud.com', SHA2('adminpass789', 256), 1, 1, 1),
