@@ -7,7 +7,7 @@ AFTER INSERT ON resource_usage
 FOR EACH ROW
 BEGIN
     INSERT INTO logs (timestamp, eventType, details)
-    VALUES (NEW.timestamp, 'Resource Usage Logged', 
+    VALUES (NEW.timestamp, 2, 
             CONCAT('CPU Usage: ', NEW.cpuUsage, '%, Memory Usage: ', NEW.memoryUsage, 'MB'));
 END$$
 

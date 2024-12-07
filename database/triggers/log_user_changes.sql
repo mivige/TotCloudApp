@@ -7,7 +7,7 @@ AFTER UPDATE ON user
 FOR EACH ROW
 BEGIN
     INSERT INTO logs (timestamp, eventType, details, user_id)
-    VALUES (NOW(), 'User Updated', CONCAT('User ', OLD.email, ' updated'), OLD.id);
+    VALUES (NOW(), 1, CONCAT('User ', OLD.email, ' updated'), OLD.id);
 END$$
 
 DELIMITER ;

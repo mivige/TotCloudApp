@@ -74,18 +74,11 @@ CREATE TABLE category (
     UNIQUE KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE currencytype (
-    currency_code CHAR(3) NOT NULL PRIMARY KEY,
-    currency_name VARCHAR(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 CREATE TABLE commitment_period (
     id INT AUTO_INCREMENT PRIMARY KEY,
     code VARCHAR(20) NOT NULL UNIQUE,
     description TINYTEXT,
-    discount DECIMAL(10,2),
-    currency_type CHAR(3),
-    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
+    discount DECIMAL(10,2)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ////////////////////
@@ -99,9 +92,7 @@ CREATE TABLE ds_datacenterregion (
     country VARCHAR(50),
     availability_zone VARCHAR(20),
     price DECIMAL(10,2),
-    currency_type CHAR(3),
-    description TINYTEXT,
-    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
+    description TINYTEXT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE ds_memory (
@@ -109,9 +100,7 @@ CREATE TABLE ds_memory (
     code VARCHAR(20) NOT NULL UNIQUE,
     description TINYTEXT,
     capacity_gb INT,
-    price DECIMAL(10,2),
-    currency_type CHAR(3),
-    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
+    price DECIMAL(10,2)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE ds_os (
@@ -119,27 +108,21 @@ CREATE TABLE ds_os (
     code VARCHAR(20) NOT NULL UNIQUE,
     name VARCHAR(50) NOT NULL,
     version VARCHAR(20),
-    price DECIMAL(10,2),
-    currency_type CHAR(3),
-    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
+    price DECIMAL(10,2)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE ds_private_bandwidth (
     id INT AUTO_INCREMENT UNIQUE,
     code VARCHAR(20) NOT NULL PRIMARY KEY,
     description TINYTEXT,
-    price DECIMAL(10,2),
-    currency_type CHAR(3),
-    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
+    price DECIMAL(10,2)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE ds_public_bandwidth (
     id INT AUTO_INCREMENT UNIQUE,
     code VARCHAR(20) NOT NULL PRIMARY KEY,
     description TINYTEXT,
-    price DECIMAL(10,2),
-    currency_type CHAR(3),
-    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
+    price DECIMAL(10,2)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE ds_processor (
@@ -148,9 +131,7 @@ CREATE TABLE ds_processor (
     description TINYTEXT,
     cores INT,
     speed_ghz DECIMAL(5,2),
-    price DECIMAL(10,2),
-    currency_type CHAR(3),
-    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
+    price DECIMAL(10,2)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -159,9 +140,7 @@ CREATE TABLE ds_storage (
     code VARCHAR(20) NOT NULL UNIQUE,
     description TINYTEXT,
     capacity_gb INT,
-    price DECIMAL(10,2),
-    currency_type CHAR(3),
-    FOREIGN KEY (currency_type) REFERENCES currencytype(currency_code) ON DELETE SET NULL
+    price DECIMAL(10,2)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE paas_dedicated_server (

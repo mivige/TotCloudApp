@@ -59,7 +59,7 @@ AFTER INSERT ON resource_usage
 FOR EACH ROW
 BEGIN
     INSERT INTO logs (timestamp, eventType, details)
-    VALUES (NEW.timestamp, 'Resource Usage Logged', 
+    VALUES (NEW.timestamp, 2, 
             CONCAT('CPU Usage: ', NEW.cpuUsage, '%, Memory Usage: ', NEW.memoryUsage, 'MB'));
 END$$
 
@@ -74,7 +74,7 @@ AFTER UPDATE ON user
 FOR EACH ROW
 BEGIN
     INSERT INTO logs (timestamp, eventType, details, user_id)
-    VALUES (NOW(), 'User Updated', CONCAT('User ', OLD.email, ' updated'), OLD.id);
+    VALUES (NOW(), 1, CONCAT('User ', OLD.email, ' updated'), OLD.id);
 END$$
 
 DELIMITER ;
