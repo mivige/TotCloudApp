@@ -142,7 +142,7 @@ if ($es_admin==1){
                 <?php }?>
                 
 
-                <?php $stmt_tmp = $dbb->prepare('select * from ds_processor pp inner join currencytype ct  on pp.currency_type = ct.currency_code;');
+                <?php $stmt_tmp = $dbb->prepare('select * from ds_processor ;');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>
@@ -153,7 +153,7 @@ if ($es_admin==1){
                     <option value="" disabled selected>Select a Processor</option>
                     <?php while ($processor = $result_tmp->fetch_assoc()): ?>
                         
-                        <option  <?php if ($processor_code==$processor['code']){?>selected<?php };?> value="<?php echo htmlspecialchars($processor['code']); ?>"><?php echo htmlspecialchars($processor['description']); echo" +";echo htmlspecialchars($processor['price']);echo" ";echo htmlspecialchars($processor['currency_name'])?></option>
+                        <option  <?php if ($processor_code==$processor['code']){?>selected<?php };?> value="<?php echo htmlspecialchars($processor['code']); ?>"><?php echo htmlspecialchars($processor['description']); echo" +";echo htmlspecialchars($processor['price']);echo" ";echo htmlspecialchars("€")?></option>
                     <?php endwhile; ?>
                 </select>
                 <div class="invalid-feedback">
@@ -161,7 +161,7 @@ if ($es_admin==1){
                 </div>
             </div>
 
-            <?php $stmt_tmp = $dbb->prepare('select * from ds_memory pm inner join currencytype ct  on pm.currency_type = ct.currency_code;');
+            <?php $stmt_tmp = $dbb->prepare('select * from ds_memory ;');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>           
@@ -170,7 +170,7 @@ if ($es_admin==1){
                 <select id="custom-select" class="form-control custom-select" id="memory" name="memory" required>
                     <option value="" disabled selected>Select a Memory</option>
                     <?php while ($memory = $result_tmp->fetch_assoc()): ?>
-                        <option <?php if ($memory_code==$memory['code']){?>selected<?php };?>    value="<?php echo htmlspecialchars($memory['code']); ?>"><?php echo htmlspecialchars($memory['description']); echo" +";echo htmlspecialchars($memory['price']);echo" ";echo htmlspecialchars($memory['currency_name']) ?></option>
+                        <option <?php if ($memory_code==$memory['code']){?>selected<?php };?>    value="<?php echo htmlspecialchars($memory['code']); ?>"><?php echo htmlspecialchars($memory['description']); echo" +";echo htmlspecialchars($memory['price']);echo" ";echo htmlspecialchars("€") ?></option>
                     <?php endwhile; ?>
                 </select>
                 <div class="invalid-feedback">
@@ -183,7 +183,7 @@ if ($es_admin==1){
 
 
             <div class="row mb-3">
-            <?php $stmt_tmp = $dbb->prepare('select code,description,price,currency_name from ds_private_bandwidth pp inner join currencytype ct  on pp.currency_type = ct.currency_code;');
+            <?php $stmt_tmp = $dbb->prepare('select code,description,price from ds_private_bandwidth ;');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>
@@ -193,7 +193,7 @@ if ($es_admin==1){
                 <select id="custom-select" class="form-control custom-select" id="private_bandwith" name="private_bandwith" required>
                     <option value="" disabled selected>Select a Private Bandwith</option>
                     <?php while ($private_bandwith = $result_tmp->fetch_assoc()): ?>
-                        <option <?php if ($private_bandwidth_code==$private_bandwith['code']){?>selected<?php };?>  value="<?php echo htmlspecialchars($private_bandwith['code']); ?>"><?php echo htmlspecialchars($private_bandwith['description']); ; echo" +";echo htmlspecialchars($private_bandwith['price']);echo" ";echo htmlspecialchars($private_bandwith['currency_name']) ?></option>
+                        <option <?php if ($private_bandwidth_code==$private_bandwith['code']){?>selected<?php };?>  value="<?php echo htmlspecialchars($private_bandwith['code']); ?>"><?php echo htmlspecialchars($private_bandwith['description']); ; echo" +";echo htmlspecialchars($private_bandwith['price']);echo" ";echo htmlspecialchars("€") ?></option>
                     <?php endwhile; ?>
                 </select>
                 <div class="invalid-feedback">
@@ -201,7 +201,7 @@ if ($es_admin==1){
                 </div>
             </div>
 
-            <?php $stmt_tmp = $dbb->prepare('select * from ds_public_bandwidth pp inner join currencytype ct  on pp.currency_type = ct.currency_code;');
+            <?php $stmt_tmp = $dbb->prepare('select * from ds_public_bandwidth ;');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>           
@@ -210,7 +210,7 @@ if ($es_admin==1){
                 <select id="custom-select" class="form-control custom-select" id="public_bandwith" name="public_bandwith" required>
                     <option value="" disabled selected>Select a Public Bandwith</option>
                     <?php while ($public_bandwith = $result_tmp->fetch_assoc()): ?>
-                        <option <?php if ($public_bandwidth_code==$public_bandwith['code']){?>selected<?php };?>   value="<?php echo htmlspecialchars($public_bandwith['code']); ?>"><?php echo htmlspecialchars($public_bandwith['description']); ; echo" +";echo htmlspecialchars($public_bandwith['price']);echo" ";echo htmlspecialchars($public_bandwith['currency_name']) ?></option>
+                        <option <?php if ($public_bandwidth_code==$public_bandwith['code']){?>selected<?php };?>   value="<?php echo htmlspecialchars($public_bandwith['code']); ?>"><?php echo htmlspecialchars($public_bandwith['description']); ; echo" +";echo htmlspecialchars($public_bandwith['price']);echo" ";echo htmlspecialchars("€") ?></option>
                     <?php endwhile; ?>
                 </select>
                 <div class="invalid-feedback">
@@ -222,7 +222,7 @@ if ($es_admin==1){
 
 
             <div class="row mb-3">
-            <?php $stmt_tmp = $dbb->prepare('select * from ds_storage ps inner join currencytype ct  on ps.currency_type = ct.currency_code;');
+            <?php $stmt_tmp = $dbb->prepare('select * from ds_storage ps ;');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>
@@ -232,7 +232,7 @@ if ($es_admin==1){
                 <select id="custom-select" class="form-control custom-select" id="storage" name="storage" required>
                     <option value="" disabled selected>Select a Storage</option>
                     <?php while ($storage = $result_tmp->fetch_assoc()): ?>
-                        <option <?php if ($storage_code==$storage['code']){?>selected<?php };?>   value="<?php echo htmlspecialchars($storage['code']); ?>"><?php echo htmlspecialchars($storage['description']); echo" +";echo htmlspecialchars($storage['price']);echo" ";echo htmlspecialchars($storage['currency_name']) ?></option>
+                        <option <?php if ($storage_code==$storage['code']){?>selected<?php };?>   value="<?php echo htmlspecialchars($storage['code']); ?>"><?php echo htmlspecialchars($storage['description']); echo" +";echo htmlspecialchars($storage['price']);echo" ";echo htmlspecialchars("€") ?></option>
                     <?php endwhile; ?>
                 </select>
                 <div class="invalid-feedback">
@@ -240,7 +240,7 @@ if ($es_admin==1){
                 </div>
             </div>
 
-            <?php $stmt_tmp = $dbb->prepare('select * from ds_os po inner join currencytype ct  on po.currency_type = ct.currency_code;');
+            <?php $stmt_tmp = $dbb->prepare('select * from ds_os ;');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>           
@@ -249,7 +249,7 @@ if ($es_admin==1){
                 <select id="custom-select" class="form-control custom-select" id="os" name="os" required>
                     <option value="" disabled selected>Select a Operating Systemy</option>
                     <?php while ($os = $result_tmp->fetch_assoc()): ?>
-                        <option <?php if ($os_code==$os['code']){?>selected<?php };?>   value="<?php echo htmlspecialchars($os['code']); ?>"><?php echo htmlspecialchars($os['name']);  echo" +";echo htmlspecialchars($os['price']);echo" ";echo htmlspecialchars($os['currency_name'])?></option>
+                        <option <?php if ($os_code==$os['code']){?>selected<?php };?>   value="<?php echo htmlspecialchars($os['code']); ?>"><?php echo htmlspecialchars($os['name']);  echo" +";echo htmlspecialchars($os['price']);echo" ";echo htmlspecialchars("€")?></option>
                     <?php endwhile; ?>
                 </select>
                 <div class="invalid-feedback">

@@ -35,7 +35,7 @@ $resultado="ERROR";
 	$dbb->set_charset("utf8");
 	$stmt->bind_param('dssd',$price,$description,$code,$id);
    }else{
-    $stmt = $dbb->prepare('insert into ds_storage (price,description,code,currency_type) values (?,?,?,"978") ');
+    $stmt = $dbb->prepare('insert into ds_storage (price,description,code) values (?,?,?) ');
 	$dbb->set_charset("utf8");
 	$stmt->bind_param('dss',$price,$description,$code);
 

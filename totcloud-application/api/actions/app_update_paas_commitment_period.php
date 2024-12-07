@@ -35,7 +35,7 @@ $resultado="ERROR";
 	$dbb->set_charset("utf8");
 	$stmt->bind_param('dssd',$discount,$description,$code,$id);
    }else{
-    $stmt = $dbb->prepare('insert into commitment_period (discount,description,code,currency_type) values (?,?,?,"978") ');
+    $stmt = $dbb->prepare('insert into commitment_period (discount,description,code) values (?,?,?) ');
 	$dbb->set_charset("utf8");
 	$stmt->bind_param('dss',$discount,$description,$code);
 
