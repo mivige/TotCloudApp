@@ -16,7 +16,7 @@ BEGIN
     DECLARE current_attempts INT;
     
     -- Get the current number of failed login attempts
-    SELECT numero_intentos_login INTO current_attempts
+    SELECT login_attempts INTO current_attempts
     FROM user
     WHERE id = p_user_id;
 
@@ -24,12 +24,12 @@ BEGIN
     IF current_attempts >= max_attempts THEN
         -- Lock the account by setting 'activo' to 0
         UPDATE user
-        SET activo = 0
+        SET active = 0
         WHERE id = p_user_id;
 
         -- Log the event
         INSERT INTO logs (timestamp, eventType, details)
-        VALUES (NOW(), 'Account Locked', CONCAT('User ID ', p_user_id, ' account locked due to too many failed attempts.'));
+        VALUES (NOW(), 3, CONCAT('User ID ', p_user_id, ' account locked due to too many failed attempts.'));
     END IF;
 END$$
 

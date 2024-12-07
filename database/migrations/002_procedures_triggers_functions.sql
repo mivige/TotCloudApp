@@ -99,9 +99,9 @@ DELIMITER ;
 -- Procedures
 -- ////////////////////
 
--- The Account Lock procedure ensures a user's account is locked after a certain number of failed login attempts (numero_intentos_login) is exceeded. 
+-- The Account Lock procedure ensures a user's account is locked after a certain number of failed login attempts (login_attempts) is exceeded. 
 -- You can specify the threshold in the procedure.
--- Call this procedure after incrementing the numero_intentos_login field when a login attempt fails:
+-- Call this procedure after incrementing the login_attempts field when a login attempt fails:
 -- CALL lock_user_account(1, 5); -- Locks user with ID 1 if failed attempts exceed 5.
 
 DELIMITER $$
@@ -114,7 +114,7 @@ BEGIN
     DECLARE current_attempts INT;
     
     -- Get the current number of failed login attempts
-    SELECT numero_intentos_login INTO current_attempts
+    SELECT login_attempts INTO current_attempts
     FROM user
     WHERE id = p_user_id;
 
@@ -122,12 +122,12 @@ BEGIN
     IF current_attempts >= max_attempts THEN
         -- Lock the account by setting 'activo' to 0
         UPDATE user
-        SET activo = 0
+        SET active = 0
         WHERE id = p_user_id;
 
         -- Log the event
         INSERT INTO logs (timestamp, eventType, details)
-        VALUES (NOW(), 'Account Locked', CONCAT('User ID ', p_user_id, ' account locked due to too many failed attempts.'));
+        VALUES (NOW(), 3, CONCAT('User ID ', p_user_id, ' account locked due to too many failed attempts.'));
     END IF;
 END$$
 
@@ -171,7 +171,7 @@ CREATE PROCEDURE create_user(
     IN p_token VARCHAR(256) , p_codigo_email VARCHAR(10), IN p_codigo_sms VARCHAR(10), IN p_fecha_token DATETIME
 )
 BEGIN
-    INSERT INTO user (firstname, lastname, lastname2, mobile_phone, email, token, codigo_email, codigo_sms, password, fecha_token )
+    INSERT INTO user (firstname, lastname, lastname2, mobile_phone, email, token, email_code, sms_code, password, token_date)
     VALUES (p_firstname, p_lastname, p_lastname2, p_mobile_phone, p_email, p_token, p_codigo_email, p_codigo_sms, p_password, p_fecha_token);
 END$$
 
@@ -193,7 +193,7 @@ BEGIN
     VALUES (p_user_id, p_new_password, NOW());
 
     -- Update the user table
-    UPDATE user SET password = p_new_password, fecha_cambio_password = NOW()
+    UPDATE user SET password = p_new_password, password_change_date = NOW()
     WHERE id = p_user_id;
 END$$
 

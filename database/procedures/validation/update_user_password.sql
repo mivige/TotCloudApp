@@ -14,7 +14,7 @@ BEGIN
     VALUES (p_user_id, p_new_password, current_time);
 
     -- Update the user table
-    UPDATE user SET password = p_new_password, fecha_cambio_password = current_time
+    UPDATE user SET password = p_new_password, password_change_date = current_time
     WHERE id = p_user_id;
 END$$
 

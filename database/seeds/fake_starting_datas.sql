@@ -26,7 +26,8 @@ INSERT INTO u_user_x_role (user_id, role_id) VALUES
 -- Insert event types
 INSERT INTO event_types (id, name) VALUES
 (1, 'User Updated'),
-(2, 'Resource Usage Logged');
+(2, 'Resource Usage Logged'),
+(3, 'Account Locked');
 
 -- Insert Datacenter Regions
 INSERT INTO ds_datacenterregion (code, region_name, country, availability_zone, price) VALUES
