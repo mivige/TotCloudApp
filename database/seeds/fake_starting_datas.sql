@@ -11,9 +11,9 @@ INSERT INTO u_role (role_name, description, code) VALUES
 
 -- Insert Users
 INSERT INTO user (firstname, lastname, mobile_phone, email, password, active, email_verified, admin) VALUES
-('John', 'Doe', '00015551234567', 'john.doe@example.com', SHA2('password123', 256), 1, 1, 0),
-('Jane', 'Smith', '00015559876543', 'jane.smith@example.com', SHA2('securepass456', 256), 1, 1, 0),
-('Mike', 'Admin', '0015551112222', 'mike.admin@totcloud.com', SHA2('adminpass789', 256), 1, 1, 1),
+('Tot', 'User', '0015551234567', 'user@totcloud.com', '$2a$12$oZoBuKScXNCarQ3TND2D9.DMiVg6M7QZxVdTGQ3iJiASfNOWri8r.', 1, 1, 0), -- pass: user
+('Jane', 'Smith', '0015559876543', 'jane.smith@example.com', SHA2('securepass456', 256), 1, 1, 0),
+('Tot', 'Admin', '0015551112222', 'admin@totcloud.com', '$2a$12$L9PLWwV9Ia11NuZbBJlvJeyMfGqrEjyb7Sm3VosW.eZgwdlKlr9vK', 1, 1, 1), -- pass: admin
 ('Mitch', 'Kind', '00393899191006', 'mivige@totcloud.com', '$2a$12$SATm/uPgpTOHyearTXtOXOSMHtwGM4Z66QlRj1Chvs0QaoXXpzb7O', 1, 1, 1);
 
 -- Link Users to Roles
