@@ -225,6 +225,7 @@ CREATE TABLE wh_db (
 CREATE TABLE saas_web_hosting (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(256) NOT NULL,
+    category_code VARCHAR(20),
     storageSpace INT NOT NULL,
     bandwidthAllocation INT NOT NULL,
     maxConcurrentUsers INT NOT NULL,
@@ -237,6 +238,7 @@ CREATE TABLE saas_web_hosting (
     db_id INT,
     request_id INT NOT NULL,
     commitment_id INT,
+    FOREIGN KEY (category_code) REFERENCES category(code) ON DELETE SET NULL,
     FOREIGN KEY (request_id) REFERENCES request(request_id) ON DELETE CASCADE,
     FOREIGN KEY (commitment_id) REFERENCES commitment_period(id) ON DELETE SET NULL,
     FOREIGN KEY (datacenter_id) REFERENCES wh_datacenter(id),
