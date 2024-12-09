@@ -206,3 +206,31 @@ BEGIN
     WHERE ur.user_id = input_user_id;
 END$$
 DELIMITER ;
+
+-- ////////////////////
+-- Events
+-- ////////////////////
+
+-- An event to delete each day unassigned requests to ensure data consistency
+
+DELIMITER $$
+CREATE PROCEDURE delete_unassigned_requests()
+BEGIN
+    DELETE r
+    FROM request r
+    LEFT JOIN paas_dedicated_server pds ON r.request_id = pds.request_id
+    WHERE pds.request_id IS NULL;
+
+    DELETE r
+    FROM request r
+    LEFT JOIN saas_web_hosting swh ON r.request_id = swh.request_id
+    WHERE swh.request_id IS NULL;
+END$$
+DELIMITER ;
+
+CREATE EVENT auto_delete_unassigned_requests
+ON SCHEDULE EVERY 1 DAY
+DO
+CALL delete_unassigned_requests();
+
+SET GLOBAL event_scheduler = ON; 
