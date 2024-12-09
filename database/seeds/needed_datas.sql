@@ -24,28 +24,37 @@ INSERT INTO category VALUES
 (5, 'WHP004', 'Web Hosting Performance', 'Para proyectos multisitio y tiendas online', 132.00);
 
 -- Insert Datacenter Regions
-INSERT INTO ds_datacenterregion (code, region_name, country, availability_zone, price) VALUES
-('US-EAST', 'US East', 'United States', 'AZ1', 50.00),
-('EU-WEST', 'Europe West', 'Ireland', 'AZ2', 60.00),
-('ASIA-SOUTH', 'Asia South', 'Singapore', 'AZ3', 55.00);
+INSERT INTO ds_datacenterregion (code, region_name, country, availability_zone, price, description) VALUES
+('EUFRRB001', 'Europe', 'France', 'AZ2', 0.00, 'Europe (France - Roubaix)  120s'),
+('EUFRST001', 'Europe', 'France', 'AZ2', 0.00, 'Europe (France - Strasbourg)  120s'),
+('EUFRGR001', 'Europe', 'France', 'AZ2', 0.00, 'Europe (France - Gravelines)  72h'),
+('EUUKER001', 'Europe', 'United Kingdom', 'AZ2', 0.00, 'Europe (United Kingdom - Erith)  72h'),
+('EUGELI001', 'Europe', 'Germany', 'AZ2', 0.00, 'Europe (Germany - Limburg)  72h'),
+('US-EAST', 'US East', 'United States', 'AZ1', 50.00, ''),
+('EU-WEST', 'Europe West', 'Ireland', 'AZ2', 60.00, ''),
+('ASIA-SOUTH', 'Asia South', 'Singapore', 'AZ3', 55.00, '');
 
 -- Insert Memory Types
 INSERT INTO ds_memory (code, description, capacity_gb, price) VALUES
-('MEM-8GB', '8GB RAM', 8, 20.00),
-('MEM-16GB', '16GB RAM', 16, 40.00),
-('MEM-32GB', '32GB RAM', 32, 80.00);
+('32GB001', '32GB DDR5 ECC On-Die 5200MHz1', 32, 0.00),
+('64GB001', '64GB DDR5 ECC On-Die 5200MHz', 64, 10.00),
+('128GB001', '128GB DDR5 ECC On-Die 3600MHz', 128, 30.00),
+('192GB001', '192GB DDR5 ECC On-Die 3600MHz', 192, 50.00);
 
 -- Insert OS Types
 INSERT INTO ds_os (code, name, version, price) VALUES
-('UBUNTU-22', 'Ubuntu Linux', '22.04 LTS', 0.00),
-('WINDOWS-22', 'Windows Server', '2022', 50.00),
-('CENTOS-8', 'CentOS Linux', '8', 0.00);
+('UB24001', 'Ubuntu: Versión 24.04 LTS', '24.04 LTS', 0.00),
+('RH93001', 'Red Hat Enterprise Linux (RHEL): Versión 9.3', '9.3', 0.00),
+('CE9001', 'CentOS Stream: Versión 9', '9', 0.00),
+('WS22001', 'Windows Server 2022', '2022', 50.00),
+('AMLI23001', 'Amazon Linux 2023', '2023', 0.00);
 
 -- Insert Processor Types
 INSERT INTO ds_processor (code, description, cores, speed_ghz, price) VALUES
-('PROC-4C', '4-Core Processor', 4, 2.5, 50.00),
-('PROC-8C', '8-Core Processor', 8, 3.0, 100.00),
-('PROC-16C', '16-Core Processor', 16, 3.5, 200.00);
+('AMDEP001', 'AMD EPYC 4244P - 6c/12t - 3.8GHz/5.1GHz', 6, 3.8, 0.00),
+('INTXE001', 'Dual Intel Xeon Gold 5515+ - 16c/32t - 3.2GHz/3.6GHz', 16, 3.2, 150.00),
+('AMDEP002', 'AMD EPYC GENOA 9454 - 48c/96t - 2.75GHz/3.65GHz', 48, 2.75, 200.00),
+('INTXE002', 'Dual Intel Xeon Gold 6526Y - 32c/64t - 2.8GHz/3.5GHz', 32, 2.8, 300.00);
 
 -- Insert Storage Types
 INSERT INTO ds_storage (code, description, capacity_gb, price) VALUES
@@ -60,9 +69,9 @@ INSERT INTO ds_public_bandwidth (code, description, price) VALUES
 ('BW-1G', '1 Gbps Public Bandwidth', 200.00);
 
 INSERT INTO ds_private_bandwidth (code, description, price) VALUES
-('PRVBW-10', '10 Mbps Private Bandwidth', 5.00),
-('PRVBW-100', '100 Mbps Private Bandwidth', 25.00),
-('PRVBW-1G', '1 Gbps Private Bandwidth', 100.00);
+('10GBPIB001','10Gbit/s unmetered and guaranteed',0.00),
+('25GBPIB001','25Gbit/s unmetered and guaranteed',100.00),
+('50GBPIB001','50Gbit/s unmetered and guaranteed',200.00);
 
 -- Insert Web Hosting related data
 INSERT INTO wh_datacenter (name, location, networkProvider) VALUES
@@ -73,6 +82,13 @@ INSERT INTO wh_datacenter (name, location, networkProvider) VALUES
 INSERT INTO wh_ssl (provider, validationLevel, certificateType, expirationDate, price) VALUES
 ('Lets Encrypt', 'Domain Validation', 'Free', '2024-12-31 23:59:59', 0.00),
 ('GlobalSign', 'Extended Validation', 'Business', '2025-06-30 23:59:59', 10,00);
+
+-- Insert commitment periods
+INSERT INTO commitment_period VALUES 
+(1,'NOCOM001','Without commitment',0.00),
+(2,'6MCP001','6 months Save 5% per month on your server',5.00),
+(3,'12MCP001','12 Months Save 10% per month on your server',10.00),
+(4,'24MCP001','24 Months Save 15% per month on your server',15.00);
 
 -- Re-enable foreign key checks
 SET FOREIGN_KEY_CHECKS = 1;
