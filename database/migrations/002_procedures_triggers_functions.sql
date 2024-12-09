@@ -83,13 +83,13 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER after_user_password_update
+CREATE TRIGGER before_user_password_update
 BEFORE UPDATE ON user
 FOR EACH ROW
 BEGIN
     IF OLD.password != NEW.password THEN
         INSERT INTO u_password_history (user_id, password, change_date)
-        VALUES (OLD.id, NEW.password, NOW());
+        VALUES (OLD.id, OLD.password, NOW());
     END IF;
 END$$
 
@@ -188,10 +188,6 @@ BEGIN
     -- DECLARE current_time DATETIME;
     -- SET current_time = NOW();
 
-    -- Insert into password history
-    INSERT INTO u_password_history (user_id, password, change_date)
-    VALUES (p_user_id, p_new_password, NOW());
-
     -- Update the user table
     UPDATE user SET password = p_new_password, password_change_date = NOW()
     WHERE id = p_user_id;
@@ -199,3 +195,14 @@ END$$
 
 DELIMITER ;
 
+-- A procedure to get the codes of the roles of a determined user
+
+DELIMITER $$
+CREATE PROCEDURE GetUserRoles(IN input_user_id INT)
+BEGIN
+    SELECT r.code
+    FROM u_role r
+    JOIN u_user_x_role ur ON ur.role_id = r.code
+    WHERE ur.user_id = input_user_id;
+END$$
+DELIMITER ;
