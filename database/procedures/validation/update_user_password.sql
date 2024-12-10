@@ -9,12 +9,8 @@ BEGIN
     DECLARE current_time DATETIME;
     SET current_time = NOW();
 
-    -- Insert into password history
-    INSERT INTO u_password_history (user_id, password, change_date)
-    VALUES (p_user_id, p_new_password, current_time);
-
     -- Update the user table
-    UPDATE user SET password = p_new_password, fecha_cambio_password = current_time
+    UPDATE user SET password = p_new_password, password_change_date = current_time
     WHERE id = p_user_id;
 END$$
 

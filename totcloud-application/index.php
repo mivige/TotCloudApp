@@ -228,7 +228,11 @@ include_once "api/config/actualizar_token.php";
 
                 <?php if ($opcion=="paas"){
                         include ('api/app_paas_home.php'); 
-                    }?>    
+                    }?>  
+                    
+                <?php if ($opcion=="saas"){
+                        include ('api/app_saas_home.php'); 
+                    }?>  
                  
                  <?php if ($opcion=="paas_memory"){
                         include ('api/app_paas_memory_home.php'); 
@@ -261,7 +265,36 @@ include_once "api/config/actualizar_token.php";
                     
                     <?php if ($opcion=="paas_commitment_period"){
                         include ('api/app_paas_commitment_period_home.php'); 
-                    }?>  
+                    }?> 
+                    
+                    <?php 
+                    // Admin pages for SaaS
+                    if ($opcion=="saas_requests"){
+                        include ('api/app/saas/requests.php'); 
+                    }
+                    if ($opcion=="saas_dbms"){
+                        include ('api/app/saas/dbms.php'); 
+                    }
+                    if ($opcion=="saas_persistency"){
+                        include ('api/app/saas/persistency.php'); 
+                    }
+                    if ($opcion=="saas_storage"){
+                        include ('api/app/saas/memory.php'); 
+                    }
+                    if ($opcion=="saas_datacenter"){
+                        include ('api/app/saas/datacenter.php'); 
+                    }
+                    if ($opcion=="saas_modules"){
+                        include ('api/app/saas/modules.php'); 
+                    }
+                    if ($opcion=="saas_ssl"){
+                        include ('api/app/saas/ssl.php'); 
+                    }
+                    if ($opcion=="saas_cdn"){
+                        include ('api/app/saas/cdn.php'); 
+                    }
+                    ?> 
+
 
                 <?php if ($opcion=="requests"){
                         include ('api/app_paas_requests_home.php'); 

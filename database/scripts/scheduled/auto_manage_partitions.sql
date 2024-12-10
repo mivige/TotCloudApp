@@ -1,0 +1,5 @@
+CREATE EVENT AutoManagePartitions
+ON SCHEDULE EVERY 1 MONTH
+STARTS '2025-02-01 00:00:00'
+DO
+CALL ManagePartitions();
