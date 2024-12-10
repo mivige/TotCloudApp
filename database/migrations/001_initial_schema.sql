@@ -185,7 +185,8 @@ CREATE TABLE wh_ssl (
     provider VARCHAR(256) NOT NULL,
     validationLevel VARCHAR(256) NOT NULL,
     certificateType VARCHAR(256) NOT NULL,
-    expirationDate DATETIME
+    expirationDate DATETIME,
+    price DECIMAL(10,2)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE wh_db_dbms (

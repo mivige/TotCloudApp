@@ -81,7 +81,7 @@ INSERT INTO wh_datacenter (name, location, networkProvider) VALUES
 
 INSERT INTO wh_ssl (provider, validationLevel, certificateType, expirationDate, price) VALUES
 ('Lets Encrypt', 'Domain Validation', 'Free', '2024-12-31 23:59:59', 0.00),
-('GlobalSign', 'Extended Validation', 'Business', '2025-06-30 23:59:59', 10,00);
+('GlobalSign', 'Extended Validation', 'Business', '2025-06-30 23:59:59', 10.00);
 
 -- Insert commitment periods
 INSERT INTO commitment_period VALUES 
