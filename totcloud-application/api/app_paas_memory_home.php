@@ -43,7 +43,8 @@ if(!empty($modificar) and !empty($id)){
     }
 } 
 
-  $stmt = $dbb->prepare('select * from ds_memory pm');
+
+  $stmt = $dbb->prepare('select * from ds_memory ');
   $dbb->set_charset("utf8");
   $stmt->execute();
   $result = $stmt->get_result();
@@ -205,7 +206,7 @@ if(!empty($modificar) and !empty($id)){
                                             <td class="text-center">
                                                 <div class="d-flex align-items-center">
                                                     <small class="text-uppercase text-muted mr-2">PRICE</small>
-                                                    <small class="text-uppercase"><span class="js-lists-values-amount"><?php echo $row["price"]; ?>&nbsp;<?php echo $row["currency_name"]; ?></span></small>
+                                                    <small class="text-uppercase"><span class="js-lists-values-amount"><?php echo $row["price"]; ?>&nbsp;€</span></small>
                                                 </div>
                                             </td>
 

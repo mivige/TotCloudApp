@@ -17,13 +17,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
        
     if(!empty($_POST["opcion"]) || isset($_POST["opcion"]))
     {
-        $opcion=$_POST["opcion"];
+        $opcion = filter_input(INPUT_GET, 'opcion', FILTER_SANITIZE_STRING);
+        //$opcion=$_POST["opcion"];
     
     } else {$opcion="home";}
 } else {
 
     if(!empty($_GET["opcion"]) || isset($_GET["opcion"]))
-    {$opcion=$_GET["opcion"];} else {$opcion="home";}
+    {
+        $opcion = filter_input(INPUT_GET, 'opcion', FILTER_SANITIZE_STRING);
+        //$opcion=$_GET["opcion"];
+    } else {$opcion="home";}
 }
 
 

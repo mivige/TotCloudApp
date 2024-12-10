@@ -14,7 +14,6 @@ date_default_timezone_set('UTC');
 include_once "../config/variables.php";
 
 
-
 $firstname = "";
 $lastname = "";
 $lastname2 = "";
