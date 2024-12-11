@@ -101,6 +101,13 @@ INSERT INTO wh_db_memory (capacity, type, speed) VALUES
 (8192, 'Hybrid', 300),
 (256, 'RAMDisk', 7000);
 
+INSERT INTO wh_modules (name, description, version, isActive) VALUES
+('WordPress', 'A popular content management system for building websites and blogs.', '6.1.1', TRUE),
+('WooCommerce', 'An eCommerce plugin for WordPress that allows online stores.', '7.4.2', TRUE),
+('Yoast SEO', 'A WordPress plugin that helps optimize content for search engines.', '20.0.1', TRUE),
+('phpMyAdmin', 'A free tool for managing MySQL databases via a web interface.', '5.2.0', FALSE),
+('Mailchimp for WP', 'A plugin to integrate Mailchimp email marketing with WordPress.', '4.9.3', TRUE);
+
 -- Insert commitment periods
 INSERT INTO commitment_period VALUES 
 (1,'NOCOM001','Without commitment',0.00),
