@@ -1,250 +1,155 @@
-
 <?php
 
-$id="";
-$price="";
-$description="";
-$code="";
+// Initialize variables for the table attributes
+$id = "";
+$name = "";
+$version = "";
+$licenseType = "";
 
-$encontrado=false;
-if ($es_admin==1){
+$found = false;
+if ($es_admin == 1) {
 
-   
+    include_once "api/config/actualizar_token.php";
 
-
-include_once "config/actualizar_token.php";
-
-
-
-if(!empty($_GET["id"]) || isset($_GET["id"]))
-{$id=$_GET["id"];} 
-
-$id=StringInputCleaner($id);
-
-if(!empty($_GET["modificar"]) || isset($_GET["modificar"]))
-{$modificar=$_GET["modificar"];} 
-
-if(!empty($modificar) and !empty($id)){
-
-    $stmt = $dbb->prepare("SELECT * FROM ds_memory WHERE id= ? ");
-    $stmt->bind_param('s', $id); // 's' indica que el parámetro es una cadena
-    $stmt->execute();
-    $result = $stmt->get_result(); // Obtener el resultado de la ejecución
-   
-    if ($result->num_rows > 0) {
-        // Obtener el único resultado
-        $fila = $result->fetch_assoc();
-        $code=$fila['code'];
-        $description=$fila['description'];
-        $price=$fila['price'];
-        $encontrado=true;
-        //$fecha_creacion=$fila['fecha_creacion'];
-       // $fecha_creacion = explode(" ",$fecha_creacion)[0]; 
+    // Retrieve the ID from the request, if available
+    if (!empty($_GET["id"]) || isset($_GET["id"])) {
+        $id = $_GET["id"];
     }
-} 
 
-  $stmt = $dbb->prepare('select * from ds_memory pm');
-  $dbb->set_charset("utf8");
-  $stmt->execute();
-  $result = $stmt->get_result();
-  
+    $id = StringInputCleaner($id);
+
+    // Check if modification is requested
+    if (!empty($_GET["modificar"]) || isset($_GET["modificar"])) {
+        $modify = $_GET["modificar"];
+    }
+
+    if (!empty($modify) and !empty($id)) {
+        // Fetch the record for modification
+        $stmt = $dbb->prepare("SELECT * FROM wh_db_dbms WHERE id = ?");
+        $stmt->bind_param('s', $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $name = $row['name'];
+            $version = $row['version'];
+            $licenseType = $row['licenseType'];
+            $found = true;
+        }
+    }
+
+    // Fetch all records to display
+    $stmt = $dbb->prepare('SELECT * FROM wh_db_dbms');
+    $dbb->set_charset("utf8");
+    $stmt->execute();
+    $result = $stmt->get_result();
 ?>
 
 <div class="row m-0">
     <div class="col-lg container-fluid page__container">
-            <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                    <li class="breadcrumb-item active">Users</li>
-            </ol>
-
-        <h1 class="h2">Memory Management</h1>
         <ol class="breadcrumb">
-                    <li class="breadcrumb-item active"><a href="index.php?opcion=paas">PaaS</a></li>
+            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+            <li class="breadcrumb-item active">Database Management Systems</li>
+        </ol>
 
-            </ol>
-            
-      <?php      if(!empty($_GET["error"])) {?>
-        <?php      if(($_GET["error"]==1) || ($_GET["error"]==3)) {?>
-    <div class="alert alert-dismissible bg-danger text-white border-0 fade show" role="alert">
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-  
-  <strong>ATENTION - </strong> The action has not been completed successfully.
-  <?php } ?> 
+        <h1 class="h2">DBMS Management</h1>
 
-  <?php      if($_GET["error"]==2) {?>
-    <div class="alert alert-dismissible bg-primary text-white border-0 fade show" role="alert">
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-  
-  <strong>ATENTION - </strong> The action has  been completed successfully.
-  <?php } ?>
-</div>
-<?php } ?> 
+        <?php if (!empty($_GET["error"])) { ?>
+            <div class="alert alert-dismissible <?php echo ($_GET["error"] == 2) ? 'bg-primary' : 'bg-danger'; ?> text-white border-0 fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <strong>ATTENTION - </strong> The action has <?php echo ($_GET["error"] == 2) ? 'been completed successfully.' : 'not been completed successfully.'; ?>
+            </div>
+        <?php } ?>
 
         <div class="card border-left-3 border-left-danger card-2by1">
-        <div class="card-body">
-                                    
-                                    
-        <form id="incidenciaForm" action="api/actions/app_update_paas_memory.php" method="post" class="needs-validation" >
+            <div class="card-body">
+                <form id="dbmsForm" action="api/actions/app_update_saas_dbms.php" method="post" class="needs-validation">
+                    <div class="row mb-3">
+                        <input type="hidden" name="id" value="<?php echo $id ?>">
+                        <input type="hidden" name="modificar" value="<?php echo $found ? 1 : 0; ?>">
 
-
-         <div class="row mb-3">
-         <input type="hidden" name="id" value="<?php echo $id ?>">
-            <?php if ($encontrado) {?>
-                <input type="hidden" name="modificar" value=1>
-            <?php } else {?>
-                <input type="hidden" name="modificar" value=0>
-                <?php }?>
-
-
-                <div class="col-2">
-                    <label for="vode" class="form-label">Code</label>
-                    <input maxlength="20" type="text" class="form-control" value="<?php echo $code ?>" id="code" name="code" required>
-                    <div class="invalid-feedback">
-                        Please, insert the code.
+                        <div class="col-4">
+                            <label for="name" class="form-label">Name</label>
+                            <input maxlength="256" type="text" class="form-control" value="<?php echo $name ?>" id="name" name="name" required>
+                            <div class="invalid-feedback">
+                                Please, insert the name.
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label for="version" class="form-label">Version</label>
+                            <input maxlength="256" type="text" class="form-control" value="<?php echo $version ?>" id="version" name="version" required>
+                            <div class="invalid-feedback">
+                                Please, insert the version.
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label for="licenseType" class="form-label">License Type</label>
+                            <input maxlength="256" type="text" class="form-control" value="<?php echo $licenseType ?>" id="licenseType" name="licenseType" required>
+                            <div class="invalid-feedback">
+                                Please, insert the license type.
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-2">
-                    <label for="price" class="form-label">Price</label>
-                    <input maxlength="20" type="text" class="form-control" value="<?php echo $price ?>" id="price" name="price" required pattern="^-?\d+(\.\d{1,2})?$">
-                    <div class="invalid-feedback">
-                        Please, insert the price.
-                    </div>
-                </div>
-    
+
+                    <button type="submit" class="btn btn-primary">
+                        <?php echo $found ? 'Modify' : 'New'; ?>
+                    </button>
+                </form>
+            </div>
         </div>
 
-        <div class="row mb-3">
-         
+        <script>
+        function pulsar_delete(id) {
+            // Prepare data to send
+            const formData = new FormData();
+            formData.append('id', id);
 
-                <div class="col-12">
-                    <label for="description" class="form-label">Description</label>
-                    <input maxlength="255" type="text" class="form-control" value="<?php echo $description ?>" id="description" name="description" required>
-                    <div class="invalid-feedback">
-                        Please, insert the description.
-                    </div>
-                </div>
-                
-       
-                 
-        </div>        
+            // Send the fetch request
+            fetch('api/actions/app_delete_saas_dbms.php', {
+                method: 'POST',
+                body: formData
+            });
+            location.reload(); // Reload the page
+        }
 
-<!--
-            <div class="mb-3">
-                <label for="fecha" class="form-label">Fecha de la Incidencia</label>
-                <input type="date" class="form-control" id="fecha" value="<?php echo $fecha_creacion ?>" name="fecha_creacion" required>
-                <div class="invalid-feedback">
-                    Por favor, seleccione una fecha.
-                </div>
-            </div>
+        function pulsar_modificar(id) {
+            window.location.href = `index.php?opcion=saas_dbms&id=${id}&modificar=1`;
+        }
+        </script>
+  
+        <div class="card table-responsive" data-toggle="lists" data-lists-values='["js-lists-values-name", "js-lists-values-version", "js-lists-values-licenseType"]' data-lists-sort-by="js-lists-values-name" data-lists-sort-asc="true">
+            <table class="table mb-0">
+                <thead class="thead-light">
+                    <tr>
+                        <th><a href="javascript:void(0)" class="sort" data-sort="js-lists-values-name">Name</a></th>
+                        <th><a href="javascript:void(0)" class="sort" data-sort="js-lists-values-version">Version</a></th>
+                        <th><a href="javascript:void(0)" class="sort" data-sort="js-lists-values-licenseType">License Type</a></th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="list">
+                    <?php while ($row = $result->fetch_assoc()) { ?>
+                        <tr>
+                            <td><span class="js-lists-values-name"><?php echo $row["name"]; ?></span></td>
+                            <td><span class="js-lists-values-version"><?php echo $row["version"]; ?></span></td>
+                            <td><span class="js-lists-values-licenseType"><?php echo $row["licenseType"]; ?></span></td>
+                            <td>
+                                <button onclick="pulsar_delete('<?php echo $row['id']; ?>');" type="button" class="btn btn-danger" title="Delete">
+                                    <i class="material-icons">delete</i>
+                                </button>
+                                <button onclick="pulsar_modificar('<?php echo $row['id']; ?>');" type="button" class="btn btn-primary" title="Modify">
+                                    <i class="material-icons">edit</i>
+                                </button>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-            <div class="mb-3">
-                <label for="estado" class="form-label">Estado</label>
-                <select class="form-control" id="estado" name="estado" required>
-                <option value="">Seleccione el estado</option>
-                <option value="abierto" <?php echo ($estado === 'abierto') ? 'selected' : ''; ?>>Abierto</option>
-                <option value="en progreso" <?php echo ($estado === 'en progreso') ? 'selected' : ''; ?>>En progreso</option>
-                <option value="cerrado" <?php echo ($estado === 'cerrado') ? 'selected' : ''; ?>>Cerrado</option>
-                </select>
-                <div class="invalid-feedback">
-                    Por favor, seleccione un estado para la incidencia.
-                </div>
-            </div>  
-            -->     
-            
-
-
-            <?php if ($encontrado) {?>
-                <button type="submit" class="btn btn-primary">Modify</button>
-                <?php } else {?>
-                    <button type="submit" class="btn btn-primary">New</button>
-                <?php }?>
-            
-        </form>
-                                      
-                                 
-                                </div>
-                            </div>
-
-                            
-
-
-
-                            <div class="card table-responsive" data-toggle="lists" data-lists-values='[
-    "js-lists-values-document", 
-    "js-lists-values-amount",
-    "js-lists-values-status"
- 
-
-  ]' data-lists-sort-by="js-lists-values-document" data-lists-sort-asc="true">
-                                <table class="table mb-0">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th colspan="4">
-                                                <a href="javascript:void(0)" class="sort" data-sort="js-lists-values-document">Code</a>
-                                                <a href="javascript:void(0)" class="sort" data-sort="js-lists-values-amount">Price</a>
-                                                <a href="javascript:void(0)" class="sort" data-sort="js-lists-values-status">Description</a>
-                                              
-
-                                                
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="list">
-                                    <?php while ($row = $result->fetch_assoc()) {?>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <small class="text-uppercase text-muted mr-2">Code</small>
-                                                    <a href="" class="text-body small"><span class="js-lists-values-document"><?php echo $row["code"]; ?></span></a>
-                                                </div>
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="d-flex align-items-center">
-                                                    <small class="text-uppercase text-muted mr-2">PRICE</small>
-                                                    <small class="text-uppercase"><span class="js-lists-values-amount"><?php echo $row["price"]; ?>&nbsp;<?php echo $row["currency_name"]; ?></span></small>
-                                                </div>
-                                            </td>
-
-                                            <td class="text-center">
-                                                <div class="d-flex align-items-center">
-                                                    <small class="text-uppercase text-muted mr-2">DESCRIPTION</small>
-                                                    <small class="text-uppercase"><span class="js-lists-values-status"><?php echo $row["description"]; ?></span></small>
-                                                </div>
-                                            </td>
-                                                                                 
-
-                                  
-                                            <td>
-                                            <div class="btn-group dropleft ">
-									
-                                  
-                                       
-                                    <button id="dropdown1" onclick="pulsar_delete('<?php echo $row['id']; ?>');" type="button btn-primary"  data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-flush " >
-                                     <i class="material-icons  text-primary">delete</i>
-                                   </button>
-                                 
-                                                                                                         
-                                   <button id="dropdown1" onclick="pulsar_modificar('<?php echo $row['id']; ?>');" type="button btn-primary"  data-toggle="tooltip" data-placement="left" title="Modify" class="btn btn-flush " >
-                                     <i class="material-icons  text-primary">edit</i>
-                                   </button>  
-                                            </td>
-                                        </tr>
-                                        <?php } ?>
-
-                                        
-
-                                    </tbody>
-                                </table>
-                            </div>
-
-                     
-
-                        </div>
-                    
-                    </div>
-
-                    <?php }?>
+<?php } ?>

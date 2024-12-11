@@ -1,20 +1,20 @@
 <?php
 	// Initialize variables
-	$id = "";
+	$id = null;
 	$fila = "";
-	$category_code = "";
-	$datacenter_id = "";
-	$ssl_id = "";
-	$db_id = "";
-	$commitment_id = "";
-	$request_id = "";
-	$isDomainIncluded = false;
-	$isEmailIncluded = false;
+	$category_code = null;
+	$datacenter_id = null;
+	$ssl_id = null;
+	$db_id = null;
+	$commitment_id = null;
+	$request_id = null;
+	$isDomainIncluded = 0;
+	$isEmailIncluded = 0;
 	$encontrado = true;
 	$encontrado = false;
 
 	// Include token update configuration
-	include_once('../../config/actualizar_token.php');
+	include_once('api/config/actualizar_token.php');
 
 	// Check and sanitize ID from GET parameter
 	if (!empty($_GET["id"]) || isset($_GET["id"])) {
@@ -253,22 +253,22 @@
 						<div class="col-3">
 							<label for="storageSpace" class="form-label">Storage Space (GB)</label>
 							<input type="number" class="form-control" id="storageSpace" name="storageSpace" 
-								   value="<?php echo htmlspecialchars($storageSpace ?? ''); ?>" required>
+								   value="<?php echo htmlspecialchars($storageSpace ?? ''); ?>" min="0" max="100" required>
 						</div>
 						<div class="col-3">
 							<label for="bandwidthAllocation" class="form-label">Bandwidth (GB/month)</label>
 							<input type="number" class="form-control" id="bandwidthAllocation" name="bandwidthAllocation" 
-								   value="<?php echo htmlspecialchars($bandwidthAllocation ?? ''); ?>" required>
+								   value="<?php echo htmlspecialchars($bandwidthAllocation ?? ''); ?>" min="10" max="10000" required>
 						</div>
 						<div class="col-3">
 							<label for="maxConcurrentUsers" class="form-label">Max Concurrent Users</label>
 							<input type="number" class="form-control" id="maxConcurrentUsers" name="maxConcurrentUsers" 
-								   value="<?php echo htmlspecialchars($maxConcurrentUsers ?? ''); ?>" required>
+								   value="<?php echo htmlspecialchars($maxConcurrentUsers ?? ''); ?>" min="0" required>
 						</div>
 						<div class="col-3">
 							<label for="maxWebsites" class="form-label">Max Websites</label>
 							<input type="number" class="form-control" id="maxWebsites" name="maxWebsites" 
-								   value="<?php echo htmlspecialchars($maxWebsites ?? ''); ?>" required>
+								   value="<?php echo htmlspecialchars($maxWebsites ?? ''); ?>" min="0" required>
 						</div>
 					</div>
 
@@ -277,7 +277,7 @@
 						<div class="col-4">
 							<div class="form-check">
 								<input class="form-check-input" type="checkbox" id="isDomainIncluded" name="isDomainIncluded" 
-									   <?php echo ($isDomainIncluded ? 'checked' : ''); ?>>
+									   <?php echo ($isDomainIncluded ? 'checked' : ''); ?> value="1">
 								<label class="form-check-label" for="isDomainIncluded">
 									Include a domain
 								</label>
@@ -312,7 +312,7 @@
 						<div class="col-4">
 							<div class="form-check">
 								<input class="form-check-input" type="checkbox" id="isEmailIncluded" name="isEmailIncluded" 
-									   <?php echo ($isEmailIncluded ? 'checked' : ''); ?>>
+									   <?php echo ($isEmailIncluded ? 'checked' : ''); ?> value="1">
 								<label class="form-check-label" for="isEmailIncluded">
 									Include Email Services
 								</label>
