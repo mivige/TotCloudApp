@@ -54,6 +54,9 @@ if ($es_admin == 1) {
         </ol>
 
         <h1 class="h2">DBMS Management</h1>
+        <ol class="breadcrumb">
+			<li class="breadcrumb-item active"><a href="index.php?opcion=saas">SaaS</a></li>
+		</ol>
 
         <?php if (!empty($_GET["error"])) { ?>
             <div class="alert alert-dismissible <?php echo ($_GET["error"] == 2) ? 'bg-primary' : 'bg-danger'; ?> text-white border-0 fade show" role="alert">
@@ -102,22 +105,60 @@ if ($es_admin == 1) {
         </div>
 
         <script>
-        function pulsar_delete(id) {
-            // Prepare data to send
-            const formData = new FormData();
-            formData.append('id', id);
+            function pulsar_delete(id) {
+                Swal.fire({
+                title: "Are you sure you want to delete the record?",
+                text: "Is not possible to recover it",
+                icon: "warning",
+                role: "alertdialog",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Delete!",
+                cancelButtonText: "No, Cancel!",
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        /*// Prepare data to send
+                        const formData = new FormData();
+                        formData.append('id', id);
 
-            // Send the fetch request
-            fetch('api/actions/app_delete_saas_dbms.php', {
-                method: 'POST',
-                body: formData
-            });
-            location.reload(); // Reload the page
-        }
+                        // Send the fetch request
+                        fetch('api/actions/app_delete_saas_dbms.php', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        location.reload(); // Reload the page*/
+                        // Prepare data to send
+                        var parametros = { "id": id };
+                        $.ajax({
+                            data: parametros,
+                            type: "POST",
+                            url: "api/actions/app_delete_saas_dbms.php",
+                            success: function(data) {
+                                
+                                data = data.trim();
+                                if (data === 'OK') {
+                                    Swal.fire({
+                                        title: "Deleted",
+                                        text: "The record has been successfully deleted!",
+                                        icon: "success",
+                                        confirmButtonText: "OK",
+                                        confirmButtonColor: "#3085d6"
+                                    }).then(() => {
+                                        location.reload(); // Reload the page
+                                    });
+                                } else {
+                                    Swal.fire("Error", "The record has NOT been successfully deleted.", "error");
+                                }
+                            }
+                        });
+                    }
+                });
+            }
 
-        function pulsar_modificar(id) {
-            window.location.href = `index.php?opcion=saas_dbms&id=${id}&modificar=1`;
-        }
+            function pulsar_modificar(id) {
+                window.location.href = `index.php?opcion=saas_dbms&id=${id}&modificar=1`;
+            }
         </script>
   
         <div class="card table-responsive" data-toggle="lists" data-lists-values='["js-lists-values-name", "js-lists-values-version", "js-lists-values-licenseType"]' data-lists-sort-by="js-lists-values-name" data-lists-sort-asc="true">
@@ -137,12 +178,14 @@ if ($es_admin == 1) {
                             <td><span class="js-lists-values-version"><?php echo $row["version"]; ?></span></td>
                             <td><span class="js-lists-values-licenseType"><?php echo $row["licenseType"]; ?></span></td>
                             <td>
-                                <button onclick="pulsar_delete('<?php echo $row['id']; ?>');" type="button" class="btn btn-danger" title="Delete">
-                                    <i class="material-icons">delete</i>
-                                </button>
-                                <button onclick="pulsar_modificar('<?php echo $row['id']; ?>');" type="button" class="btn btn-primary" title="Modify">
-                                    <i class="material-icons">edit</i>
-                                </button>
+                                <div class="btn-group dropleft ">
+                                    <button id="dropdown1" onclick="pulsar_delete('<?php echo $row['id']; ?>');" type="button btn-primary"  data-toggle="tooltip" data-placement="left" class="btn btn-flush " title="Delete">
+                                        <i class="material-icons">delete</i>
+                                    </button>
+                                    <button id="dropdown1" onclick="pulsar_modificar('<?php echo $row['id']; ?>');" type="button btn-primary"  data-toggle="tooltip" data-placement="left" class="btn btn-flush " title="Modify">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     <?php } ?>

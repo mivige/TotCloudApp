@@ -121,15 +121,15 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 					<strong>ATTENTION - </strong> The action has not been completed successfully.
-				<?php } ?> 
+			<?php } ?> 
 				
-				<?php if ($_GET["error"] == 2) { ?>
-					<div class="alert alert-dismissible bg-primary text-white border-0 fade show" role="alert">
-						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<strong>ATTENTION - </strong> The action has been completed successfully.
-					<?php } ?>
+			<?php if ($_GET["error"] == 2) { ?>
+				<div class="alert alert-dismissible bg-primary text-white border-0 fade show" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<strong>ATTENTION - </strong> The action has been completed successfully.
+			<?php } ?>
 				</div>
 		<?php } ?>
 			
@@ -253,7 +253,7 @@
 						<div class="col-3">
 							<label for="storageSpace" class="form-label">Storage Space (GB)</label>
 							<input type="number" class="form-control" id="storageSpace" name="storageSpace" 
-								   value="<?php echo htmlspecialchars($storageSpace ?? ''); ?>" min="0" max="100" required>
+								   value="<?php echo htmlspecialchars($storageSpace ?? ''); ?>" min="1" max="100" required>
 						</div>
 						<div class="col-3">
 							<label for="bandwidthAllocation" class="form-label">Bandwidth (GB/month)</label>
@@ -263,12 +263,12 @@
 						<div class="col-3">
 							<label for="maxConcurrentUsers" class="form-label">Max Concurrent Users</label>
 							<input type="number" class="form-control" id="maxConcurrentUsers" name="maxConcurrentUsers" 
-								   value="<?php echo htmlspecialchars($maxConcurrentUsers ?? ''); ?>" min="0" required>
+								   value="<?php echo htmlspecialchars($maxConcurrentUsers ?? ''); ?>" min="1" required>
 						</div>
 						<div class="col-3">
 							<label for="maxWebsites" class="form-label">Max Websites</label>
 							<input type="number" class="form-control" id="maxWebsites" name="maxWebsites" 
-								   value="<?php echo htmlspecialchars($maxWebsites ?? ''); ?>" min="0" required>
+								   value="<?php echo htmlspecialchars($maxWebsites ?? ''); ?>" min="1" required>
 						</div>
 					</div>
 
@@ -288,27 +288,27 @@
 							<input type="text" class="form-control" id="domain" name="domain">
 						</div>
 						<script>
-								// Selection of elements
-								const checkbox = document.getElementById('isDomainIncluded');
-								const textInput = document.getElementById('domain');
-								const textInputContainer = document.getElementById('domain-container');
+							// Selection of elements
+							const checkbox = document.getElementById('isDomainIncluded');
+							const textInput = document.getElementById('domain');
+							const textInputContainer = document.getElementById('domain-container');
 
-								// Update required
-								function toggleRequired() {
-									if (checkbox.checked) {
-										textInputContainer.style.display = 'block';
-										textInput.setAttribute('required', 'required'); // Make required
-									} else {
-										textInputContainer.style.display = 'none';
-										textInput.removeAttribute('required'); // Remove required
-									}
+							// Update required
+							function toggleRequired() {
+								if (checkbox.checked) {
+									textInputContainer.style.display = 'block';
+									textInput.setAttribute('required', 'required'); // Make required
+								} else {
+									textInputContainer.style.display = 'none';
+									textInput.removeAttribute('required'); // Remove required
 								}
+							}
 
-								// Add event listener
-								checkbox.addEventListener('change', toggleRequired);
+							// Add event listener
+							checkbox.addEventListener('change', toggleRequired);
 
-								toggleRequired();
-							</script>
+							toggleRequired();
+						</script>
 						<div class="col-4">
 							<div class="form-check">
 								<input class="form-check-input" type="checkbox" id="isEmailIncluded" name="isEmailIncluded" 
@@ -385,6 +385,63 @@
 			</div>
 		</div>
 
+		<script>
+            function pulsar_delete(id) {
+                Swal.fire({
+                title: "Are you sure you want to delete the record?",
+                text: "Is not possible to recover it",
+                icon: "warning",
+                role: "alertdialog",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Delete!",
+                cancelButtonText: "No, Cancel!",
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        /*// Prepare data to send
+                        const formData = new FormData();
+                        formData.append('id', id);
+
+                        // Send the fetch request
+                        fetch('api/actions/app_delete_saas_dbms.php', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        location.reload(); // Reload the page*/
+                        // Prepare data to send
+                        var parametros = { "id": id };
+                        $.ajax({
+                            data: parametros,
+                            type: "POST",
+                            url: "api/actions/app_delete_saas_requests.php",
+                            success: function(data) {
+                                
+                                data = data.trim();
+                                if (data === 'OK') {
+                                    Swal.fire({
+                                        title: "Deleted",
+                                        text: "The record has been successfully deleted!",
+                                        icon: "success",
+                                        confirmButtonText: "OK",
+                                        confirmButtonColor: "#3085d6"
+                                    }).then(() => {
+                                        location.reload(); // Reload the page
+                                    });
+                                } else {
+                                    Swal.fire("Error", "The record has NOT been successfully deleted.", "error");
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+
+            function pulsar_modificar(id) {
+                window.location.href = `index.php?opcion=saas_requests&id=${id}&modificar=1`;
+            }
+        </script>
+
 		<!-- Requests Table -->
 		<div class="card table-responsive" data-toggle="lists" 
 			data-lists-values='[
@@ -443,16 +500,13 @@
 									<a href="#" class="dropdown-toggle text-muted" data-caret="false" data-toggle="dropdown">
 										<i class="material-icons">more_vert</i>
 									</a>
-									<div class="dropdown-menu dropdown-menu-right">
-										<a href="index.php?opcion=saas&id=<?php echo $row['saasid']; ?>&modificar=1" class="dropdown-item">
-											<i class="material-icons">edit</i> Edit
-										</a>
-										<div class="dropdown-divider"></div>
-										<a href="api/actions/app_delete_saas_request.php?id=<?php echo $row['saasid']; ?>" 
-											class="dropdown-item text-danger" 
-											onclick="return confirm('Are you sure you want to delete this request?');">
-											<i class="material-icons">delete</i> Delete
-										</a>
+									<div class="btn-group dropleft ">
+										<button id="dropdown1" onclick="pulsar_delete('<?php echo $row['id']; ?>');" type="button btn-primary"  data-toggle="tooltip" data-placement="left" class="btn btn-flush " title="Delete">
+											<i class="material-icons">delete</i>
+										</button>
+										<button id="dropdown1" onclick="pulsar_modificar('<?php echo $row['id']; ?>');" type="button btn-primary"  data-toggle="tooltip" data-placement="left" class="btn btn-flush " title="Modify">
+											<i class="material-icons">edit</i>
+										</button>
 									</div>
 								</div>
 							</td>
