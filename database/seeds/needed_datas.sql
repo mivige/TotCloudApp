@@ -94,6 +94,13 @@ INSERT INTO wh_db_persistency (type) VALUES
 ('Long-Term'),
 ('Critical');
 
+INSERT INTO wh_db_memory (capacity, type, speed) VALUES
+(1024, 'SSD', 550),
+(2048, 'HDD', 150),
+(512, 'NVMe', 3500),
+(8192, 'Hybrid', 300),
+(256, 'RAMDisk', 7000);
+
 -- Insert commitment periods
 INSERT INTO commitment_period VALUES 
 (1,'NOCOM001','Without commitment',0.00),
