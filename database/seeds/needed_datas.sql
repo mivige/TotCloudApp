@@ -87,6 +87,13 @@ INSERT INTO wh_db_dbms (name, version, licenseType) VALUES
 ('InfoStacker', '2.3.4', 'Proprietary'),
 ('DBEase', '5.0.0', 'BSD');
 
+INSERT INTO wh_db_persistency (type) VALUES
+('Volatile'),
+('Non-Volatile'),
+('Temporary'),
+('Long-Term'),
+('Critical');
+
 -- Insert commitment periods
 INSERT INTO commitment_period VALUES 
 (1,'NOCOM001','Without commitment',0.00),
