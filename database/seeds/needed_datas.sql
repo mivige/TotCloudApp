@@ -29,10 +29,7 @@ INSERT INTO ds_datacenterregion (code, region_name, country, availability_zone, 
 ('EUFRST001', 'Europe', 'France', 'AZ2', 0.00, 'Europe (France - Strasbourg)  120s'),
 ('EUFRGR001', 'Europe', 'France', 'AZ2', 0.00, 'Europe (France - Gravelines)  72h'),
 ('EUUKER001', 'Europe', 'United Kingdom', 'AZ2', 0.00, 'Europe (United Kingdom - Erith)  72h'),
-('EUGELI001', 'Europe', 'Germany', 'AZ2', 0.00, 'Europe (Germany - Limburg)  72h'),
-('US-EAST', 'US East', 'United States', 'AZ1', 50.00, ''),
-('EU-WEST', 'Europe West', 'Ireland', 'AZ2', 60.00, ''),
-('ASIA-SOUTH', 'Asia South', 'Singapore', 'AZ3', 55.00, '');
+('EUGELI001', 'Europe', 'Germany', 'AZ2', 0.00, 'Europe (Germany - Limburg)  72h');
 
 -- Insert Memory Types
 INSERT INTO ds_memory (code, description, capacity_gb, price) VALUES
@@ -82,6 +79,13 @@ INSERT INTO wh_datacenter (name, location, networkProvider) VALUES
 INSERT INTO wh_ssl (provider, validationLevel, certificateType, expirationDate, price) VALUES
 ('Lets Encrypt', 'Domain Validation', 'Free', '2024-12-31 23:59:59', 0.00),
 ('GlobalSign', 'Extended Validation', 'Business', '2025-06-30 23:59:59', 10.00);
+
+INSERT INTO wh_db_dbms (name, version, licenseType) VALUES
+('DataWhizz', '3.2.1', 'GPL'),
+('StoragePro', '1.8.0', 'MIT'),
+('QueryMaster', '4.5.3', 'Apache-2.0'),
+('InfoStacker', '2.3.4', 'Proprietary'),
+('DBEase', '5.0.0', 'BSD');
 
 -- Insert commitment periods
 INSERT INTO commitment_period VALUES 

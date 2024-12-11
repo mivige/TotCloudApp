@@ -105,7 +105,7 @@ include_once "api/config/actualizar_token.php";
                         </button>
 
                         <!-- Brand -->
-                        <a href="http://localhost/practica_bdds" class="navbar-brand">
+                        <a href="index.php" class="navbar-brand">
                             <img src="assets/images/logos_apps/logo.png" width="30%" class="mr-2" alt="TOTCLOUD" /> </a>
                             <a href="index.php" class="navbar-brand">  <span class="d-none d-xs-md-block"><?php echo $app_titulo_principal ?></span></a>
                        
@@ -122,7 +122,7 @@ include_once "api/config/actualizar_token.php";
                          <!-- Menu -->
                          <ul class="nav navbar-nav flex-nowrap d-none d-lg-flex">
                             <li class="nav-item">
-                            <a class="nav-link" href=""><i class="material-icons">file_download</i>Readme</a>
+                            <a class="nav-link" href="https://github.com/mivige/TotCloudApp" target="_blank"><i class="material-icons">file_download</i>GitHub</a>
                             </li>
     
                         </ul>     
