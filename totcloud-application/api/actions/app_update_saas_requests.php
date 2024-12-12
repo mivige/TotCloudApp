@@ -60,10 +60,10 @@
                 SET category_code = ?, storageSpace = ?, bandwidthAllocation = ?, 
                     maxConcurrentUsers = ?, maxWebsites = ?, isDomainIncluded = ?, 
                     isEmailIncluded = ?, datacenter_id = ?, ssl_id = ?, 
-                    db_id = ?, commitment_id = ?
+                    commitment_id = ?
                 WHERE id = ?');
             
-            $stmt->bind_param('siiiiiiiiiiii', 
+            $stmt->bind_param('siiiiiiiiii', 
                 $category, 
                 $storageSpace, 
                 $bandwidthAllocation, 
@@ -72,8 +72,7 @@
                 $isDomainIncluded, 
                 $isEmailIncluded, 
                 $datacenter, 
-                $ssl, 
-                $database === '' ? null : $database, 
+                $ssl,  
                 $commitment, 
                 $id
             );
@@ -101,10 +100,10 @@
             $stmt = $dbb->prepare('INSERT INTO saas_web_hosting 
                 (name, category_code, storageSpace, bandwidthAllocation, maxConcurrentUsers, 
                 maxWebsites, isDomainIncluded, isEmailIncluded, 
-                datacenter_id, ssl_id, db_id, request_id, commitment_id) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+                datacenter_id, ssl_id, request_id, commitment_id) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
             
-            $stmt->bind_param('ssiiiiiiiiiii', 
+            $stmt->bind_param('ssiiiiiiiiii', 
                 $category,
                 $category, 
                 $storageSpace, 
@@ -115,7 +114,6 @@
                 $isEmailIncluded, 
                 $datacenter, 
                 $ssl, 
-                $database, 
                 $request_id, 
                 $commitment
             );

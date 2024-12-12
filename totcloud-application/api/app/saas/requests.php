@@ -445,22 +445,21 @@
 		<!-- Requests Table -->
 		<div class="card table-responsive" data-toggle="lists" 
 			data-lists-values='[
-				"js-lists-values-document", 
-				"js-lists-values-amount",
+				"js-lists-values-date", 
+				"js-lists-values-description",
 				"js-lists-values-status",
-				"js-lists-values-date"
+				"js-lists-values-user"
 			]' 
-			data-lists-sort-by="js-lists-values-document"
+			data-lists-sort-by="js-lists-values-date"
 			data-lists-sort-asc="true">
 			<table class="table mb-0">
 				<thead class="thead-light">
-					<tr>
-						<th colspan="5">
-							<a href="javascript:void(0)" class="sort" data-sort="js-lists-values-document">Date</a>
-							<a href="javascript:void(0)" class="sort" data-sort="js-lists-values-amount">Description</a>
-							<a href="javascript:void(0)" class="sort" data-sort="js-lists-values-status">Status</a>
-							<a href="javascript:void(0)" class="sort" data-sort="js-lists-values-date">User</a>
-						</th>
+					<tr>							
+						<th><a href="javascript:void(0)" class="sort" data-sort="js-lists-values-date">Date</a></th>
+						<th><a href="javascript:void(0)" class="sort" data-sort="js-lists-values-description">Description</a></th>
+						<th><a href="javascript:void(0)" class="sort" data-sort="js-lists-values-status">Status</a></th>
+						<th><a href="javascript:void(0)" class="sort" data-sort="js-lists-values-user">User</a></th>
+						<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody class="list">
@@ -470,41 +469,41 @@
 								<div class="d-flex align-items-center">
 									<small class="text-uppercase text-muted mr-2">DATE</small>
 									<a href="#" class="text-body small">
-										#<span class="js-lists-values-document"><?php echo htmlspecialchars($row["date"]); ?></span>
+										#<span class="js-lists-values-date"><?php echo htmlspecialchars($row["date"]); ?></span>
 									</a>
 								</div>
 							</td>
 							<td>
 								<div class="d-flex align-items-center">
 									<small class="text-uppercase text-muted mr-2">DESCRIPTION</small>
-									<span class="js-lists-values-amount"><?php echo htmlspecialchars($row["name"]); ?></span>
+									<span class="js-lists-values-description"><?php echo htmlspecialchars($row["name"]); ?></span>
 								</div>
 							</td>
-							<td>
-								<div class="d-flex align-items-center">
-									<small class="text-uppercase text-muted mr-2">STATUS</small>
-									<span class="js-lists-values-status badge 
-										<?php echo ($row["state"] == 1 ? 'badge-success' : 'badge-danger'); ?>">
-										<?php echo ($row["state"] == 1 ? 'Active' : 'Inactive'); ?>
-									</span>
-								</div>
+							<td class="text-center">
+                                <div class="d-flex align-items-center">
+                                    <?php if ($row["state"]==1){ ?>
+                                    <i class="material-icons text-primary md-18 mr-2">lens</i>
+                                    <small class="text-uppercase js-lists-values-status">ACTIVE</small>
+                                    <?php }?>
+                                    <?php if ($row["state"]!=1){ ?>
+                                    <i class="material-icons text-danger md-18 mr-2">lens</i>
+                                    <small class="text-uppercase js-lists-values-status">NOT ACTIVE</small>
+                                    <?php }?>    
+                                </div>
 							</td>
 							<td>
 								<div class="d-flex align-items-center">
 									<small class="text-uppercase text-muted mr-2">USER</small>
-									<span class="js-lists-values-date"><?php echo htmlspecialchars($row["email"]); ?></span>
+									<span class="js-lists-values-user"><?php echo htmlspecialchars($row["email"]); ?></span>
 								</div>
 							</td>
 							<td class="text-right">
 								<div class="dropdown">
-									<a href="#" class="dropdown-toggle text-muted" data-caret="false" data-toggle="dropdown">
-										<i class="material-icons">more_vert</i>
-									</a>
 									<div class="btn-group dropleft ">
-										<button id="dropdown1" onclick="pulsar_delete('<?php echo $row['id']; ?>');" type="button btn-primary"  data-toggle="tooltip" data-placement="left" class="btn btn-flush " title="Delete">
+										<button id="dropdown1" onclick="pulsar_delete('<?php echo $row['request_id']; ?>');" type="button btn-primary"  data-toggle="tooltip" data-placement="left" class="btn btn-flush " title="Delete">
 											<i class="material-icons">delete</i>
 										</button>
-										<button id="dropdown1" onclick="pulsar_modificar('<?php echo $row['id']; ?>');" type="button btn-primary"  data-toggle="tooltip" data-placement="left" class="btn btn-flush " title="Modify">
+										<button id="dropdown1" onclick="pulsar_modificar('<?php echo $row['saasid']; ?>');" type="button btn-primary"  data-toggle="tooltip" data-placement="left" class="btn btn-flush " title="Modify">
 											<i class="material-icons">edit</i>
 										</button>
 									</div>
