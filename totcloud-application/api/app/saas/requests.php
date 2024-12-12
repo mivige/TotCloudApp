@@ -11,6 +11,10 @@
 	$isDomainIncluded = 0;
 	$domain = "";
 	$isEmailIncluded = 0;
+	$isDBIncluded = 0;
+	$dbms_id = null;
+	$memory_id = null;
+	$persistency_id = null;
 	$module_id = null;
 	$cdn_id = null;
 	$encontrado = true;
@@ -283,15 +287,37 @@
 					<!-- Additional Options -->
 					<div class="row mb-3">
 						<div class="col-4">
-							<div class="form-check">
-								<input class="form-check-input" type="checkbox" id="isDomainIncluded" name="isDomainIncluded" 
+							<label class="form-label" for="isDomainIncluded">Include a domain</label>
+							<div class="custom-control custom-checkbox-toggle custom-control-inline mr-1">
+								<input class="custom-control-input" type="checkbox" id="isDomainIncluded" name="isDomainIncluded" 
 									   <?php echo ($isDomainIncluded ? 'checked' : ''); ?> value="1">
-								<label class="form-check-label" for="isDomainIncluded">
-									Include a domain
-								</label>
+								<label class="custom-control-label" for="isDomainIncluded">Yes</label>
 							</div>
+							<label class="form-label mb-0" for="isDomainIncluded">Yes</label>
 						</div>
-						<div id="domain-container" class="col-6">
+						<div class="col-4">
+							<label class="form-label" for="isEmailIncluded">Include Email Services</label>
+							<div class="custom-control custom-checkbox-toggle custom-control-inline mr-1">
+								<input class="custom-control-input" type="checkbox" id="isEmailIncluded" name="isEmailIncluded" 
+									   <?php echo ($isEmailIncluded ? 'checked' : ''); ?> value="1">
+								<label class="custom-control-label" for="isEmailIncluded">Yes</label>
+							</div>
+							<label class="form-label mb-0" for="isEmailIncluded">Yes</label>
+						</div>
+						<div class="col-4">
+							<label class="form-label" for="isDBIncluded">Include Database</label>
+							<div class="custom-control custom-checkbox-toggle custom-control-inline mr-1">
+								<input class="custom-control-input" type="checkbox" id="isDBIncluded" name="isDbIncluded" 
+									   <?php echo ($isDBIncluded ? 'checked' : ''); ?> value="1">
+								<label class="custom-control-label" for="isDBIncluded">Yes</label>
+							</div>
+							<label class="form-label mb-0" for="isDBIncluded">Yes</label>
+						</div>
+					</div>
+
+					<!-- Domain -->
+					<div class="row mb-3">
+						<div id="domain-container" class="col-12">
 							<label for="domain" class="form-label">Wanted domain</label>
 							<input type="text" class="form-control" value="<?php echo htmlspecialchars($domain ?? ''); ?>" id="domain" name="domain">
 						</div>
@@ -317,15 +343,112 @@
 
 							toggleRequired();
 						</script>
-						<div class="col-4">
-							<div class="form-check">
-								<input class="form-check-input" type="checkbox" id="isEmailIncluded" name="isEmailIncluded" 
-									   <?php echo ($isEmailIncluded ? 'checked' : ''); ?> value="1">
-								<label class="form-check-label" for="isEmailIncluded">
-									Include Email Services
-								</label>
-							</div>
+					</div>
+
+					<!-- Optional Database Selection -->
+					<?php 
+					$stmt_dbms = $dbb->prepare('SELECT * FROM wh_db_dbms');
+					$stmt_dbms->execute();
+					$result_dbms = $stmt_dbms->get_result();
+
+					$stmt_memory = $dbb->prepare('SELECT * FROM wh_db_memory');
+					$stmt_memory->execute();
+					$result_memory = $stmt_memory->get_result();
+
+					$stmt_persistency = $dbb->prepare('SELECT * FROM wh_db_persistency');
+					$stmt_persistency->execute();
+					$result_persistency = $stmt_persistency->get_result();
+					?>
+					<div class="row mb-3">
+						<div id="dbms-container" class="col-4">
+							<label for="dbms" class="form-label">Wanted DBMS</label>
+							<select class="form-control custom-select" id="dbms" name="dbms">
+								<option value="" selected>Select a DBMS</option>
+								<?php while ($dbms = $result_dbms->fetch_assoc()): ?>
+									<option <?php if ($dbms_id == $dbms['id']){ ?>selected<?php }; ?> 
+										value="<?php echo htmlspecialchars($dbms['id']); ?>">
+										<?php 
+										echo htmlspecialchars($dbms['name']); 
+										echo " - ";
+										echo htmlspecialchars($dbms['version']); 
+										?>
+									</option>
+								<?php endwhile; ?>
+							</select>
 						</div>
+						<div id="memory-container" class="col-4">
+							<label for="memory" class="form-label">Wanted storage</label>
+							<select class="form-control custom-select" id="memory" name="memory">
+								<option value="" selected>Select a storage option</option>
+								<?php while ($memory = $result_memory->fetch_assoc()): ?>
+									<option <?php if ($memory_id == $memory['id']){ ?>selected<?php }; ?> 
+										value="<?php echo htmlspecialchars($memory['id']); ?>">
+										<?php 
+										echo htmlspecialchars($memory['capacity']); 
+										echo " - ";
+										echo htmlspecialchars($memory['type']);
+										echo " (";
+										echo htmlspecialchars($memory['speed']); 
+										echo "MB/s)";
+										?>
+									</option>
+								<?php endwhile; ?>
+							</select>
+						</div>
+						<div id="persistency-container" class="col-4">
+							<label for="persistency" class="form-label">Wanted persistency level</label>
+							<select class="form-control custom-select" id="persistency" name="persistency">
+								<option value="" selected>Select a persistency option</option>
+								<?php while ($persistency = $result_persistency->fetch_assoc()): ?>
+									<option <?php if ($persistency_id == $persistency['id']){ ?>selected<?php }; ?> 
+										value="<?php echo htmlspecialchars($persistency['id']); ?>">
+										<?php 
+										echo htmlspecialchars($persistency['type']); 
+										?>
+									</option>
+								<?php endwhile; ?>
+							</select>
+						</div>
+						<script>
+							// Selection of elements
+							const checkboxDB = document.getElementById('isDBIncluded');
+							const dbms = document.getElementById('dbms');
+							const dbmsContainer = document.getElementById('dbms-container');
+
+							const memory = document.getElementById('memory');
+							const memoryContainer = document.getElementById('memory-container');
+
+							const persistency = document.getElementById('persistency');
+							const persistencyContainer = document.getElementById('persistency-container');
+
+							// Update required
+							function toggleRequiredDB() {
+								if (checkboxDB.checked) {
+									dbmsContainer.style.display = 'block';
+									dbms.setAttribute('required', 'required'); // Make required
+
+									memoryContainer.style.display = 'block';
+									memory.setAttribute('required', 'required'); // Make required
+
+									persistencyContainer.style.display = 'block';
+									persistency.setAttribute('required', 'required'); // Make required
+								} else {
+									dbmsContainer.style.display = 'none';
+									dbms.removeAttribute('required'); // Remove required
+
+									memoryContainer.style.display = 'none';
+									memory.removeAttribute('required'); // Remove required
+
+									persistencyContainer.style.display = 'none';
+									persistency.removeAttribute('required'); // Remove required
+								}
+							}
+
+							// Add event listener
+							checkboxDB.addEventListener('change', toggleRequiredDB);
+
+							toggleRequiredDB();
+						</script>
 					</div>
 
 					<!-- Modules Selection -->
@@ -382,32 +505,6 @@
 								Please, select an CDN.
 							</div>
 						</div> 
-					</div>
-
-					<!-- Optional Database Selection -->
-					<?php 
-					$stmt_db = $dbb->prepare('SELECT * FROM wh_db');
-					$stmt_db->execute();
-					$result_db = $stmt_db->get_result();
-					?>
-					<div class="row mb-3">
-						<div class="col-12">
-							<label for="database" class="form-label">Optional Database</label>
-							<select class="form-control custom-select" id="database" name="database">
-								<option value="" selected>Select a Database (Optional)</option>
-								<?php while ($db = $result_db->fetch_assoc()): ?>
-									<option <?php if ($db_id == $db['id']){ ?>selected<?php }; ?> 
-										value="<?php echo htmlspecialchars($db['id']); ?>">
-										<?php 
-										echo htmlspecialchars($db['name']); 
-										echo " - ";
-										echo htmlspecialchars($db['capacity']); 
-										echo " GB";
-										?>
-									</option>
-								<?php endwhile; ?>
-							</select>
-						</div>
 					</div>
 
 					<!-- Commitment Period Selection -->
