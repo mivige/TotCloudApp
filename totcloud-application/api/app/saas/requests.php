@@ -46,6 +46,7 @@
 			// Fetch the single result
 			$fila = $result->fetch_assoc();
 			$category_code = $fila['category_code'];
+			$state = $fila['state'];
 			$datacenter_id = $fila['datacenter_id'];
 			$ssl_id = $fila['ssl_id'];
 			$commitment_id = $fila['commitment_id'];
@@ -437,6 +438,31 @@
 							</div>
 						</div>
 					</div>
+
+					<?php if ($es_admin==1 && $encontrado==true){      ?>
+						<input type="hidden" name="request_id" value="<?php echo $request_id ?>">
+						<div class="card border-left-3 border-left-primary">
+							<div class="card-body">
+
+
+								<div class="col-6">
+									<label for="state" class="form-label">State</label>
+									<select id="custom-select" class="form-control custom-select" id="state" name="state" required>
+										<option value="" disabled selected>Select a State</option>
+										<option <?php if ($state=="0"){?>selected<?php };?> value="0">OPEN</option>
+										<option <?php if ($state=="1"){?>selected<?php };?> value="1">ON PROGRESS</option>
+										<option <?php if ($state=="2"){?>selected<?php };?> value="2">CLOSED</option>
+							
+									</select>
+									<div class="invalid-feedback">
+										Please, select a state.
+									</div>
+								</div>
+
+							</div>
+						</div>
+					<?php } ?>
+					
 					
 					<!-- Form submission button -->
 					<?php if ($encontrado) { ?>
@@ -543,16 +569,22 @@
 								</div>
 							</td>
 							<td class="text-center">
-                                <div class="d-flex align-items-center">
-                                    <?php if ($row["state"]==1){ ?>
-                                    <i class="material-icons text-primary md-18 mr-2">lens</i>
-                                    <small class="text-uppercase js-lists-values-status">ACTIVE</small>
-                                    <?php }?>
-                                    <?php if ($row["state"]!=1){ ?>
-                                    <i class="material-icons text-danger md-18 mr-2">lens</i>
-                                    <small class="text-uppercase js-lists-values-status">NOT ACTIVE</small>
-                                    <?php }?>    
-                                </div>
+								<div class="d-flex align-items-center">
+									<small class="text-uppercase text-muted mr-2">Status</small>
+									<?php if ($row["state"]=='0'){ 
+										$est="OPEN";?>
+									<i class="material-icons text-danger md-18 mr-2">lens</i>
+									<?php }?> 
+									<?php if ($row["state"]=='1'){ 
+										$est="ON PROGRESS";?>
+									<i class="material-icons text-primary md-18 mr-2">lens</i>
+									<?php }?>    
+									<?php if ($row["state"]=='2'){
+										$est="CLOSED";?>
+									<i class="material-icons text-success md-18 mr-2">lens</i>
+									<?php }?>                                                                                                   
+									<small class="text-uppercase js-lists-values-status"><?php echo $est; ?></small>
+								</div>
 							</td>
 							<td>
 								<div class="d-flex align-items-center">

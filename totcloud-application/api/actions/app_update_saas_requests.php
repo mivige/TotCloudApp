@@ -35,6 +35,8 @@
         $cdn = isset($_POST['cdn']) ? StringInputCleaner(trim($_POST['cdn'])) : null;
         $commitment = isset($_POST['commitment']) ? StringInputCleaner(trim($_POST['commitment'])) : 0;
         $id_user = isset($_POST['id_user']) ? StringInputCleaner(trim($_POST['id_user'])) : 0;
+        $state=isset($_POST['state']) ? trim($_POST['state']) : '';
+        $state=StringInputCleaner($state);
     }
 
     // Check if user token is set and valid
@@ -53,8 +55,8 @@
         if ($modificar == 1) {
             // Update existing request
             // First, update the request record (if needed)
-            $stmt = $dbb->prepare('UPDATE request SET user_id = ? WHERE request_id = (SELECT request_id FROM saas_web_hosting WHERE id = ?)');
-            $stmt->bind_param('si', $id_user, $id);
+            $stmt = $dbb->prepare('UPDATE request SET state = ? WHERE request_id = (SELECT request_id FROM saas_web_hosting WHERE id = ?)');
+            $stmt->bind_param('si', $state, $id);
             $stmt->execute();
 
             // Update saas_web_hosting record
