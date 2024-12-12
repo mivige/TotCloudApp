@@ -208,6 +208,27 @@ CREATE TABLE wh_db_persistency (
     type VARCHAR(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE saas_web_hosting (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(256) NOT NULL,
+    category_code VARCHAR(20),
+    storageSpace INT NOT NULL,
+    bandwidthAllocation INT NOT NULL,
+    maxConcurrentUsers INT NOT NULL,
+    maxWebsites INT NOT NULL,
+    isDomainIncluded BOOLEAN DEFAULT FALSE,
+    isEmailIncluded BOOLEAN DEFAULT FALSE,
+    datacenter_id INT NOT NULL,
+    ssl_id INT NOT NULL,
+    request_id INT NOT NULL,
+    commitment_id INT,
+    FOREIGN KEY (category_code) REFERENCES category(code) ON DELETE SET NULL,
+    FOREIGN KEY (request_id) REFERENCES request(request_id) ON DELETE CASCADE,
+    FOREIGN KEY (commitment_id) REFERENCES commitment_period(id) ON DELETE SET NULL,
+    FOREIGN KEY (datacenter_id) REFERENCES wh_datacenter(id),
+    FOREIGN KEY (ssl_id) REFERENCES wh_ssl(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 CREATE TABLE wh_db (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(256) NOT NULL,
@@ -218,33 +239,11 @@ CREATE TABLE wh_db (
     FK_DBMS INT NOT NULL,
     FK_memory INT NOT NULL,
     FK_persistency INT NOT NULL,
+    wh_id INT NOT NULL,
     FOREIGN KEY (FK_DBMS) REFERENCES wh_db_dbms(id),
     FOREIGN KEY (FK_memory) REFERENCES wh_db_memory(id),
-    FOREIGN KEY (FK_persistency) REFERENCES wh_db_persistency(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-CREATE TABLE saas_web_hosting (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(256) NOT NULL,
-    category_code VARCHAR(20),
-    storageSpace INT NOT NULL,
-    bandwidthAllocation INT NOT NULL,
-    maxConcurrentUsers INT NOT NULL,
-    maxWebsites INT NOT NULL,
-    isSSLIncluded BOOLEAN DEFAULT FALSE,
-    isDomainIncluded BOOLEAN DEFAULT FALSE,
-    isEmailIncluded BOOLEAN DEFAULT FALSE,
-    datacenter_id INT NOT NULL,
-    ssl_id INT NOT NULL,
-    db_id INT,
-    request_id INT NOT NULL,
-    commitment_id INT,
-    FOREIGN KEY (category_code) REFERENCES category(code) ON DELETE SET NULL,
-    FOREIGN KEY (request_id) REFERENCES request(request_id) ON DELETE CASCADE,
-    FOREIGN KEY (commitment_id) REFERENCES commitment_period(id) ON DELETE SET NULL,
-    FOREIGN KEY (datacenter_id) REFERENCES wh_datacenter(id),
-    FOREIGN KEY (ssl_id) REFERENCES wh_ssl(id),
-    FOREIGN KEY (db_id) REFERENCES wh_db(id) ON DELETE SET NULL
+    FOREIGN KEY (FK_persistency) REFERENCES wh_db_persistency(id),
+    FOREIGN KEY (wh_id) REFERENCES saas_web_hosting(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE wh_dns (

@@ -42,13 +42,11 @@
 			$category_code = $fila['category_code'];
 			$datacenter_id = $fila['datacenter_id'];
 			$ssl_id = $fila['ssl_id'];
-			$db_id = $fila['db_id'];
 			$commitment_id = $fila['commitment_id'];
 			$storageSpace = $fila['storageSpace'];
 			$bandwidthAllocation = $fila['bandwidthAllocation'];
 			$maxConcurrentUsers = $fila['maxConcurrentUsers'];
 			$maxWebsites = $fila['maxWebsites'];
-			$isSSLIncluded = $fila['isSSLIncluded'];
 			$isDomainIncluded = $fila['isDomainIncluded'];
 			$isEmailIncluded = $fila['isEmailIncluded'];
 			$request_id = $fila['request_id'];
