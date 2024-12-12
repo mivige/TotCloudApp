@@ -9,6 +9,7 @@
 	$commitment_id = null;
 	$request_id = null;
 	$isDomainIncluded = 0;
+	$domain = "";
 	$isEmailIncluded = 0;
 	$encontrado = true;
 	$encontrado = false;
@@ -31,6 +32,7 @@
 	if (!empty($modificar) and !empty($id)) {
 		$stmt = $dbb->prepare("SELECT * FROM saas_web_hosting swh 
 								JOIN request rq ON swh.request_id = rq.request_id 
+								JOIN wh_domain d ON swh.id = d.FK_webhosting
 								WHERE swh.id = ?");
 		$stmt->bind_param('s', $id);
 		$stmt->execute();
@@ -48,6 +50,7 @@
 			$maxConcurrentUsers = $fila['maxConcurrentUsers'];
 			$maxWebsites = $fila['maxWebsites'];
 			$isDomainIncluded = $fila['isDomainIncluded'];
+			$domain = $fila['name'];
 			$isEmailIncluded = $fila['isEmailIncluded'];
 			$request_id = $fila['request_id'];
 			$encontrado = true;
@@ -283,7 +286,7 @@
 						</div>
 						<div id="domain-container" class="col-6">
 							<label for="domain" class="form-label">Wanted domain</label>
-							<input type="text" class="form-control" id="domain" name="domain">
+							<input type="text" class="form-control" value="<?php echo htmlspecialchars($domain ?? ''); ?>" id="domain" name="domain">
 						</div>
 						<script>
 							// Selection of elements

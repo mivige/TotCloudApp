@@ -76,9 +76,22 @@
                 $commitment, 
                 $id
             );
-
+            
             if (!$stmt->execute()) {
                 throw new Exception("Failed to update saas_web_hosting");
+            }
+
+            // Insert into domain table
+            $stmt = $dbb->prepare('UPDATE wh_domain SET name = ?, expirationDate = DATE_ADD(NOW(), INTERVAL 1 YEAR) WHERE FK_webhosting = ?');
+
+            $stmt->bind_param('si', 
+                $domain,
+                $id
+            );
+
+            if (!$stmt->execute()) {
+                throw new Exception("Failed to update domain");
+                
             }
 
         } else {
@@ -120,6 +133,23 @@
 
             if (!$stmt->execute()) {
                 throw new Exception("Failed to insert saas_web_hosting");
+            }
+
+            if ($isDomainIncluded) {
+                // Get the last inserted saas_id
+                $saas_id = $dbb->insert_id;
+
+                // Insert into domain table
+                $stmt = $dbb->prepare('INSERT INTO wh_domain (name, expirationDate, FK_webhosting) VALUES (?, DATE_ADD(NOW(), INTERVAL 1 YEAR), ?)');
+
+                $stmt->bind_param('si', 
+                    $domain,
+                    $saas_id
+                );
+
+                if (!$stmt->execute()) {
+                    throw new Exception("Failed to insert domain");
+                }
             }
         }
 
