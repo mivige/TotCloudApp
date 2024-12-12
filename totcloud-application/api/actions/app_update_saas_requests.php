@@ -38,7 +38,7 @@
         $cdn = isset($_POST['cdn']) ? StringInputCleaner(trim($_POST['cdn'])) : null;
         $commitment = isset($_POST['commitment']) ? StringInputCleaner(trim($_POST['commitment'])) : 0;
         $id_user = isset($_POST['id_user']) ? StringInputCleaner(trim($_POST['id_user'])) : 0;
-        $state=isset($_POST['state']) ? trim($_POST['state']) : '';
+        $state=isset($_POST['state']) ? trim($_POST['state']) : null;
         $state=StringInputCleaner($state);
     }
 
@@ -58,10 +58,12 @@
         if ($modificar == 1) {
             // Update existing request
             // First, update the request record (if needed)
-            $stmt = $dbb->prepare('UPDATE request SET state = ? WHERE request_id = (SELECT request_id FROM saas_web_hosting WHERE id = ?)');
-            $stmt->bind_param('si', $state, $id);
-            $stmt->execute();
-
+            if ($state != null) {
+                $stmt = $dbb->prepare('UPDATE request SET state = ? WHERE request_id = (SELECT request_id FROM saas_web_hosting WHERE id = ?)');
+                $stmt->bind_param('si', $state, $id);
+                $stmt->execute();
+            }
+            
             // Update saas_web_hosting record
             $stmt = $dbb->prepare('UPDATE saas_web_hosting 
                 SET category_code = ?, storageSpace = ?, bandwidthAllocation = ?, 
@@ -246,7 +248,7 @@
                     $dbms_id,
                     $memory_id,
                     $persistency_id,
-                    $id
+                    $saas_id
                 );
 
                 if (!$stmt->execute()) {
@@ -266,7 +268,7 @@
         // Rollback the transaction in case of error
         $dbb->rollback();
 
-        // Log the error (you might want to implement proper error logging)
+        // Log the error
         error_log("SaaS Web Hosting Request Error: " . $e->getMessage());
         error_log("Error Details: " . print_r($e, true));
         error_log("Full SQL Error: " . $dbb->error);

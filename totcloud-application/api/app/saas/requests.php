@@ -280,12 +280,12 @@
 						<div class="col-3">
 							<label for="maxConcurrentUsers" class="form-label">Max Concurrent Users</label>
 							<input type="number" class="form-control" id="maxConcurrentUsers" name="maxConcurrentUsers" 
-								   value="<?php echo htmlspecialchars($maxConcurrentUsers ?? ''); ?>" min="1" required>
+								   value="<?php echo htmlspecialchars($maxConcurrentUsers ?? ''); ?>" min="1" max="100000" required>
 						</div>
 						<div class="col-3">
 							<label for="maxWebsites" class="form-label">Max Websites</label>
 							<input type="number" class="form-control" id="maxWebsites" name="maxWebsites" 
-								   value="<?php echo htmlspecialchars($maxWebsites ?? ''); ?>" min="1" required>
+								   value="<?php echo htmlspecialchars($maxWebsites ?? ''); ?>" min="1" max="10" required>
 						</div>
 					</div>
 
@@ -658,7 +658,6 @@
 						<tr>
 							<td>
 								<div class="d-flex align-items-center">
-									<small class="text-uppercase text-muted mr-2">DATE</small>
 									<a href="#" class="text-body small">
 										#<span class="js-lists-values-date"><?php echo htmlspecialchars($row["date"]); ?></span>
 									</a>
@@ -666,13 +665,11 @@
 							</td>
 							<td>
 								<div class="d-flex align-items-center">
-									<small class="text-uppercase text-muted mr-2">DESCRIPTION</small>
 									<span class="js-lists-values-description"><?php echo htmlspecialchars($row["name"]); ?></span>
 								</div>
 							</td>
 							<td class="text-center">
 								<div class="d-flex align-items-center">
-									<small class="text-uppercase text-muted mr-2">Status</small>
 									<?php if ($row["state"]=='0'){ 
 										$est="OPEN";?>
 									<i class="material-icons text-danger md-18 mr-2">lens</i>
@@ -690,7 +687,6 @@
 							</td>
 							<td>
 								<div class="d-flex align-items-center">
-									<small class="text-uppercase text-muted mr-2">USER</small>
 									<span class="js-lists-values-user"><?php echo htmlspecialchars($row["email"]); ?></span>
 								</div>
 							</td>

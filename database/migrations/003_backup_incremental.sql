@@ -193,7 +193,6 @@
     `code` varchar(20) DEFAULT NULL,
     `description` tinytext DEFAULT NULL,
     `discount` decimal(10,2) DEFAULT NULL,
-    `currency_type` char(3) DEFAULT NULL,
     `operation_type` enum('INSERT','UPDATE','DELETE') NOT NULL,
     `operation_time` datetime DEFAULT current_timestamp()
     ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
