@@ -30,7 +30,10 @@
         $isDomainIncluded = isset($_POST['isDomainIncluded']) ? 1 : 0;
         $domain = isset($_POST['domain']) ? StringInputCleaner(trim($_POST['domain'])) : null;
         $isEmailIncluded = isset($_POST['isEmailIncluded']) ? 1 : 0;
-        $database = isset($_POST['database']) ? StringInputCleaner(trim($_POST['database'])) : null;
+        $isDBIncluded = isset($_POST['isDBIncluded']) ? StringInputCleaner(trim($_POST['isDBIncluded'])) : 0;
+        $dbms_id = isset($_POST['dbms']) ? StringInputCleaner(trim($_POST['dbms'])) : null;
+        $memory_id = isset($_POST['memory']) ? StringInputCleaner(trim($_POST['memory'])) : null;
+        $persistency_id = isset($_POST['persistency']) ? StringInputCleaner(trim($_POST['persistency'])) : null;
         $module = isset($_POST['module']) ? StringInputCleaner(trim($_POST['module'])) : null;
         $cdn = isset($_POST['cdn']) ? StringInputCleaner(trim($_POST['cdn'])) : null;
         $commitment = isset($_POST['commitment']) ? StringInputCleaner(trim($_POST['commitment'])) : 0;
@@ -127,8 +130,25 @@
                 );
 
                 if (!$stmt->execute()) {
-                throw new Exception("Failed to update cdn");
+                    throw new Exception("Failed to update cdn");
+                }
+            }
 
+            if ($isDBIncluded != 0) {
+                // Update DB table
+                $stmt = $dbb->prepare('INSERT INTO wh_db (FK_DBMS, FK_memory, FK_persistency, wh_id) VALUES (?, ?, ?, ?) 
+                                       ON DUPLICATE KEY UPDATE FK_DBMS = VALUES(FK_DBMS), FK_memory = VALUES(FK_memory),
+                                       FK_persistency = VALUES(FK_persistency);');
+
+                $stmt->bind_param('iiii', 
+                    $dbms_id,
+                    $memory_id,
+                    $persistency_id,
+                    $id
+                );
+
+                if (!$stmt->execute()) {
+                    throw new Exception("Failed to update DB");
                 }
             }
 
@@ -215,6 +235,22 @@
 
                 if (!$stmt->execute()) {
                     throw new Exception("Failed to insert cdn");
+                }
+            }
+
+            if ($isDBIncluded != 0) {
+                // Insert into DB table
+                $stmt = $dbb->prepare('INSERT INTO wh_db (FK_DBMS, FK_memory, FK_persistency, wh_id) VALUES (?, ?, ?, ?)');
+
+                $stmt->bind_param('iiii', 
+                    $dbms_id,
+                    $memory_id,
+                    $persistency_id,
+                    $id
+                );
+
+                if (!$stmt->execute()) {
+                    throw new Exception("Failed to insert DB");
                 }
             }
         }

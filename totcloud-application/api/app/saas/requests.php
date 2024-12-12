@@ -41,6 +41,7 @@
 								LEFT JOIN wh_domain d ON swh.id = d.FK_webhosting
 								LEFT JOIN wh_web_hosting_x_cdn whc ON whc.FK_webhosting = swh.id
 								LEFT JOIN wh_web_hosting_x_modules whm ON whm.FK_webhosting = swh.id
+								LEFT JOIN wh_db db ON db.wh_id = swh.id
 								WHERE swh.id = ?");
 		$stmt->bind_param('s', $id);
 		$stmt->execute();
@@ -64,6 +65,10 @@
 			$cdn_id = $fila['FK_CDN'];
 			$isEmailIncluded = $fila['isEmailIncluded'];
 			$request_id = $fila['request_id'];
+			$isDBIncluded = $fila['FK_DBMS'] != null ? 1 : 0;
+			$dbms_id = $fila['FK_DBMS'];
+			$memory_id = $fila['FK_memory'];
+			$persistency_id = $fila['FK_persistency'];
 			$encontrado = true;
 		}
 	} 
@@ -307,7 +312,7 @@
 						<div class="col-4">
 							<label class="form-label" for="isDBIncluded">Include Database</label>
 							<div class="custom-control custom-checkbox-toggle custom-control-inline mr-1">
-								<input class="custom-control-input" type="checkbox" id="isDBIncluded" name="isDbIncluded" 
+								<input class="custom-control-input" type="checkbox" id="isDBIncluded" name="isDBIncluded" 
 									   <?php echo ($isDBIncluded ? 'checked' : ''); ?> value="1">
 								<label class="custom-control-label" for="isDBIncluded">Yes</label>
 							</div>

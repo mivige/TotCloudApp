@@ -231,15 +231,10 @@ CREATE TABLE saas_web_hosting (
 
 CREATE TABLE wh_db (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(256) NOT NULL,
-    engine VARCHAR(256) NOT NULL,
-    capacity INT NOT NULL,
-    maxConnections INT NOT NULL,
-    iops INT NOT NULL,
     FK_DBMS INT NOT NULL,
     FK_memory INT NOT NULL,
     FK_persistency INT NOT NULL,
-    wh_id INT NOT NULL,
+    wh_id INT NOT NULL UNIQUE,
     FOREIGN KEY (FK_DBMS) REFERENCES wh_db_dbms(id),
     FOREIGN KEY (FK_memory) REFERENCES wh_db_memory(id),
     FOREIGN KEY (FK_persistency) REFERENCES wh_db_persistency(id),
