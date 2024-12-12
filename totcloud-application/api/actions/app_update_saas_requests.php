@@ -31,6 +31,8 @@
         $domain = isset($_POST['domain']) ? StringInputCleaner(trim($_POST['domain'])) : null;
         $isEmailIncluded = isset($_POST['isEmailIncluded']) ? 1 : 0;
         $database = isset($_POST['database']) ? StringInputCleaner(trim($_POST['database'])) : null;
+        $module = isset($_POST['module']) ? StringInputCleaner(trim($_POST['module'])) : null;
+        $cdn = isset($_POST['cdn']) ? StringInputCleaner(trim($_POST['cdn'])) : null;
         $commitment = isset($_POST['commitment']) ? StringInputCleaner(trim($_POST['commitment'])) : 0;
         $id_user = isset($_POST['id_user']) ? StringInputCleaner(trim($_POST['id_user'])) : 0;
     }
@@ -81,17 +83,51 @@
                 throw new Exception("Failed to update saas_web_hosting");
             }
 
-            // Insert into domain table
-            $stmt = $dbb->prepare('UPDATE wh_domain SET name = ?, expirationDate = DATE_ADD(NOW(), INTERVAL 1 YEAR) WHERE FK_webhosting = ?');
+            if ($domain != null) {
+                // Update domain table
+                $stmt = $dbb->prepare('INSERT INTO wh_domain (name, expirationDate, FK_webhosting) VALUES (?, DATE_ADD(NOW(), INTERVAL 1 YEAR), ?) 
+                                       ON DUPLICATE KEY UPDATE name = VALUES(name);');
 
-            $stmt->bind_param('si', 
-                $domain,
+                $stmt->bind_param('si', 
+                    $domain,
+                    $id
+                );
+
+                if (!$stmt->execute()) {
+                    throw new Exception("Failed to update domain");
+                }
+            }
+
+            if ($module != null) {
+                // Update module table
+                $stmt = $dbb->prepare('INSERT INTO wh_web_hosting_x_modules (FK_modules, FK_webhosting) VALUES (?, ?) 
+                                       ON DUPLICATE KEY UPDATE FK_modules = VALUES(FK_modules);');
+
+                $stmt->bind_param('ii', 
+                    $module,
+                    $id
+                );
+
+                if (!$stmt->execute()) {
+                throw new Exception("Failed to update module");
+
+                }
+            }
+
+            if ($cdn != null) {
+                // Update cdn table
+                $stmt = $dbb->prepare('INSERT INTO wh_web_hosting_x_cdn (FK_CDN, FK_webhosting) VALUES (?, ?) 
+                                       ON DUPLICATE KEY UPDATE FK_CDN = VALUES(FK_CDN);');
+
+                $stmt->bind_param('ii', 
+                $cdn,
                 $id
-            );
+                );
 
-            if (!$stmt->execute()) {
-                throw new Exception("Failed to update domain");
-                
+                if (!$stmt->execute()) {
+                throw new Exception("Failed to update cdn");
+
+                }
             }
 
         } else {
@@ -135,10 +171,10 @@
                 throw new Exception("Failed to insert saas_web_hosting");
             }
 
-            if ($isDomainIncluded) {
-                // Get the last inserted saas_id
-                $saas_id = $dbb->insert_id;
+            // Get the last inserted saas_id
+            $saas_id = $dbb->insert_id;
 
+            if ($isDomainIncluded) {
                 // Insert into domain table
                 $stmt = $dbb->prepare('INSERT INTO wh_domain (name, expirationDate, FK_webhosting) VALUES (?, DATE_ADD(NOW(), INTERVAL 1 YEAR), ?)');
 
@@ -149,6 +185,34 @@
 
                 if (!$stmt->execute()) {
                     throw new Exception("Failed to insert domain");
+                }
+            }
+
+            if ($module != null) {
+                // Insert into module table
+                $stmt = $dbb->prepare('INSERT INTO wh_web_hosting_x_modules (FK_modules, FK_webhosting) VALUES (?, ?)');
+
+                $stmt->bind_param('ii', 
+                    $module,
+                    $saas_id
+                );
+
+                if (!$stmt->execute()) {
+                    throw new Exception("Failed to insert module");
+                }
+            }
+
+            if ($cdn != null) {
+                // Insert into module table
+                $stmt = $dbb->prepare('INSERT INTO wh_web_hosting_x_cdn (FK_CDN, FK_webhosting) VALUES (?, ?)');
+
+                $stmt->bind_param('ii', 
+                    $cdn,
+                    $saas_id
+                );
+
+                if (!$stmt->execute()) {
+                    throw new Exception("Failed to insert cdn");
                 }
             }
         }

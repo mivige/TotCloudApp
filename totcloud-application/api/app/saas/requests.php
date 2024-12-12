@@ -11,6 +11,8 @@
 	$isDomainIncluded = 0;
 	$domain = "";
 	$isEmailIncluded = 0;
+	$module_id = null;
+	$cdn_id = null;
 	$encontrado = true;
 	$encontrado = false;
 
@@ -32,7 +34,9 @@
 	if (!empty($modificar) and !empty($id)) {
 		$stmt = $dbb->prepare("SELECT * FROM saas_web_hosting swh 
 								JOIN request rq ON swh.request_id = rq.request_id 
-								JOIN wh_domain d ON swh.id = d.FK_webhosting
+								LEFT JOIN wh_domain d ON swh.id = d.FK_webhosting
+								LEFT JOIN wh_web_hosting_x_cdn whc ON whc.FK_webhosting = swh.id
+								LEFT JOIN wh_web_hosting_x_modules whm ON whm.FK_webhosting = swh.id
 								WHERE swh.id = ?");
 		$stmt->bind_param('s', $id);
 		$stmt->execute();
@@ -51,6 +55,8 @@
 			$maxWebsites = $fila['maxWebsites'];
 			$isDomainIncluded = $fila['isDomainIncluded'];
 			$domain = $fila['name'];
+			$module_id = $fila['FK_modules'];
+			$cdn_id = $fila['FK_CDN'];
 			$isEmailIncluded = $fila['isEmailIncluded'];
 			$request_id = $fila['request_id'];
 			$encontrado = true;
@@ -319,6 +325,62 @@
 								</label>
 							</div>
 						</div>
+					</div>
+
+					<!-- Modules Selection -->
+					<?php 
+					$stmt_modules = $dbb->prepare('SELECT * FROM wh_modules');
+					$stmt_modules->execute();
+					$result_modules = $stmt_modules->get_result();
+					?>
+					<div class="row mb-3">
+						<div class="col-6">
+							<label for="module" class="form-label">Modules (optional)</label>
+							<select class="form-control custom-select" id="module" name="module">
+								<option value="" disabled selected>Select a module (optional)</option>
+								<?php while ($module = $result_modules->fetch_assoc()): ?>
+									<option <?php if ($module_id == $module['id']){ ?>selected<?php }; ?> 
+										value="<?php echo htmlspecialchars($module['id']); ?>">
+										<?php 
+										echo htmlspecialchars($module['name']); 
+										echo " ";
+										echo htmlspecialchars($module['version']);
+										echo " - ";
+										echo htmlspecialchars($module['description']);
+										?>
+									</option>
+								<?php endwhile; ?>
+							</select>
+							<div class="invalid-feedback">
+								Please, select a Module.
+							</div>
+						</div>
+
+						<!-- CDN Selection -->
+						<?php 
+						$stmt_cdn = $dbb->prepare('SELECT * FROM wh_cdn');
+						$stmt_cdn->execute();
+						$result_cdn = $stmt_cdn->get_result();
+						?>           
+						<div class="col-6">
+							<label for="cdn" class="form-label">Content Delivery Network (optional)</label>
+							<select class="form-control custom-select" id="cdn" name="cdn">
+								<option value="" disabled selected>Select a CDN (optional)</option>
+								<?php while ($cdn = $result_cdn->fetch_assoc()): ?>
+									<option <?php if ($cdn_id == $cdn['id']){ ?>selected<?php }; ?> 
+										value="<?php echo htmlspecialchars($cdn['id']); ?>">
+										<?php 
+										echo htmlspecialchars($cdn['name']); 
+										echo " - ";
+										echo htmlspecialchars($cdn['endpoint']);
+										?>
+									</option>
+								<?php endwhile; ?>
+							</select>
+							<div class="invalid-feedback">
+								Please, select an CDN.
+							</div>
+						</div> 
 					</div>
 
 					<!-- Optional Database Selection -->

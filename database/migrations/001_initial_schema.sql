@@ -262,7 +262,7 @@ CREATE TABLE wh_domain (
     registrar VARCHAR(256),
     expirationDate DATETIME NOT NULL,
     isAutoRenew BOOLEAN DEFAULT FALSE,
-    FK_webhosting INT NOT NULL,
+    FK_webhosting INT NOT NULL UNIQUE,
     FOREIGN KEY (FK_webhosting) REFERENCES saas_web_hosting(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
