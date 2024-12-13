@@ -17,7 +17,11 @@ INSERT INTO u_role (role_name, description, code) VALUES
 INSERT INTO event_types (id, name) VALUES
 (1, 'User Updated'),
 (2, 'Resource Usage Logged'),
-(3, 'Account Locked');
+(3, 'Account Locked'),
+(4, 'Request Inserted'),
+(5, 'Web Hosting Modified'),
+(6, 'Dedicated Server Modified'),
+(7, 'Table Modified');
 
 -- ////////////////////
 -- Insert request categories

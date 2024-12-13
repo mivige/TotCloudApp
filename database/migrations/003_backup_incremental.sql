@@ -835,7 +835,7 @@
     `state` tinyint(1) DEFAULT 0,
     `operation_type` enum('INSERT','UPDATE','DELETE') NOT NULL,
     `operation_time` datetime DEFAULT current_timestamp()
-    ) 
+    );
 
     DELIMITER $$
     CREATE TRIGGER request_after_insert
@@ -969,7 +969,7 @@
     `code` varchar(20) DEFAULT NULL,
     `operation_type` enum('INSERT','UPDATE','DELETE') NOT NULL,
     `operation_time` datetime DEFAULT current_timestamp()
-    ) 
+    );
 
     DELIMITER $$
     CREATE TRIGGER u_role_after_insert
