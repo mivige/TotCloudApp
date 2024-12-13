@@ -21,7 +21,7 @@ if(!empty($_GET["modificar"]) || isset($_GET["modificar"]))
 
 if(!empty($modificar) and !empty($id)){
 
-    $stmt = $dbb->prepare("SELECT * FROM u_role WHERE id= ? ");
+    $stmt = $dbb->prepare("SELECT id,role_name,description,code FROM u_role WHERE id= ? ");
     $stmt->bind_param('s', $id); // 's' indica que el parámetro es una cadena
     $stmt->execute();
     $result = $stmt->get_result(); // Obtener el resultado de la ejecución
@@ -38,7 +38,7 @@ if(!empty($modificar) and !empty($id)){
     }
 } 
 
-  $stmt = $dbb->prepare('select * from u_role');
+  $stmt = $dbb->prepare('select id,role_name,description,code from u_role');
   $dbb->set_charset("utf8");
   $stmt->execute();
   $result = $stmt->get_result();

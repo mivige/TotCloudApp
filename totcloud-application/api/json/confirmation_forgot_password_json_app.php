@@ -17,7 +17,7 @@ include_once "../config/variables.php";
 
 function comprobar_pwd_history($dbb,$password,$u){
 	
-	$stmt = $dbb->prepare('SELECT * FROM u_password_history    WHERE user_id= ?  ');
+	$stmt = $dbb->prepare('SELECT password FROM u_password_history    WHERE user_id= ?  ');
 	$dbb->set_charset("utf8");
     $stmt->bind_param('i', $u);
     $stmt->execute();
@@ -31,7 +31,7 @@ function comprobar_pwd_history($dbb,$password,$u){
         }
     }
 
-    $stmt = $dbb->prepare('SELECT * FROM user   WHERE id= ?  ');
+    $stmt = $dbb->prepare('SELECT password FROM user   WHERE id= ?  ');
     $dbb->set_charset("utf8");
       $stmt->bind_param('i', $u);
       $stmt->execute();
@@ -136,7 +136,7 @@ if(
 		  
          //Miramos cuantos intentos llevamos
 		 $numero_intentos=0;
-		 $stmt = $dbb->prepare('SELECT * FROM user    WHERE id= ? and password_change_request=1 LIMIT 0,1');
+		 $stmt = $dbb->prepare('SELECT password_change_attempts FROM user    WHERE id= ? and password_change_request=1 LIMIT 0,1');
 		 $dbb->set_charset("utf8");
          $stmt->bind_param('s',$u);
          $stmt->execute();

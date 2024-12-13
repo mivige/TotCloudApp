@@ -1,6 +1,6 @@
 <?php
 $validado='0';
-    $stmt = $dbb->prepare('SELECT * FROM user    WHERE  token= ? and active=1 LIMIT 0,1');
+    $stmt = $dbb->prepare('SELECT id,firstname,token_date,lastname,lastname2,email,mobile_phone,active,admin FROM user    WHERE  token= ? and active=1 LIMIT 0,1');
     $dbb->set_charset("utf8");
 	$stmt->bind_param('s',$_SESSION['app_user_token']);
     $stmt->execute();

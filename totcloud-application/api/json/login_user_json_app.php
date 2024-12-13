@@ -41,7 +41,7 @@ if(
 	 {   
 	 
 	    
-	     $stmt = $dbb->prepare('SELECT * FROM user    WHERE active>0 and email_verified=1 and password_change_request=0 and login_attempts<3 and  email= ? ');
+	     $stmt = $dbb->prepare('SELECT id,firstname,lastname,lastname2,mobile_phone,email,password,password_change_date,login_attempts FROM user    WHERE active>0 and email_verified=1 and password_change_request=0 and login_attempts<3 and  email= ? ');
          $dbb->set_charset("utf8");
 		 $stmt->bind_param('s',$email);
          $stmt->execute();
@@ -87,7 +87,7 @@ if(
 				 }
 			 } else {
 			    $fecha_token=date("Y-m-d H:i:s");
-			    $stmt = $dbb->prepare('UPDATE user set active=1=1,token=?,token_date=? where id= ?');
+			    $stmt = $dbb->prepare('UPDATE user set active=1,token=?,token_date=? where id= ?');
                 $dbb->set_charset("utf8");
 				$stmt->bind_param('sss', $token,$fecha_token,$id);
                 if ($stmt->execute()){
@@ -129,7 +129,7 @@ if(
 			      // set response code
 				  
 				  //Aqui miramos activo y password pendiente cambiar
-	          $stmt = $dbb->prepare('SELECT * FROM user    WHERE active>0  and  email= ? ');
+	          $stmt = $dbb->prepare('SELECT login_attempts,password_change_request FROM user    WHERE active>0  and  email= ? ');
               $dbb->set_charset("utf8");
 			  $stmt->bind_param('s',$email);
               $stmt->execute();
@@ -148,7 +148,7 @@ if(
 			   else{		  
 				  
                  
-	          $stmt = $dbb->prepare('SELECT * FROM user    WHERE active=0 and email= ? ');
+	          $stmt = $dbb->prepare('SELECT email_verified FROM user    WHERE active=0 and email= ? ');
               $dbb->set_charset("utf8");
 			  $stmt->bind_param('s',$email);
               $stmt->execute();
@@ -164,7 +164,7 @@ if(
 			  }
 	         } else {
 				 
-                $stmt = $dbb->prepare('SELECT * FROM user    WHERE active=-1 and email= ? ');
+                $stmt = $dbb->prepare('SELECT email FROM user    WHERE active=-1 and email= ? ');
                 $dbb->set_charset("utf8");
 				$stmt->bind_param('s',$email);
                 $stmt->execute();

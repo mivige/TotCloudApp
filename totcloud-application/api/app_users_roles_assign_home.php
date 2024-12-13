@@ -31,7 +31,7 @@ if(empty($id)){
 
 if(!empty($id)){
 
-    $stmt = $dbb->prepare("SELECT * FROM user WHERE id= ? ");
+    $stmt = $dbb->prepare("SELECT id,firstname,lastname,lastname2,email,mobile_phone,active,admin FROM user WHERE id= ? ");
     $stmt->bind_param('s', $id); // 's' indica que el parámetro es una cadena
     $stmt->execute();
     $result = $stmt->get_result(); // Obtener el resultado de la ejecución

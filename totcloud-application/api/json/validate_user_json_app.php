@@ -73,7 +73,7 @@ if(
        }else{
          //Miramos cuantos intentos llevamos
 		 $numero_intentos=0;
-		 $stmt = $dbb->prepare('SELECT * FROM user    WHERE id= ? and email_verified=0 LIMIT 0,1');
+		 $stmt = $dbb->prepare('SELECT email_validation_attempts FROM user    WHERE id= ? and email_verified=0 LIMIT 0,1');
          $dbb->set_charset("utf8");
 		 $stmt->bind_param('s',$u);
          $stmt->execute();

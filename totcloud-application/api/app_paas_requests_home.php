@@ -36,7 +36,7 @@ if(!empty($_GET["modificar"]) || isset($_GET["modificar"]))
 
 if(!empty($modificar) and !empty($id)){
 
-    $stmt = $dbb->prepare("SELECT * FROM paas_dedicated_server pds join request rq on pds.request_id=rq.request_id WHERE id= ? ");
+    $stmt = $dbb->prepare("SELECT id,category_code,public_bandwidth_code,private_bandwidth_code,storage_code,memory_code,processor_code,data_center_region_code,os_code,state,commitment_period,pds.request_id FROM paas_dedicated_server pds join request rq on pds.request_id=rq.request_id WHERE id= ? ");
     $stmt->bind_param('s', $id); // 's' indica que el parámetro es una cadena
     $stmt->execute();
     $result = $stmt->get_result(); // Obtener el resultado de la ejecución
@@ -142,7 +142,7 @@ if ($es_admin==1){
                 <?php }?>
                 
 
-                <?php $stmt_tmp = $dbb->prepare('select * from ds_processor ;');
+                <?php $stmt_tmp = $dbb->prepare('select code,description,price from ds_processor ;');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>
@@ -161,7 +161,7 @@ if ($es_admin==1){
                 </div>
             </div>
 
-            <?php $stmt_tmp = $dbb->prepare('select * from ds_memory ;');
+            <?php $stmt_tmp = $dbb->prepare('select code,description,price from ds_memory ;');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>           
@@ -201,7 +201,7 @@ if ($es_admin==1){
                 </div>
             </div>
 
-            <?php $stmt_tmp = $dbb->prepare('select * from ds_public_bandwidth ;');
+            <?php $stmt_tmp = $dbb->prepare('select code,description,price from ds_public_bandwidth ;');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>           
@@ -222,7 +222,7 @@ if ($es_admin==1){
 
 
             <div class="row mb-3">
-            <?php $stmt_tmp = $dbb->prepare('select * from ds_storage ps ;');
+            <?php $stmt_tmp = $dbb->prepare('select code,description,price from ds_storage ps ;');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>
@@ -240,7 +240,7 @@ if ($es_admin==1){
                 </div>
             </div>
 
-            <?php $stmt_tmp = $dbb->prepare('select * from ds_os ;');
+            <?php $stmt_tmp = $dbb->prepare('select code,name,price from ds_os ;');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>           
@@ -261,7 +261,7 @@ if ($es_admin==1){
 
 
             <div class="row mb-3">
-            <?php $stmt_tmp = $dbb->prepare('SELECT * FROM ds_datacenterregion');
+            <?php $stmt_tmp = $dbb->prepare('SELECT code,description FROM ds_datacenterregion');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>
@@ -279,7 +279,7 @@ if ($es_admin==1){
                 </div>
             </div>
 
-            <?php $stmt_tmp = $dbb->prepare('SELECT * FROM commitment_period');
+            <?php $stmt_tmp = $dbb->prepare('SELECT code,description FROM commitment_period');
             $stmt_tmp->execute();
             $result_tmp = $stmt_tmp->get_result();
             ?>           

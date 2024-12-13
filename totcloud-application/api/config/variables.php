@@ -196,7 +196,7 @@ function sanitize_my_email($field) {
 
 function estokenvalido($dbb,$token,$u){
 	
-	$stmt = $dbb->prepare('SELECT * FROM user    WHERE id= ? and token= ? LIMIT 0,1');
+	$stmt = $dbb->prepare('SELECT token_date FROM user    WHERE id= ? and token= ? LIMIT 0,1');
    $dbb->set_charset("utf8");   
    $stmt->bind_param('ss', $u,$token);
     $stmt->execute();
@@ -233,7 +233,7 @@ function estokenvalido($dbb,$token,$u){
 
 function comprobar_codigo1_codigo2($dbb,$u,$codigo1,$codigo2){
 	
-	$stmt = $dbb->prepare('SELECT * FROM user    WHERE email_code= ? and sms_code= ?  and id= ? LIMIT 0,1');
+	$stmt = $dbb->prepare('SELECT id FROM user    WHERE email_code= ? and sms_code= ?  and id= ? LIMIT 0,1');
 	$dbb->set_charset("utf8");
     $stmt->bind_param('sss', $codigo1,$codigo2,$u);
     $stmt->execute();
@@ -253,9 +253,9 @@ function comprobar_codigo1_codigo2($dbb,$u,$codigo1,$codigo2){
 function comprobar_codigo1_codigo2_no_validado($dbb,$u,$codigo1,$codigo2,$sql){
 	
     if($sql==1){
-	$stmt = $dbb->prepare('SELECT * FROM user    WHERE email_code= ? and sms_code= ? and id= ? and password_change_request=1 LIMIT 0,1');
+	$stmt = $dbb->prepare('SELECT id FROM user    WHERE email_code= ? and sms_code= ? and id= ? and password_change_request=1 LIMIT 0,1');
     }else{
-        $stmt = $dbb->prepare('SELECT * FROM user    WHERE email_code= ? and sms_code= ? and id= ? and email_verified=0 LIMIT 0,1');    
+        $stmt = $dbb->prepare('SELECT id FROM user    WHERE email_code= ? and sms_code= ? and id= ? and email_verified=0 LIMIT 0,1');    
     }
     $dbb->set_charset("utf8");
     $stmt->bind_param('sss', $codigo1,$codigo2,$u);

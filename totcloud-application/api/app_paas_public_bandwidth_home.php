@@ -26,7 +26,7 @@ if(!empty($_GET["modificar"]) || isset($_GET["modificar"]))
 
 if(!empty($modificar) and !empty($id)){
 
-    $stmt = $dbb->prepare("SELECT * FROM ds_public_bandwidth WHERE id= ? ");
+    $stmt = $dbb->prepare("SELECT id,code,description,price FROM ds_public_bandwidth WHERE id= ? ");
     $stmt->bind_param('s', $id); // 's' indica que el parámetro es una cadena
     $stmt->execute();
     $result = $stmt->get_result(); // Obtener el resultado de la ejecución
@@ -43,7 +43,7 @@ if(!empty($modificar) and !empty($id)){
     }
 } 
 
-  $stmt = $dbb->prepare('select * from ds_public_bandwidth ');
+  $stmt = $dbb->prepare('select id,code,description,price from ds_public_bandwidth ');
   $dbb->set_charset("utf8");
   $stmt->execute();
   $result = $stmt->get_result();

@@ -26,7 +26,7 @@ if(!empty($_GET["modificar"]) || isset($_GET["modificar"]))
 
 if(!empty($modificar) and !empty($id)){
 
-    $stmt = $dbb->prepare("SELECT * FROM commitment_period WHERE id= ? ");
+    $stmt = $dbb->prepare("SELECT id,code,description,discount FROM commitment_period WHERE id= ? ");
     $stmt->bind_param('s', $id); // 's' indica que el parámetro es una cadena
     $stmt->execute();
     $result = $stmt->get_result(); // Obtener el resultado de la ejecución
@@ -43,7 +43,7 @@ if(!empty($modificar) and !empty($id)){
     }
 } 
 
-  $stmt = $dbb->prepare('select * from commitment_period ');
+  $stmt = $dbb->prepare('select id,code,description,discount from commitment_period ');
   $dbb->set_charset("utf8");
   $stmt->execute();
   $result = $stmt->get_result();
