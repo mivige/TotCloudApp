@@ -36,7 +36,10 @@
 
 	// If modification and ID are present, fetch web hosting details
 	if (!empty($modificar) and !empty($id)) {
-		$stmt = $dbb->prepare("SELECT * FROM saas_web_hosting swh 
+		$stmt = $dbb->prepare("SELECT category_code, state, datacenter_id, ssl_id,
+								commitment_id, storageSpace, bandwidthAllocation, maxConcurrentUsers, 
+								maxWebsites, isDomainIncluded, d.name, FK_modules, FK_CDN, isEmailIncluded,
+								rq.request_id, FK_DBMS, FK_memory, FK_persistency FROM saas_web_hosting swh 
 								JOIN request rq ON swh.request_id = rq.request_id 
 								LEFT JOIN wh_domain d ON swh.id = d.FK_webhosting
 								LEFT JOIN wh_web_hosting_x_cdn whc ON whc.FK_webhosting = swh.id
@@ -179,7 +182,7 @@
 
 					<!-- Category Selection -->
 					<?php 
-					$stmt_category = $dbb->prepare('SELECT * FROM category WHERE name LIKE \'Web%\' ORDER BY price');
+					$stmt_category = $dbb->prepare('SELECT code, name, description, price FROM category WHERE name LIKE \'Web%\' ORDER BY price');
 					$stmt_category->execute();
 					$result_category = $stmt_category->get_result();
 					?>
@@ -203,14 +206,14 @@
 								<?php endwhile; ?>
 							</select>
 							<div class="invalid-feedback">
-								Please, select a Data Center.
+								Please, select a Category.
 							</div>
 						</div>
 					</div>
 
 					<!-- Datacenter Selection -->
 					<?php 
-					$stmt_datacenter = $dbb->prepare('SELECT * FROM wh_datacenter');
+					$stmt_datacenter = $dbb->prepare('SELECT id, name, location FROM wh_datacenter');
 					$stmt_datacenter->execute();
 					$result_datacenter = $stmt_datacenter->get_result();
 					?>
@@ -237,7 +240,7 @@
 
 						<!-- SSL Selection -->
 						<?php 
-						$stmt_ssl = $dbb->prepare('SELECT * FROM wh_ssl');
+						$stmt_ssl = $dbb->prepare('SELECT id, provider, validationLevel, price FROM wh_ssl');
 						$stmt_ssl->execute();
 						$result_ssl = $stmt_ssl->get_result();
 						?>           
@@ -352,15 +355,15 @@
 
 					<!-- Optional Database Selection -->
 					<?php 
-					$stmt_dbms = $dbb->prepare('SELECT * FROM wh_db_dbms');
+					$stmt_dbms = $dbb->prepare('SELECT id, name, version FROM wh_db_dbms');
 					$stmt_dbms->execute();
 					$result_dbms = $stmt_dbms->get_result();
 
-					$stmt_memory = $dbb->prepare('SELECT * FROM wh_db_memory');
+					$stmt_memory = $dbb->prepare('SELECT id, capacity, type, speed FROM wh_db_memory');
 					$stmt_memory->execute();
 					$result_memory = $stmt_memory->get_result();
 
-					$stmt_persistency = $dbb->prepare('SELECT * FROM wh_db_persistency');
+					$stmt_persistency = $dbb->prepare('SELECT id, type FROM wh_db_persistency');
 					$stmt_persistency->execute();
 					$result_persistency = $stmt_persistency->get_result();
 					?>
@@ -458,7 +461,7 @@
 
 					<!-- Modules Selection -->
 					<?php 
-					$stmt_modules = $dbb->prepare('SELECT * FROM wh_modules');
+					$stmt_modules = $dbb->prepare('SELECT id, name, version, description FROM wh_modules');
 					$stmt_modules->execute();
 					$result_modules = $stmt_modules->get_result();
 					?>
@@ -487,7 +490,7 @@
 
 						<!-- CDN Selection -->
 						<?php 
-						$stmt_cdn = $dbb->prepare('SELECT * FROM wh_cdn');
+						$stmt_cdn = $dbb->prepare('SELECT id, name, endpoint FROM wh_cdn');
 						$stmt_cdn->execute();
 						$result_cdn = $stmt_cdn->get_result();
 						?>           
@@ -514,7 +517,7 @@
 
 					<!-- Commitment Period Selection -->
 					<?php 
-					$stmt_commitment = $dbb->prepare('SELECT * FROM commitment_period');
+					$stmt_commitment = $dbb->prepare('SELECT id, description, discount FROM commitment_period');
 					$stmt_commitment->execute();
 					$result_commitment = $stmt_commitment->get_result();
 					?>

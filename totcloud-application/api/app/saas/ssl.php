@@ -26,8 +26,8 @@ if ($es_admin == 1) {
     }
 
     if (!empty($modify) and !empty($id)) {
-        // Fetch the record for modification
-        $stmt = $dbb->prepare("SELECT * FROM wh_ssl WHERE id = ?");
+        // Fetch the record for modification 
+        $stmt = $dbb->prepare("SELECT provider, validationLevel, certificateType, expirationDate, price FROM wh_ssl WHERE id = ?");
         $stmt->bind_param('s', $id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -44,7 +44,7 @@ if ($es_admin == 1) {
     }
 
     // Fetch all records to display
-    $stmt = $dbb->prepare('SELECT * FROM wh_ssl');
+    $stmt = $dbb->prepare('SELECT id, provider, validationLevel, expirationDate FROM wh_ssl');
     $dbb->set_charset("utf8");
     $stmt->execute();
     $result = $stmt->get_result();

@@ -25,7 +25,7 @@ if ($es_admin == 1) {
 
     if (!empty($modify) and !empty($id)) {
         // Fetch the record for modification
-        $stmt = $dbb->prepare("SELECT * FROM wh_db_dbms WHERE id = ?");
+        $stmt = $dbb->prepare("SELECT name, version, licenseType FROM wh_db_dbms WHERE id = ?");
         $stmt->bind_param('s', $id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -40,7 +40,7 @@ if ($es_admin == 1) {
     }
 
     // Fetch all records to display
-    $stmt = $dbb->prepare('SELECT * FROM wh_db_dbms');
+    $stmt = $dbb->prepare('SELECT id, name, version, licenseType FROM wh_db_dbms');
     $dbb->set_charset("utf8");
     $stmt->execute();
     $result = $stmt->get_result();

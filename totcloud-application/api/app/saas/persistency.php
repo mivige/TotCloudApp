@@ -23,7 +23,7 @@
 
         if (!empty($modify) and !empty($id)) {
             // Fetch the record for modification
-            $stmt = $dbb->prepare("SELECT * FROM wh_db_persistency WHERE id = ?");
+            $stmt = $dbb->prepare("SELECT type FROM wh_db_persistency WHERE id = ?");
             $stmt->bind_param('s', $id);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -36,7 +36,7 @@
         }
 
         // Fetch all records to display
-        $stmt = $dbb->prepare('SELECT * FROM wh_db_persistency');
+        $stmt = $dbb->prepare('SELECT id, type FROM wh_db_persistency');
         $dbb->set_charset("utf8");
         $stmt->execute();
         $result = $stmt->get_result();
@@ -55,11 +55,11 @@
 		</ol>
 
         <?php if (!empty($_GET["error"])) { ?>
-            <div class="alert alert-dismissible <?php echo ($_GET["error"] == 2) ? 'bg-primary' : 'bg-danger'; ?> text-white border-0 fade show" role="alert">
+            <div class="alert alert-dismissible <?php echo ($_GET["error"] == 0) ? 'bg-primary' : 'bg-danger'; ?> text-white border-0 fade show" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <strong>ATTENTION - </strong> The action has <?php echo ($_GET["error"] == 2) ? 'been completed successfully.' : 'not been completed successfully.'; ?>
+                <strong>ATTENTION - </strong> The action has <?php echo ($_GET["error"] == 0) ? 'been completed successfully.' : 'not been completed successfully.'; ?>
             </div>
         <?php } ?>
 

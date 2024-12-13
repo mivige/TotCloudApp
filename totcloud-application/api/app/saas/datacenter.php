@@ -25,7 +25,7 @@ if ($es_admin == 1) {
 
     if (!empty($modify) and !empty($id)) {
         // Fetch the record for modification
-        $stmt = $dbb->prepare("SELECT * FROM wh_datacenter WHERE id = ?");
+        $stmt = $dbb->prepare("SELECT name, location, networkProvider FROM wh_datacenter WHERE id = ?");
         $stmt->bind_param('s', $id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -40,7 +40,7 @@ if ($es_admin == 1) {
     }
 
     // Fetch all records to display
-    $stmt = $dbb->prepare('SELECT * FROM wh_datacenter');
+    $stmt = $dbb->prepare('SELECT id, name, location, networkProvider FROM wh_datacenter');
     $dbb->set_charset("utf8");
     $stmt->execute();
     $result = $stmt->get_result();
@@ -157,7 +157,7 @@ if ($es_admin == 1) {
                     <tr>
                         <th><a href="javascript:void(0)" class="sort" data-sort="js-lists-values-name">Name</a></th>
                         <th><a href="javascript:void(0)" class="sort" data-sort="js-lists-values-location">location</a></th>
-                        <th><a href="javascript:void(0)" class="sort" data-sort="js-lists-values-networkProvider">License Type</a></th>
+                        <th><a href="javascript:void(0)" class="sort" data-sort="js-lists-values-networkProvider">Network Provider</a></th>
                         <th>Actions</th>
                     </tr>
                 </thead>
