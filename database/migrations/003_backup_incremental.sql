@@ -224,7 +224,7 @@
     BEGIN
     INSERT INTO commitment_period_backup_incremental
     VALUES (
-    OLD.id, OLD.code, OLD.description, OLD.discount, OLD.currency_type,
+    OLD.id, OLD.code, OLD.description, OLD.discount,
     'DELETE', NOW()
     );
     END$$
@@ -261,7 +261,6 @@
     `country` varchar(50) DEFAULT NULL,
     `availability_zone` varchar(20) DEFAULT NULL,
     `price` decimal(10,2) DEFAULT NULL,
-    `currency_type` char(3) DEFAULT NULL,
     `description` tinytext DEFAULT NULL,
     `operation_type` enum('INSERT','UPDATE','DELETE') NOT NULL,
     `operation_time` datetime DEFAULT current_timestamp()
@@ -295,7 +294,7 @@
     INSERT INTO ds_datacenterregion_backup_incremental
     VALUES (
     OLD.id, OLD.code, OLD.region_name, OLD.country, OLD.availability_zone,
-    OLD.price, OLD.currency_type, OLD.description,
+    OLD.price, OLD.description,
     'DELETE', NOW()
     );
     END$$
@@ -332,7 +331,6 @@
     `description` tinytext DEFAULT NULL,
     `capacity_gb` int(11) DEFAULT NULL,
     `price` decimal(10,2) DEFAULT NULL,
-    `currency_type` char(3) DEFAULT NULL,
     `operation_type` enum('INSERT','UPDATE','DELETE') NOT NULL,
     `operation_time` datetime DEFAULT current_timestamp()
     ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -364,7 +362,7 @@
     BEGIN
     INSERT INTO ds_memory_backup_incremental
     VALUES (
-    OLD.id, OLD.code, OLD.description, OLD.capacity_gb, OLD.price, OLD.currency_type,
+    OLD.id, OLD.code, OLD.description, OLD.capacity_gb, OLD.price,
     'DELETE', NOW()
     );
     END$$
@@ -401,7 +399,6 @@
     `name` varchar(50) DEFAULT NULL,
     `version` varchar(20) DEFAULT NULL,
     `price` decimal(10,2) DEFAULT NULL,
-    `currency_type` char(3) DEFAULT NULL,
     `operation_type` enum('INSERT','UPDATE','DELETE') NOT NULL,
     `operation_time` datetime DEFAULT current_timestamp()
     ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -433,7 +430,7 @@
     BEGIN
     INSERT INTO ds_os_backup_incremental
     VALUES (
-    OLD.id, OLD.code, OLD.name, OLD.version, OLD.price, OLD.currency_type,
+    OLD.id, OLD.code, OLD.name, OLD.version, OLD.price,
     'DELETE', NOW()
     );
     END$$
@@ -469,7 +466,6 @@
     `code` varchar(20) DEFAULT NULL,
     `description` tinytext DEFAULT NULL,
     `price` decimal(10,2) DEFAULT NULL,
-    `currency_type` char(3) DEFAULT NULL,
     `operation_type` enum('INSERT','UPDATE','DELETE') NOT NULL,
     `operation_time` datetime DEFAULT current_timestamp()
     ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -501,7 +497,7 @@
     BEGIN
     INSERT INTO ds_private_bandwidth_backup_incremental
     VALUES (
-    OLD.id, OLD.code, OLD.description, OLD.price, OLD.currency_type,
+    OLD.id, OLD.code, OLD.description, OLD.price,
     'DELETE', NOW()
     );
     END$$
@@ -537,7 +533,6 @@
     `code` varchar(20) DEFAULT NULL,
     `description` tinytext DEFAULT NULL,
     `price` decimal(10,2) DEFAULT NULL,
-    `currency_type` char(3) DEFAULT NULL,
     `operation_type` enum('INSERT','UPDATE','DELETE') NOT NULL,
     `operation_time` datetime DEFAULT current_timestamp()
     ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -569,7 +564,7 @@
     BEGIN
     INSERT INTO ds_public_bandwidth_backup_incremental
     VALUES (
-    OLD.id, OLD.code, OLD.description, OLD.price, OLD.currency_type,
+    OLD.id, OLD.code, OLD.description, OLD.price,
     'DELETE', NOW()
     );
     END$$
@@ -607,7 +602,6 @@
     `cores` int(11) DEFAULT NULL,
     `speed_ghz` decimal(5,2) DEFAULT NULL,
     `price` decimal(10,2) DEFAULT NULL,
-    `currency_type` char(3) DEFAULT NULL,
     `operation_type` enum('INSERT','UPDATE','DELETE') NOT NULL,
     `operation_time` datetime DEFAULT current_timestamp()
     ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -639,7 +633,7 @@
     BEGIN
     INSERT INTO ds_processor_backup_incremental
     VALUES (
-    OLD.id, OLD.code, OLD.description, OLD.cores, OLD.speed_ghz, OLD.price, OLD.currency_type,
+    OLD.id, OLD.code, OLD.description, OLD.cores, OLD.speed_ghz, OLD.price,
     'DELETE', NOW()
     );
     END$$
@@ -676,7 +670,6 @@
     `description` tinytext DEFAULT NULL,
     `capacity_gb` int(11) DEFAULT NULL,
     `price` decimal(10,2) DEFAULT NULL,
-    `currency_type` char(3) DEFAULT NULL,
     `operation_type` enum('INSERT','UPDATE','DELETE') NOT NULL,
     `operation_time` datetime DEFAULT current_timestamp()
     ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -708,7 +701,7 @@
     BEGIN
     INSERT INTO ds_storage_backup_incremental
     VALUES (
-    OLD.id, OLD.code, OLD.description, OLD.capacity_gb, OLD.price, OLD.currency_type,
+    OLD.id, OLD.code, OLD.description, OLD.capacity_gb, OLD.price,
     'DELETE', NOW()
     );
     END$$
