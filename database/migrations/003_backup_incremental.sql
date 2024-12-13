@@ -21,9 +21,9 @@
         `email_validation_attempts` int(11) DEFAULT 0,
         `password_change_date` datetime DEFAULT NULL,
         `password_change_request` tinyint(1) DEFAULT 0,
-        `login_attempts` int(11) DEFAULT 0,
         `password_change_attempts` int(11) DEFAULT 0,
         `password_change_request_date` datetime DEFAULT NULL,
+        `login_attempts` int(11) DEFAULT 0,
         `admin` tinyint(1) DEFAULT NULL,
         `operation_type` enum('INSERT','UPDATE','DELETE') NOT NULL,
         `operation_time` datetime DEFAULT current_timestamp()
