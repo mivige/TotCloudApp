@@ -9,14 +9,14 @@
 
 ## 📖 Table of Contents
 
-1. [Introduction](#introduction)  
-2. [🎯 Features](#features)  
-3. [🛠️ Technologies Used](#technologies-used)  
-4. [🛢️ Database Design](#database-design)  
-5. [🧩 Functionality Overview](#functionality-overview)  
-6. [🎥 Demo](#demo)  
-7. [🚀 How to Run](#how-to-run)  
-8. [👥 Authors](#authors)  
+1. [Introduction](#-introduction)  
+2. [🎯 Features](#-features)  
+3. [🛠️ Technologies Used](#-technologies-used)  
+4. [🛢️ Database Design](#-database-design)  
+5. [🧩 Functionality Overview](#-functionality-overview)  
+6. [🎥 Demo](#-demo)  
+7. [🚀 How to Run](#-how-to-run)  
+8. [👥 Authors](#-authors)  
 
 ---
 
