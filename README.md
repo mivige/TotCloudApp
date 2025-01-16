@@ -63,7 +63,7 @@ The goal? Build a secure, scalable, and user-friendly app to manage infrastructu
 
 The heart of the application 💙:  
 
-![Diagram]()
+![Diagram](docs/er_diagram.svg)
 
 ---
 
